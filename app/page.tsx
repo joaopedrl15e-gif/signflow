@@ -44,8 +44,10 @@ const LIVE_CONVERSIONS = [
 ];
 
 export default function HomePage() {
-  // Cursor Spotlight State
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  // Cursor Spotlight & Trailing Dot State
+  const [mousePos, setMousePos] = useState({ x: -100, y: -100 });
+  const [trailingPos, setTrailingPos] = useState({ x: -100, y: -100 });
+  const [isHoveringClickable, setIsHoveringClickable] = useState(false);
 
   // Interactive Live Signature State
   const [demoSigned, setDemoSigned] = useState(false);
@@ -66,10 +68,28 @@ export default function HomePage() {
   const [proposalsPerMonth, setProposalsPerMonth] = useState(12);
   const [averageTicket, setAverageTicket] = useState(2500);
 
-  // Mouse Spotlight Tracker
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    setMousePos({ x: e.clientX, y: e.clientY });
-  };
+  // Mouse Move Listener for Trail & Spotlight
+  useEffect(() => {
+    const onMove = (e: MouseEvent) => {
+      setMousePos({ x: e.clientX, y: e.clientY });
+    };
+    window.addEventListener('mousemove', onMove);
+    return () => window.removeEventListener('mousemove', onMove);
+  }, []);
+
+  // Smooth Trailing Dot Animation
+  useEffect(() => {
+    let animationFrameId: number;
+    const smoothFollow = () => {
+      setTrailingPos((prev) => ({
+        x: prev.x + (mousePos.x - prev.x) * 0.18,
+        y: prev.y + (mousePos.y - prev.y) * 0.18,
+      }));
+      animationFrameId = requestAnimationFrame(smoothFollow);
+    };
+    animationFrameId = requestAnimationFrame(smoothFollow);
+    return () => cancelAnimationFrame(animationFrameId);
+  }, [mousePos]);
 
   // Rotate Live Conversion Toast
   useEffect(() => {
@@ -112,7 +132,7 @@ export default function HomePage() {
     const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
     const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
 
-    ctx.lineWidth = 3;
+    ctx.lineWidth = 3.5;
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
     ctx.strokeStyle = '#34d399'; // Emerald neon
@@ -161,10 +181,26 @@ export default function HomePage() {
   const currentToast = LIVE_CONVERSIONS[tickerIndex];
 
   return (
-    <div
-      onMouseMove={handleMouseMove}
-      className="min-h-screen bg-slate-950 text-white selection:bg-emerald-500 selection:text-black overflow-x-hidden bg-grid-pattern relative"
-    >
+    <div className="min-h-screen bg-slate-950 text-white selection:bg-emerald-500 selection:text-black overflow-x-hidden bg-grid-pattern relative">
+      {/* 🟢 CUSTOM INTERACTIVE TRAILING CURSOR HALO 🟢 */}
+      <div
+        className="pointer-events-none fixed z-50 rounded-full border border-emerald-400/60 transition-transform duration-75 hidden md:block"
+        style={{
+          width: '36px',
+          height: '36px',
+          transform: `translate(${trailingPos.x - 18}px, ${trailingPos.y - 18}px)`,
+          boxShadow: '0 0 15px rgba(16, 185, 129, 0.4), inset 0 0 10px rgba(16, 185, 129, 0.2)',
+          backdropFilter: 'blur(1px)',
+        }}
+      />
+      <div
+        className="pointer-events-none fixed z-50 w-2 h-2 rounded-full bg-emerald-400 hidden md:block"
+        style={{
+          transform: `translate(${mousePos.x - 4}px, ${mousePos.y - 4}px)`,
+          boxShadow: '0 0 10px #34d399',
+        }}
+      />
+
       {/* 🔦 DYNAMIC MOUSE SPOTLIGHT GLOW 🔦 */}
       <div
         className="pointer-events-none fixed -inset-px opacity-40 transition-opacity duration-300 z-30"
