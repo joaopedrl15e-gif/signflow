@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import {
   Check,
@@ -18,8 +18,6 @@ import {
 import { CHECKOUT_LINKS } from '@/lib/plans';
 
 export default function PricingPage() {
-  const [billingCycle, setBillingCycle] = useState<'monthly' | 'annual'>('monthly');
-
   return (
     <div className="min-h-screen bg-slate-950 text-white selection:bg-emerald-500 selection:text-black overflow-x-hidden bg-grid-pattern relative pb-20">
       {/* Top Banner */}
@@ -55,7 +53,7 @@ export default function PricingPage() {
           Invista no fechamento dos seus contratos
         </h1>
 
-        <p className="text-slate-400 text-sm sm:text-base max-w-xl mx-auto mb-10">
+        <p className="text-slate-400 text-sm sm:text-base max-w-xl mx-auto mb-16">
           Comece gratuitamente e faça upgrade quando quiser criar propostas comerciais ilimitadas e acelerar suas vendas.
         </p>
 
@@ -88,7 +86,7 @@ export default function PricingPage() {
               <span className="text-3xl sm:text-4xl font-black text-amber-400 block">
                 R$ 297
               </span>
-              <span className="text-[11px] text-slate-400 block mb-3 font-medium">Pagamento único ou 12x</span>
+              <span className="text-[11px] text-slate-400 block mb-3 font-medium">Pagamento único no Pix ou Cartão</span>
               <a
                 href={CHECKOUT_LINKS.lifetime}
                 target="_blank"
@@ -101,35 +99,6 @@ export default function PricingPage() {
               </a>
             </div>
           </div>
-        </div>
-
-        {/* Billing Switcher */}
-        <div className="flex items-center justify-center gap-3 p-1.5 glass-panel rounded-2xl w-fit mx-auto text-xs font-bold mb-16">
-          <button
-            type="button"
-            onClick={() => setBillingCycle('monthly')}
-            className={`px-5 py-2 rounded-xl transition-all ${
-              billingCycle === 'monthly'
-                ? 'bg-emerald-500 text-slate-950 font-black shadow-md'
-                : 'text-slate-400 hover:text-white'
-            }`}
-          >
-            Cobrança Mensal
-          </button>
-          <button
-            type="button"
-            onClick={() => setBillingCycle('annual')}
-            className={`px-5 py-2 rounded-xl transition-all flex items-center gap-2 ${
-              billingCycle === 'annual'
-                ? 'bg-emerald-500 text-slate-950 font-black shadow-md'
-                : 'text-slate-400 hover:text-white'
-            }`}
-          >
-            <span>Cobrança Anual</span>
-            <span className="px-2 py-0.5 rounded-full bg-slate-900 text-emerald-400 text-[10px] font-extrabold border border-emerald-500/30">
-              Economize 20%
-            </span>
-          </button>
         </div>
 
         {/* 4 Pricing Cards Grid */}
@@ -167,9 +136,7 @@ export default function PricingPage() {
               <h3 className="text-lg font-bold text-white mb-1">Iniciante Starter</h3>
               <p className="text-xs text-slate-400 mb-5 min-h-[32px]">Para autônomos com volume moderado de orçamentos.</p>
               <div className="mb-5 pb-5 border-b border-slate-800">
-                <span className="text-3xl sm:text-4xl font-black text-white">
-                  R$ {billingCycle === 'annual' ? '23' : '29'}
-                </span>
+                <span className="text-3xl sm:text-4xl font-black text-white">R$ 29</span>
                 <span className="text-xs text-slate-400 font-medium"> / mês</span>
               </div>
               <div className="space-y-2.5 mb-6 text-xs text-slate-300">
@@ -199,9 +166,7 @@ export default function PricingPage() {
               <h3 className="text-lg font-bold text-white mb-1">Profissional Pro</h3>
               <p className="text-xs text-slate-400 mb-5 min-h-[32px]">Para quem quer fechar contratos semanais sem limites.</p>
               <div className="mb-5 pb-5 border-b border-slate-800">
-                <span className="text-3xl sm:text-4xl font-black text-white">
-                  R$ {billingCycle === 'annual' ? '39' : '49'}
-                </span>
+                <span className="text-3xl sm:text-4xl font-black text-white">R$ 49</span>
                 <span className="text-xs text-slate-400 font-medium"> / mês</span>
               </div>
               <div className="space-y-2.5 mb-6 text-xs text-slate-300">
@@ -231,9 +196,7 @@ export default function PricingPage() {
               <h3 className="text-lg font-bold text-white mb-1">Agência & Equipe</h3>
               <p className="text-xs text-slate-400 mb-5 min-h-[32px]">Para agências e empresas com múltiplos vendedores.</p>
               <div className="mb-5 pb-5 border-b border-slate-800">
-                <span className="text-3xl sm:text-4xl font-black text-white">
-                  R$ {billingCycle === 'annual' ? '99' : '119'}
-                </span>
+                <span className="text-3xl sm:text-4xl font-black text-white">R$ 119</span>
                 <span className="text-xs text-slate-400 font-medium"> / mês</span>
               </div>
               <div className="space-y-2.5 mb-6 text-xs text-slate-300">

@@ -33,7 +33,6 @@ export default function HomePage() {
   const [demoSigned, setDemoSigned] = useState(false);
   const [demoSigning, setDemoSigning] = useState(false);
 
-  const [pricingCycle, setPricingCycle] = useState<'monthly' | 'annual'>('monthly');
   const [isUpgradeModalOpen, setIsUpgradeModalOpen] = useState(false);
   const [selectedPlanForModal, setSelectedPlanForModal] = useState<'starter' | 'pro' | 'agency' | 'lifetime'>('pro');
 
@@ -329,12 +328,12 @@ export default function HomePage() {
           Escolha o plano ideal para o seu negócio
         </h2>
 
-        <p className="text-slate-400 text-sm sm:text-base max-w-xl mx-auto mb-10">
+        <p className="text-slate-400 text-sm sm:text-base max-w-xl mx-auto mb-16">
           Comece gratuitamente e faça upgrade quando quiser criar propostas comerciais ilimitadas e acelerar suas vendas.
         </p>
 
         {/* 👑 SPECIAL LIFETIME DEAL BANNER ON HOMEPAGE 👑 */}
-        <div className="max-w-4xl mx-auto mb-14 rounded-3xl p-6 sm:p-8 bg-gradient-to-r from-amber-950/60 via-slate-900 to-amber-950/60 border-2 border-amber-500/50 shadow-2xl relative overflow-hidden text-left">
+        <div className="max-w-4xl mx-auto mb-16 rounded-3xl p-6 sm:p-8 bg-gradient-to-r from-amber-950/60 via-slate-900 to-amber-950/60 border-2 border-amber-500/50 shadow-2xl relative overflow-hidden text-left">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
             <div className="space-y-2">
               <div className="flex items-center gap-2">
@@ -377,35 +376,6 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* Billing Switcher */}
-        <div className="flex items-center justify-center gap-3 p-1.5 glass-panel rounded-2xl w-fit mx-auto text-xs font-bold mb-16">
-          <button
-            type="button"
-            onClick={() => setPricingCycle('monthly')}
-            className={`px-5 py-2 rounded-xl transition-all ${
-              pricingCycle === 'monthly'
-                ? 'bg-emerald-500 text-slate-950 font-black shadow-md'
-                : 'text-slate-400 hover:text-white'
-            }`}
-          >
-            Cobrança Mensal
-          </button>
-          <button
-            type="button"
-            onClick={() => setPricingCycle('annual')}
-            className={`px-5 py-2 rounded-xl transition-all flex items-center gap-2 ${
-              pricingCycle === 'annual'
-                ? 'bg-emerald-500 text-slate-950 font-black shadow-md'
-                : 'text-slate-400 hover:text-white'
-            }`}
-          >
-            <span>Cobrança Anual</span>
-            <span className="px-2 py-0.5 rounded-full bg-slate-900 text-emerald-400 text-[10px] font-extrabold border border-emerald-500/30">
-              Economize 20%
-            </span>
-          </button>
-        </div>
-
         {/* 4 Pricing Cards with DIRECT CAKTO URLS */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-left items-stretch mb-16">
           {/* Card 1: Gratuito */}
@@ -441,9 +411,7 @@ export default function HomePage() {
               <h3 className="text-lg font-bold text-white mb-1">Iniciante Starter</h3>
               <p className="text-xs text-slate-400 mb-5 min-h-[32px]">Para autônomos com volume moderado de orçamentos.</p>
               <div className="mb-5 pb-5 border-b border-slate-800">
-                <span className="text-3xl sm:text-4xl font-black text-white">
-                  R$ {pricingCycle === 'annual' ? '23' : '29'}
-                </span>
+                <span className="text-3xl sm:text-4xl font-black text-white">R$ 29</span>
                 <span className="text-xs text-slate-400 font-medium"> / mês</span>
               </div>
               <div className="space-y-2.5 mb-6 text-xs text-slate-300">
@@ -473,9 +441,7 @@ export default function HomePage() {
               <h3 className="text-lg font-bold text-white mb-1">Profissional Pro</h3>
               <p className="text-xs text-slate-400 mb-5 min-h-[32px]">Para quem quer fechar contratos semanais sem limites.</p>
               <div className="mb-5 pb-5 border-b border-slate-800">
-                <span className="text-3xl sm:text-4xl font-black text-white">
-                  R$ {pricingCycle === 'annual' ? '39' : '49'}
-                </span>
+                <span className="text-3xl sm:text-4xl font-black text-white">R$ 49</span>
                 <span className="text-xs text-slate-400 font-medium"> / mês</span>
               </div>
               <div className="space-y-2.5 mb-6 text-xs text-slate-300">
@@ -505,9 +471,7 @@ export default function HomePage() {
               <h3 className="text-lg font-bold text-white mb-1">Agência & Equipe</h3>
               <p className="text-xs text-slate-400 mb-5 min-h-[32px]">Para agências e empresas com múltiplos vendedores.</p>
               <div className="mb-5 pb-5 border-b border-slate-800">
-                <span className="text-3xl sm:text-4xl font-black text-white">
-                  R$ {pricingCycle === 'annual' ? '99' : '119'}
-                </span>
+                <span className="text-3xl sm:text-4xl font-black text-white">R$ 119</span>
                 <span className="text-xs text-slate-400 font-medium"> / mês</span>
               </div>
               <div className="space-y-2.5 mb-6 text-xs text-slate-300">

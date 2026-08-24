@@ -19,14 +19,13 @@ export const UpgradeModal: React.FC<UpgradeModalProps> = ({
   initialPlan = 'pro',
 }) => {
   const [selectedPlan, setSelectedPlan] = useState<'starter' | 'pro' | 'agency' | 'lifetime'>(initialPlan);
-  const [billingCycle, setBillingCycle] = useState<'monthly' | 'annual'>('monthly');
   const [isProcessing, setIsProcessing] = useState(false);
 
   if (!isOpen) return null;
 
   const isLifetime = selectedPlan === 'lifetime';
   const plan = SAAS_PLANS.find(p => p.id === selectedPlan) || SAAS_PLANS[2];
-  const price = isLifetime ? LIFETIME_PLAN.oneTimePrice : (billingCycle === 'annual' ? plan.annualPrice : plan.monthlyPrice);
+  const price = isLifetime ? LIFETIME_PLAN.oneTimePrice : plan.monthlyPrice;
   const currentCheckoutUrl = isLifetime ? CHECKOUT_LINKS.lifetime : CHECKOUT_LINKS[selectedPlan];
 
   const handleSimulateUpgrade = async () => {
@@ -35,7 +34,7 @@ export const UpgradeModal: React.FC<UpgradeModalProps> = ({
       const res = await fetch('/api/subscription', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ plan: selectedPlan, cycle: isLifetime ? 'lifetime' : billingCycle }),
+        body: JSON.stringify({ plan: selectedPlan, cycle: isLifetime ? 'lifetime' : 'monthly' }),
       });
 
       if (!res.ok) throw new Error('Erro ao ativar plano');
@@ -86,7 +85,6 @@ export const UpgradeModal: React.FC<UpgradeModalProps> = ({
 
         {/* Plan Selector Grid */}
         <div className="space-y-3 mb-6">
-          {/* Plan Selector Pills */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
             <button
               type="button"
@@ -146,37 +144,6 @@ export const UpgradeModal: React.FC<UpgradeModalProps> = ({
               <span className="text-xs font-bold text-amber-700">R$ 297</span>
             </button>
           </div>
-
-          {/* Monthly / Annual Toggle for non-lifetime */}
-          {!isLifetime && (
-            <div className="flex items-center justify-center gap-2 p-1 bg-slate-100 rounded-2xl w-fit mx-auto text-xs font-bold mt-2">
-              <button
-                type="button"
-                onClick={() => setBillingCycle('monthly')}
-                className={`px-4 py-1 rounded-xl transition-all ${
-                  billingCycle === 'monthly'
-                    ? 'bg-white text-slate-900 shadow-sm'
-                    : 'text-slate-500 hover:text-slate-900'
-                }`}
-              >
-                Mensal
-              </button>
-              <button
-                type="button"
-                onClick={() => setBillingCycle('annual')}
-                className={`px-4 py-1 rounded-xl transition-all flex items-center gap-1.5 ${
-                  billingCycle === 'annual'
-                    ? 'bg-white text-slate-900 shadow-sm'
-                    : 'text-slate-500 hover:text-slate-900'
-                }`}
-              >
-                <span>Anual</span>
-                <span className="px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[9px] font-extrabold">
-                  -20% OFF
-                </span>
-              </button>
-            </div>
-          )}
         </div>
 
         {/* Benefits Checklist */}
