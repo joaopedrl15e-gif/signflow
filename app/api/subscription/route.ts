@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/storage';
 import { getSessionUser } from '@/lib/auth';
-import { SAAS_PLANS } from '@/lib/plans';
+import { SAAS_PLANS, LIFETIME_PLAN } from '@/lib/plans';
 
 export async function GET() {
   try {
@@ -11,10 +11,17 @@ export async function GET() {
     const proposals = userId ? db.getProposals(userId) : [];
     
     const currentPlanId = user?.plan || settings?.plan || 'free';
-    const currentPlan = SAAS_PLANS.find(p => p.id === currentPlanId) || SAAS_PLANS[0];
+    
+    let currentPlan: any = SAAS_PLANS.find(p => p.id === currentPlanId);
+    if (!currentPlan && currentPlanId === 'lifetime') {
+      currentPlan = LIFETIME_PLAN;
+    }
+    if (!currentPlan) {
+      currentPlan = SAAS_PLANS[0];
+    }
 
-    const isUnlimited = currentPlan.maxProposals === 'unlimited';
-    const maxProposals = isUnlimited ? 999999 : Number(currentPlan.maxProposals);
+    const isUnlimited = currentPlanId === 'lifetime' || currentPlan.maxProposals === 'unlimited';
+    const maxProposals = isUnlimited ? 999999 : Number(currentPlan.maxProposals || 3);
     const usageCount = proposals.length;
     const canCreateMore = isUnlimited || usageCount < maxProposals;
 
@@ -44,7 +51,8 @@ export async function POST(request: Request) {
     const body = await request.json();
     const { plan, cycle } = body;
 
-    if (!plan || !['free', 'pro', 'agency'].includes(plan)) {
+    const allowedPlans = ['free', 'starter', 'pro', 'agency', 'lifetime'];
+    if (!plan || !allowedPlans.includes(plan)) {
       return NextResponse.json({ error: 'Plano inválido' }, { status: 400 });
     }
 
