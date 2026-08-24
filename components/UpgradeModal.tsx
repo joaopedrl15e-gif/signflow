@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { X, Check, Zap, Sparkles, ShieldCheck, CreditCard, Loader2, ExternalLink } from 'lucide-react';
+import { X, Check, Zap, Sparkles, ShieldCheck, CreditCard, Loader2, ExternalLink, Crown } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { SAAS_PLANS, LIFETIME_PLAN, CHECKOUT_LINKS } from '@/lib/plans';
 
@@ -60,7 +60,7 @@ export const UpgradeModal: React.FC<UpgradeModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-md p-4 animate-in fade-in duration-200 overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-md p-4 animate-in fade-in duration-200 overflow-y-auto">
       <div className="bg-white rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl border border-slate-200 relative my-8 text-slate-900">
         <button
           onClick={onClose}
@@ -73,13 +73,13 @@ export const UpgradeModal: React.FC<UpgradeModalProps> = ({
         <div className="text-left mb-6">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold border border-emerald-200 mb-2">
             <Sparkles className="w-3.5 h-3.5" />
-            <span>Checkout Seguro (Pix & Cartão) 🔒</span>
+            <span>Liberação Imediata via Pix ou Cartão 🔒</span>
           </div>
           <h2 className="text-2xl font-black text-slate-900 tracking-tight">
             Escolha seu Plano de Upgrade
           </h2>
           <p className="text-xs text-slate-500 mt-1">
-            Selecione o plano ideal para a sua necessidade e comece agora.
+            Desbloqueie propostas ilimitadas e ferramentas profissionais de alta conversão.
           </p>
         </div>
 
@@ -149,13 +149,13 @@ export const UpgradeModal: React.FC<UpgradeModalProps> = ({
         {/* Benefits Checklist */}
         <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 mb-6 space-y-2 text-xs">
           <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-            {isLifetime ? 'Benefícios da Oferta Vitalícia Founder:' : `Recursos inclusos no Plano ${plan.name}:`}
+            {isLifetime ? 'Benefícios Inclusos na Oferta Vitalícia Founder:' : `Recursos inclusos no Plano ${plan.name}:`}
           </span>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-slate-700">
-            {(isLifetime ? LIFETIME_PLAN.features : plan.features).slice(0, 4).map((f, idx) => (
-              <div key={idx} className="flex items-center gap-2">
-                <Check className="w-4 h-4 text-emerald-600 shrink-0" />
-                <span>{f}</span>
+            {(isLifetime ? LIFETIME_PLAN.features : plan.features).slice(0, 6).map((f, idx) => (
+              <div key={idx} className="flex items-start gap-2">
+                <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
+                <span className="leading-snug">{f}</span>
               </div>
             ))}
           </div>
@@ -173,7 +173,7 @@ export const UpgradeModal: React.FC<UpgradeModalProps> = ({
             <span>
               {isLifetime
                 ? 'Garantir Acesso Vitalício por R$ 297 (Pix ou Cartão)'
-                : `Pagar R$ ${price}/mês com Pix ou Cartão`}
+                : `Assinar ${plan.name} por R$ ${price}/mês`}
             </span>
             <ExternalLink className="w-4 h-4 text-white ml-1" />
           </a>

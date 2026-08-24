@@ -15,7 +15,7 @@ import {
   Crown,
   Flame
 } from 'lucide-react';
-import { CHECKOUT_LINKS } from '@/lib/plans';
+import { SAAS_PLANS, LIFETIME_PLAN, CHECKOUT_LINKS } from '@/lib/plans';
 
 export default function PricingPage() {
   return (
@@ -58,40 +58,40 @@ export default function PricingPage() {
         </p>
 
         {/* 👑 SPECIAL LIFETIME DEAL BANNER 👑 */}
-        <div className="max-w-4xl mx-auto mb-16 rounded-3xl p-6 sm:p-8 bg-gradient-to-r from-amber-950/60 via-slate-900 to-amber-950/60 border-2 border-amber-500/50 shadow-2xl relative overflow-hidden text-left">
+        <div className="max-w-4xl mx-auto mb-16 rounded-3xl p-6 sm:p-8 bg-gradient-to-r from-amber-950/70 via-slate-900 to-amber-950/70 border-2 border-amber-500/60 shadow-2xl relative overflow-hidden text-left group">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
-            <div className="space-y-2">
+            <div className="space-y-2.5">
               <div className="flex items-center gap-2">
-                <span className="px-2.5 py-0.5 rounded-full bg-amber-500 text-slate-950 text-[10px] font-black uppercase tracking-wider flex items-center gap-1">
-                  <Flame className="w-3 h-3 text-slate-950" />
-                  <span>Oferta Especial de Lançamento</span>
+                <span className="px-3 py-1 rounded-full bg-amber-500 text-slate-950 text-[10px] font-black uppercase tracking-wider flex items-center gap-1 shadow-md">
+                  <Flame className="w-3.5 h-3.5 text-slate-950" />
+                  <span>Oferta Vitalícia Founder • Vagas Limitadas</span>
                 </span>
-                <span className="text-xs text-amber-400 font-bold">Vagas Limitadas</span>
               </div>
               <h3 className="text-2xl sm:text-3xl font-black text-white">
                 Plano Vitalício Founder (Acesso Eterno)
               </h3>
               <p className="text-xs sm:text-sm text-slate-300 max-w-xl leading-relaxed">
-                Pague <strong className="text-amber-400">uma única vez (R$ 297)</strong> e tenha todas as ferramentas do Plano Pro liberadas para sempre, sem nenhuma mensalidade.
+                Pague <strong className="text-amber-400">uma única vez</strong> e tenha todas as ferramentas do Plano Pro liberadas para sempre, sem nenhuma mensalidade ou renovação futura.
               </p>
-              <div className="flex items-center gap-4 text-xs text-slate-400 pt-2 flex-wrap">
-                <span className="flex items-center gap-1"><Check className="w-3.5 h-3.5 text-amber-400" /> Propostas ilimitadas</span>
-                <span className="flex items-center gap-1"><Check className="w-3.5 h-3.5 text-amber-400" /> Assinatura digital na tela</span>
-                <span className="flex items-center gap-1"><Check className="w-3.5 h-3.5 text-amber-400" /> Zero mensalidades</span>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-slate-300 pt-2">
+                <span className="flex items-center gap-1.5"><Check className="w-4 h-4 text-amber-400 shrink-0" /> Propostas & Contratos ILIMITADOS</span>
+                <span className="flex items-center gap-1.5"><Check className="w-4 h-4 text-amber-400 shrink-0" /> Assinatura digital válida (MP 2.200-2)</span>
+                <span className="flex items-center gap-1.5"><Check className="w-4 h-4 text-amber-400 shrink-0" /> Chave Pix integrada para sinal</span>
+                <span className="flex items-center gap-1.5"><Check className="w-4 h-4 text-amber-400 shrink-0" /> Zero mensalidades para sempre</span>
               </div>
             </div>
 
-            <div className="text-center sm:text-right shrink-0 bg-slate-950/80 p-5 rounded-2xl border border-amber-500/30">
+            <div className="text-center sm:text-right shrink-0 bg-slate-950/90 p-6 rounded-2xl border border-amber-500/40 shadow-xl">
               <span className="text-[11px] text-slate-400 line-through block">De R$ 588,00/ano</span>
               <span className="text-3xl sm:text-4xl font-black text-amber-400 block">
                 R$ 297
               </span>
-              <span className="text-[11px] text-slate-400 block mb-3 font-medium">Pagamento único no Pix ou Cartão</span>
+              <span className="text-[11px] text-slate-400 block mb-4 font-medium">Pagamento único no Pix ou Cartão</span>
               <a
                 href={CHECKOUT_LINKS.lifetime}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-slate-950 font-black text-xs shadow-lg shadow-amber-500/20 transition-all hover:scale-105"
+                className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-slate-950 font-black text-xs shadow-lg shadow-amber-500/25 transition-all hover:scale-105"
               >
                 <Crown className="w-4 h-4 text-slate-950" />
                 <span>Garantir Vaga Vitalícia (R$ 297)</span>
@@ -101,7 +101,7 @@ export default function PricingPage() {
           </div>
         </div>
 
-        {/* 4 Pricing Cards Grid */}
+        {/* 4 Upgraded Pricing Cards Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-left items-stretch mb-24">
           {/* Card 1: Gratuito */}
           <div className="rounded-3xl p-6 sm:p-7 flex flex-col justify-between glass-panel border border-slate-800 hover:border-slate-700 transition-all">
@@ -114,7 +114,9 @@ export default function PricingPage() {
               </div>
               <div className="space-y-2.5 mb-6 text-xs text-slate-300">
                 <div className="flex items-start gap-2"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" /><span>Até 3 propostas ativas</span></div>
-                <div className="flex items-start gap-2"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" /><span>Assinatura na tela</span></div>
+                <div className="flex items-start gap-2"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" /><span>Assinatura na tela (touch/mouse)</span></div>
+                <div className="flex items-start gap-2"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" /><span>Validade jurídica MP 2.200-2</span></div>
+                <div className="flex items-start gap-2"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" /><span>Acesso a 4 modelos validados</span></div>
                 <div className="flex items-start gap-2"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" /><span>Download em PDF</span></div>
               </div>
             </div>
@@ -127,7 +129,7 @@ export default function PricingPage() {
             </Link>
           </div>
 
-          {/* Card 2: Starter (R$ 29 - Cakto Real) */}
+          {/* Card 2: Starter (R$ 29) */}
           <div className="rounded-3xl p-6 sm:p-7 flex flex-col justify-between glass-panel border border-slate-800 hover:border-indigo-500/40 transition-all">
             <div>
               <span className="inline-block px-2.5 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 text-[9px] font-black uppercase tracking-wider mb-2 border border-indigo-500/30">
@@ -141,8 +143,10 @@ export default function PricingPage() {
               </div>
               <div className="space-y-2.5 mb-6 text-xs text-slate-300">
                 <div className="flex items-start gap-2"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" /><span>Até 10 propostas por mês</span></div>
-                <div className="flex items-start gap-2"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" /><span>Envio no WhatsApp</span></div>
-                <div className="flex items-start gap-2"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" /><span>Sem marca d'água</span></div>
+                <div className="flex items-start gap-2"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" /><span><strong>100% Sem marca d'água</strong></span></div>
+                <div className="flex items-start gap-2"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" /><span>Envio em 1-Clique no WhatsApp</span></div>
+                <div className="flex items-start gap-2"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" /><span>Chave Pix para receber sinal</span></div>
+                <div className="flex items-start gap-2"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" /><span>PDFs ilimitados em alta resolução</span></div>
               </div>
             </div>
             <a
@@ -160,7 +164,7 @@ export default function PricingPage() {
           {/* Card 3: Pro (R$ 49) */}
           <div className="rounded-3xl p-6 sm:p-7 flex flex-col justify-between glass-panel-glow border-2 border-emerald-500 shadow-2xl shadow-emerald-500/10 scale-105 z-10 relative">
             <span className="absolute -top-3 left-1/2 -translate-x-1/2 px-2.5 py-0.5 rounded-full bg-emerald-500 text-slate-950 text-[9px] font-black uppercase tracking-wider shadow-md">
-              MAIS POPULAR ⭐
+              MAIS VENDIDO ⭐
             </span>
             <div>
               <h3 className="text-lg font-bold text-white mb-1">Profissional Pro</h3>
@@ -170,16 +174,19 @@ export default function PricingPage() {
                 <span className="text-xs text-slate-400 font-medium"> / mês</span>
               </div>
               <div className="space-y-2.5 mb-6 text-xs text-slate-300">
-                <div className="flex items-start gap-2"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" /><span>Propostas ILIMITADAS</span></div>
-                <div className="flex items-start gap-2"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" /><span>Assinatura válida juridicamente</span></div>
-                <div className="flex items-start gap-2"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" /><span>Suporte prioritário WhatsApp</span></div>
+                <div className="flex items-start gap-2"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" /><span><strong>Propostas e Contratos ILIMITADOS</strong></span></div>
+                <div className="flex items-start gap-2"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" /><span><strong>Rastreamento em tempo real</strong></span></div>
+                <div className="flex items-start gap-2"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" /><span>Chave Pix para entrada na proposta</span></div>
+                <div className="flex items-start gap-2"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" /><span>Simulador de parcelamento no cartão</span></div>
+                <div className="flex items-start gap-2"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" /><span>Calculadora de ROI automática</span></div>
+                <div className="flex items-start gap-2"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" /><span>Suporte prioritário via WhatsApp VIP</span></div>
               </div>
             </div>
             <a
               href={CHECKOUT_LINKS.pro}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full py-3 px-4 rounded-xl font-black text-xs bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-slate-950 shadow-lg shadow-emerald-500/25 hover:scale-[1.02] transition-all flex items-center justify-center gap-2"
+              className="w-full py-3 px-4 rounded-xl font-black text-xs bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-400 hover:from-emerald-400 hover:to-teal-300 text-slate-950 shadow-lg shadow-emerald-500/25 hover:scale-[1.02] transition-all flex items-center justify-center gap-2"
             >
               <CreditCard className="w-3.5 h-3.5" />
               <span>Assinar Plano Pro (R$ 49)</span>
@@ -200,9 +207,12 @@ export default function PricingPage() {
                 <span className="text-xs text-slate-400 font-medium"> / mês</span>
               </div>
               <div className="space-y-2.5 mb-6 text-xs text-slate-300">
-                <div className="flex items-start gap-2"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" /><span>Tudo do Plano Pro</span></div>
-                <div className="flex items-start gap-2"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" /><span>Até 5 membros de equipe</span></div>
-                <div className="flex items-start gap-2"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" /><span>Domínio personalizado</span></div>
+                <div className="flex items-start gap-2"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" /><span><strong>Tudo do Plano Pro 100% ILIMITADO</strong></span></div>
+                <div className="flex items-start gap-2"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" /><span>Até 5 Usuários / Vendedores</span></div>
+                <div className="flex items-start gap-2"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" /><span><strong>White-label total (Sua marca)</strong></span></div>
+                <div className="flex items-start gap-2"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" /><span>Domínio próprio personalizado</span></div>
+                <div className="flex items-start gap-2"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" /><span>Exportação financeira em Excel/CSV</span></div>
+                <div className="flex items-start gap-2"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" /><span>Gerente de suporte dedicado VIP</span></div>
               </div>
             </div>
             <a
@@ -237,7 +247,7 @@ export default function PricingPage() {
             <div className="pt-4">
               <h4 className="text-sm font-bold text-white mb-1">Quais formas de pagamento são aceitas?</h4>
               <p className="text-xs text-slate-400 leading-relaxed">
-                Aceitamos PIX instantâneo com liberação na hora e Cartão de Crédito em até 12x.
+                Aceitamos PIX instantâneo com liberação imediata e Cartão de Crédito em até 12x via Cakto.
               </p>
             </div>
 
