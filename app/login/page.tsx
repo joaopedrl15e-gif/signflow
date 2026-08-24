@@ -3,7 +3,8 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Sparkles, ArrowRight, Lock, Mail, Loader2, ShieldCheck, ChevronLeft, UserCheck } from 'lucide-react';
+import { Sparkles, ArrowRight, Lock, Mail, Loader2, UserCheck, ChevronLeft } from 'lucide-react';
+import { clientAuth } from '@/lib/clientAuth';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -18,42 +19,42 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      const res = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-      });
+      // 1. Authenticate via client storage
+      const clientRes = clientAuth.login(email, password);
+      
+      // 2. Also try API login for cookie sync
+      try {
+        await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password }),
+        });
+      } catch {}
 
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.error || 'Erro ao entrar na conta');
+      if (!clientRes.success) {
+        throw new Error(clientRes.error || 'E-mail ou senha incorretos.');
       }
 
       router.push('/dashboard');
+      window.location.href = '/dashboard';
     } catch (err: any) {
-      setErrorMsg(err.message || 'Credenciais inválidas');
-    } finally {
+      setErrorMsg(err.message || 'Credenciais inválidas.');
       setLoading(false);
     }
   };
 
   const handleDemoLogin = async () => {
-    setEmail('demo@studionova.com.br');
-    setPassword('123456');
     setLoading(true);
-
+    clientAuth.login('demo@studionova.com.br', '123456');
     try {
-      const res = await fetch('/api/auth/login', {
+      await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: 'demo@studionova.com.br', password: '123456' }),
       });
-      if (res.ok) {
-        router.push('/dashboard');
-      }
-    } catch {
-      setLoading(false);
-    }
+    } catch {}
+    router.push('/dashboard');
+    window.location.href = '/dashboard';
   };
 
   return (
@@ -100,7 +101,7 @@ export default function LoginPage() {
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
             <label className="block text-xs font-bold text-slate-300 mb-1.5">
-              E-mail Profissional
+              E-mail de Acesso
             </label>
             <div className="relative">
               <Mail className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
@@ -120,7 +121,6 @@ export default function LoginPage() {
               <label className="text-xs font-bold text-slate-300">
                 Sua Senha
               </label>
-              <span className="text-[11px] text-slate-500">Esqueceu?</span>
             </div>
             <div className="relative">
               <Lock className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
@@ -162,7 +162,7 @@ export default function LoginPage() {
             className="w-full py-2.5 px-3 rounded-xl bg-slate-900 hover:bg-slate-850 border border-slate-800 text-[11px] text-slate-300 font-bold flex items-center justify-center gap-2 transition-colors"
           >
             <UserCheck className="w-3.5 h-3.5 text-indigo-400" />
-            <span>Entrar na Conta de Demonstração (1-Clique)</span>
+            <span>Entrar na Conta Demo (1-Clique)</span>
           </button>
         </div>
 

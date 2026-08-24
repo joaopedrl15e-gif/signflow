@@ -12,10 +12,10 @@ import {
   Building,
   Phone,
   Loader2,
-  CheckCircle2,
   ChevronLeft
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { clientAuth } from '@/lib/clientAuth';
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -33,22 +33,33 @@ export default function RegisterPage() {
     setLoading(true);
 
     try {
-      const res = await fetch('/api/auth/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name,
-          companyName,
-          email,
-          phone,
-          password,
-        }),
+      // 1. Register and set session locally in the browser
+      const resLocal = clientAuth.register({
+        name,
+        companyName,
+        email,
+        phone,
+        password,
       });
 
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.error || 'Erro ao criar conta');
+      if (!resLocal.success) {
+        throw new Error(resLocal.error || 'Erro ao criar conta');
       }
+
+      // 2. Also register in the backend API
+      try {
+        await fetch('/api/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name,
+            companyName,
+            email,
+            phone,
+            password,
+          }),
+        });
+      } catch {}
 
       try {
         confetti({
@@ -60,6 +71,7 @@ export default function RegisterPage() {
 
       setTimeout(() => {
         router.push('/dashboard');
+        window.location.href = '/dashboard';
       }, 500);
     } catch (err: any) {
       setErrorMsg(err.message || 'Falha ao cadastrar');

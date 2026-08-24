@@ -17,6 +17,7 @@ import {
   LogOut
 } from 'lucide-react';
 import { UpgradeModal } from './UpgradeModal';
+import { clientAuth } from '@/lib/clientAuth';
 
 const NAV_ITEMS = [
   { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
@@ -36,12 +37,17 @@ export const Sidebar: React.FC = () => {
   const [isUpgradeOpen, setIsUpgradeOpen] = useState(false);
 
   useEffect(() => {
-    fetch('/api/auth/me')
-      .then(res => res.json())
-      .then(data => {
-        if (data.authenticated) setUser(data.user);
-      })
-      .catch(() => {});
+    const active = clientAuth.getCurrentUser();
+    if (active) {
+      setUser(active);
+    } else {
+      fetch('/api/auth/me')
+        .then(res => res.json())
+        .then(data => {
+          if (data.authenticated) setUser(data.user);
+        })
+        .catch(() => {});
+    }
 
     fetch('/api/subscription')
       .then(res => res.json())
@@ -50,13 +56,12 @@ export const Sidebar: React.FC = () => {
   }, []);
 
   const handleLogout = async () => {
+    clientAuth.logout();
     try {
       await fetch('/api/auth/logout', { method: 'POST' });
-      router.push('/login');
-      window.location.href = '/login';
-    } catch {
-      router.push('/login');
-    }
+    } catch {}
+    router.push('/login');
+    window.location.href = '/login';
   };
 
   const isFree = !subData?.plan || subData.plan === 'free';
@@ -139,7 +144,7 @@ export const Sidebar: React.FC = () => {
         </div>
       </div>
 
-      {/* Bottom Area: Subscription Card & Logout */}
+      {/* Bottom Area */}
       <div className="p-3">
         {/* Subscription Plan Card in Sidebar */}
         <div className="p-4 rounded-2xl bg-gradient-to-b from-slate-50 to-slate-100 border border-slate-200 text-center relative overflow-hidden mb-3">

@@ -6,14 +6,12 @@ import {
   TrendingUp,
   FileCheck2,
   Clock,
-  ArrowUpRight,
   Plus,
   Share2,
   ExternalLink,
   Target,
   Sparkles,
   Zap,
-  Filter,
   CheckCircle2,
   FileText
 } from 'lucide-react';
@@ -22,6 +20,7 @@ import { formatCurrency, formatDate } from '@/lib/utils';
 import { StatusBadge } from '@/components/StatusBadge';
 import { ShareModal } from '@/components/ShareModal';
 import { UpgradeModal } from '@/components/UpgradeModal';
+import { clientAuth } from '@/lib/clientAuth';
 
 export default function DashboardPage() {
   const [proposals, setProposals] = useState<Proposal[]>([]);
@@ -33,12 +32,18 @@ export default function DashboardPage() {
   const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
-    fetch('/api/auth/me')
-      .then(res => res.json())
-      .then(data => {
-        if (data.authenticated) setUser(data.user);
-      })
-      .catch(() => {});
+    // 1. Read user session instantly
+    const active = clientAuth.getCurrentUser();
+    if (active) {
+      setUser(active);
+    } else {
+      fetch('/api/auth/me')
+        .then(res => res.json())
+        .then(data => {
+          if (data.authenticated && data.user) setUser(data.user);
+        })
+        .catch(() => {});
+    }
 
     fetchProposals();
   }, []);
@@ -60,7 +65,6 @@ export default function DashboardPage() {
     }
   };
 
-  // Safe KPI calculations
   const safeProposals = Array.isArray(proposals) ? proposals : [];
   const totalRevenue = safeProposals
     .filter(p => p && p.status === 'accepted')
@@ -78,7 +82,6 @@ export default function DashboardPage() {
     ? Math.round((acceptedCount / totalCount) * 100)
     : 0;
 
-  // Monthly Target
   const monthlyTarget = 15000;
   const goalProgress = Math.min(100, Math.round((totalRevenue / monthlyTarget) * 100));
 
@@ -151,7 +154,6 @@ export default function DashboardPage() {
 
       {/* 4 Cards de Métricas */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-        {/* Card 1: Faturamento Fechado */}
         <div className="bg-white p-5 rounded-3xl border border-slate-200/80 shadow-sm hover:border-emerald-200 transition-all group">
           <div className="flex items-center justify-between mb-3">
             <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Faturado (Aceitos)</span>
@@ -168,7 +170,6 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Card 2: Em Negociação */}
         <div className="bg-white p-5 rounded-3xl border border-slate-200/80 shadow-sm hover:border-amber-200 transition-all group">
           <div className="flex items-center justify-between mb-3">
             <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Em Negociação</span>
@@ -184,7 +185,6 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Card 3: Taxa de Conversão */}
         <div className="bg-white p-5 rounded-3xl border border-slate-200/80 shadow-sm hover:border-indigo-200 transition-all group">
           <div className="flex items-center justify-between mb-3">
             <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Taxa de Conversão</span>
@@ -200,7 +200,6 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Card 4: Total de Propostas */}
         <div className="bg-white p-5 rounded-3xl border border-slate-200/80 shadow-sm hover:border-blue-200 transition-all group">
           <div className="flex items-center justify-between mb-3">
             <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Total Emitido</span>
@@ -217,9 +216,8 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* 🚀 Propostas Recentes 🚀 */}
+      {/* Propostas Recentes */}
       <div className="bg-white rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden">
-        {/* Table Header Controls */}
         <div className="p-6 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <h2 className="text-base font-bold text-slate-900">Propostas Recentes</h2>
@@ -247,7 +245,6 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Proposals List */}
         {loading ? (
           <div className="p-12 text-center text-xs text-slate-400">Carregando propostas...</div>
         ) : filteredProposals.length === 0 ? (
@@ -255,16 +252,16 @@ export default function DashboardPage() {
             <div className="w-12 h-12 rounded-2xl bg-slate-100 text-slate-400 flex items-center justify-center mx-auto mb-3">
               <FileText className="w-6 h-6" />
             </div>
-            <p className="text-sm font-bold text-slate-900">Nenhuma proposta encontrada</p>
+            <p className="text-sm font-bold text-slate-900">Nenhuma proposta criada ainda</p>
             <p className="text-xs text-slate-500 mt-1 max-w-sm mx-auto">
-              Clique em Criar Nova Proposta para emitir seu primeiro orçamento e enviar pelo WhatsApp.
+              Seu painel está limpo! Clique no botão abaixo para criar seu primeiro orçamento comercial e enviar para o cliente no WhatsApp.
             </p>
             <Link
               href="/dashboard/propostas/nova"
               className="mt-4 inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shadow-sm transition-all"
             >
               <Plus className="w-4 h-4" />
-              <span>Criar Primeira Proposta</span>
+              <span>Criar Minha Primeira Proposta</span>
             </Link>
           </div>
         ) : (
@@ -344,7 +341,6 @@ export default function DashboardPage() {
         )}
       </div>
 
-      {/* Share Modal */}
       {selectedProposal && (
         <ShareModal
           proposal={selectedProposal}
@@ -356,7 +352,6 @@ export default function DashboardPage() {
         />
       )}
 
-      {/* Upgrade Modal */}
       <UpgradeModal
         isOpen={isUpgradeOpen}
         onClose={() => setIsUpgradeOpen(false)}
