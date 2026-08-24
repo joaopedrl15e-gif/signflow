@@ -16,23 +16,27 @@ import {
   TrendingUp,
   Clock,
   Layers,
-  MousePointerClick,
   Smartphone,
-  ChevronRight,
-  Sliders,
   Check,
-  Lock,
   Flame,
-  Star,
+  HelpCircle,
   LogIn,
   UserPlus
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { SAAS_PLANS } from '@/lib/plans';
+import { UpgradeModal } from '@/components/UpgradeModal';
 
 export default function HomePage() {
   const [demoSigned, setDemoSigned] = useState(false);
   const [demoSigning, setDemoSigning] = useState(false);
 
+  // Pricing Switcher & Upgrade Modal
+  const [pricingCycle, setPricingCycle] = useState<'monthly' | 'annual'>('monthly');
+  const [isUpgradeModalOpen, setIsUpgradeModalOpen] = useState(false);
+  const [selectedPlanForModal, setSelectedPlanForModal] = useState<'pro' | 'agency'>('pro');
+
+  // ROI Calculator
   const [proposalsPerMonth, setProposalsPerMonth] = useState(12);
   const [averageTicket, setAverageTicket] = useState(2500);
 
@@ -54,6 +58,15 @@ export default function HomePage() {
 
   const handleResetDemo = () => {
     setDemoSigned(false);
+  };
+
+  const handleSelectPlan = (planId: 'free' | 'pro' | 'agency') => {
+    if (planId === 'free') {
+      window.location.href = '/cadastro';
+    } else {
+      setSelectedPlanForModal(planId);
+      setIsUpgradeModalOpen(true);
+    }
   };
 
   const estimatedHoursSaved = Math.round(proposalsPerMonth * 1.8);
@@ -91,10 +104,10 @@ export default function HomePage() {
             <a href="#demo" className="hover:text-white transition-colors">Demonstração</a>
             <a href="#recursos" className="hover:text-white transition-colors">Recursos</a>
             <a href="#calculadora" className="hover:text-white transition-colors">Calculadora de ROI</a>
-            <Link href="/planos" className="text-emerald-400 font-bold hover:text-emerald-300 transition-colors flex items-center gap-1">
+            <a href="#planos" className="text-emerald-400 font-bold hover:text-emerald-300 transition-colors flex items-center gap-1">
               <Zap className="w-3.5 h-3.5" />
               <span>Planos & Preços</span>
-            </Link>
+            </a>
           </nav>
 
           <div className="flex items-center gap-3">
@@ -144,13 +157,13 @@ export default function HomePage() {
             <Sparkles className="w-5 h-5 text-slate-950" />
             <span>Criar Minha Conta Gratuita</span>
           </Link>
-          <Link
-            href="/login"
+          <a
+            href="#planos"
             className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-4 rounded-2xl glass-panel hover:bg-slate-850 text-slate-200 font-semibold text-sm transition-all"
           >
-            <LogIn className="w-4 h-4 text-emerald-400" />
-            <span>Já tenho uma conta</span>
-          </Link>
+            <Zap className="w-4 h-4 text-emerald-400" />
+            <span>Ver Tabela de Planos</span>
+          </a>
         </div>
 
         {/* Social Proof Stats Bar */}
@@ -314,6 +327,122 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* 💰 SEÇÃO DE PLANOS & VALORES EMBUTIDA NO SITE 💰 */}
+      <section id="planos" className="py-24 px-4 sm:px-6 max-w-6xl mx-auto relative z-10 text-center">
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-panel border border-emerald-500/30 text-emerald-300 text-xs font-bold mb-6">
+          <Sparkles className="w-3.5 h-3.5" />
+          <span>Planos Transparentes e Sem Taxas Ocultas</span>
+        </div>
+
+        <h2 className="text-3xl sm:text-5xl font-black tracking-tight text-white mb-4">
+          Escolha o plano ideal para o seu negócio
+        </h2>
+
+        <p className="text-slate-400 text-sm sm:text-base max-w-xl mx-auto mb-10">
+          Comece gratuitamente e faça upgrade quando quiser criar propostas comerciais ilimitadas e acelerar suas vendas.
+        </p>
+
+        {/* Billing Switcher (Mensal vs Anual -20%) */}
+        <div className="flex items-center justify-center gap-3 p-1.5 glass-panel rounded-2xl w-fit mx-auto text-xs font-bold mb-16">
+          <button
+            type="button"
+            onClick={() => setPricingCycle('monthly')}
+            className={`px-5 py-2 rounded-xl transition-all ${
+              pricingCycle === 'monthly'
+                ? 'bg-emerald-500 text-slate-950 font-black shadow-md'
+                : 'text-slate-400 hover:text-white'
+            }`}
+          >
+            Cobrança Mensal
+          </button>
+          <button
+            type="button"
+            onClick={() => setPricingCycle('annual')}
+            className={`px-5 py-2 rounded-xl transition-all flex items-center gap-2 ${
+              pricingCycle === 'annual'
+                ? 'bg-emerald-500 text-slate-950 font-black shadow-md'
+                : 'text-slate-400 hover:text-white'
+            }`}
+          >
+            <span>Cobrança Anual</span>
+            <span className="px-2 py-0.5 rounded-full bg-slate-900 text-emerald-400 text-[10px] font-extrabold border border-emerald-500/30">
+              Economize 20%
+            </span>
+          </button>
+        </div>
+
+        {/* 3 Pricing Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left items-stretch mb-16">
+          {SAAS_PLANS.map((plan) => {
+            const isPopular = plan.popular;
+            const price = pricingCycle === 'annual' ? plan.annualPrice : plan.monthlyPrice;
+
+            return (
+              <div
+                key={plan.id}
+                className={`rounded-3xl p-8 flex flex-col justify-between relative transition-all ${
+                  isPopular
+                    ? 'glass-panel-glow border-2 border-emerald-500 shadow-2xl shadow-emerald-500/10 scale-105 z-10'
+                    : 'glass-panel border border-slate-800 hover:border-slate-700'
+                }`}
+              >
+                {plan.badge && (
+                  <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-emerald-500 text-slate-950 text-[10px] font-black uppercase tracking-wider shadow-md">
+                    {plan.badge}
+                  </span>
+                )}
+
+                <div>
+                  <h3 className="text-xl font-bold text-white mb-1">{plan.name}</h3>
+                  <p className="text-xs text-slate-400 mb-6 min-h-[36px]">{plan.description}</p>
+
+                  <div className="mb-6 pb-6 border-b border-slate-800">
+                    <span className="text-4xl sm:text-5xl font-black text-white">
+                      R$ {price}
+                    </span>
+                    <span className="text-xs text-slate-400 font-medium"> / mês</span>
+                    {pricingCycle === 'annual' && plan.monthlyPrice > 0 && (
+                      <p className="text-[11px] text-emerald-400 mt-1">Faturado anualmente com 20% OFF</p>
+                    )}
+                  </div>
+
+                  <div className="space-y-3 mb-8">
+                    <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">
+                      Recursos incluídos:
+                    </span>
+                    {plan.features.map((feature, idx) => (
+                      <div key={idx} className="flex items-start gap-2.5 text-xs text-slate-300">
+                        <Check className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                        <span>{feature}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => handleSelectPlan(plan.id)}
+                  className={`w-full py-3.5 px-4 rounded-2xl font-black text-xs transition-all flex items-center justify-center gap-2 ${
+                    isPopular
+                      ? 'bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-slate-950 shadow-lg shadow-emerald-500/25 hover:scale-[1.02]'
+                      : 'bg-slate-850 hover:bg-slate-800 text-white border border-slate-700'
+                  }`}
+                >
+                  <span>{plan.ctaText}</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Garantia Selo */}
+        <div className="flex items-center justify-center gap-2 text-xs text-slate-400">
+          <ShieldCheck className="w-4 h-4 text-emerald-400" />
+          <span>Garantia de 7 dias ou seu dinheiro de volta • Cancele quando quiser</span>
+        </div>
+      </section>
+
       {/* 📊 CALCULADORA DE ROI 📊 */}
       <section id="calculadora" className="py-20 px-4 sm:px-6 max-w-5xl mx-auto relative z-10">
         <div className="glass-panel rounded-3xl p-8 sm:p-12 border border-slate-800 shadow-2xl relative overflow-hidden">
@@ -418,6 +547,13 @@ export default function HomePage() {
           <p>&copy; 2026 SignFlow. Todos os direitos reservados.</p>
         </div>
       </footer>
+
+      {/* Modal de Upgrade Interativo ao Vivo */}
+      <UpgradeModal
+        isOpen={isUpgradeModalOpen}
+        onClose={() => setIsUpgradeModalOpen(false)}
+        initialPlan={selectedPlanForModal}
+      />
     </div>
   );
 }
