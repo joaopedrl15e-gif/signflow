@@ -2,6 +2,19 @@ export type ProposalStatus = 'draft' | 'sent' | 'viewed' | 'accepted' | 'decline
 
 export type PlanTier = 'free' | 'pro' | 'agency';
 
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  passwordHash: string; // Plain/SHA for demo or bcrypt
+  companyName: string;
+  phone?: string;
+  document?: string;
+  plan: PlanTier;
+  planCycle?: 'monthly' | 'annual';
+  createdAt: string;
+}
+
 export interface ProposalItem {
   id: string;
   title: string;
@@ -21,8 +34,8 @@ export interface ProposalMilestone {
 export interface ProposalSignature {
   signerName: string;
   signerEmail: string;
-  signerDocument: string; // CPF or CNPJ
-  signatureImage: string; // Data URL base64 from canvas or generated
+  signerDocument: string;
+  signatureImage: string;
   signedAt: string;
   ipAddress?: string;
   userAgent?: string;
@@ -32,17 +45,18 @@ export interface ClientInfo {
   name: string;
   companyName?: string;
   email: string;
-  phone: string; // WhatsApp
-  document?: string; // CPF/CNPJ
+  phone: string;
+  document?: string;
   address?: string;
 }
 
 export interface CompanySettings {
+  userId?: string;
   name: string;
   tagline?: string;
   email: string;
   phone: string;
-  document: string; // CNPJ / CPF
+  document: string;
   logoUrl?: string;
   website?: string;
   primaryColor?: string;
@@ -54,6 +68,7 @@ export interface CompanySettings {
 
 export interface Proposal {
   id: string;
+  userId?: string; // Multi-tenant ownership
   code: string;
   title: string;
   introduction?: string;

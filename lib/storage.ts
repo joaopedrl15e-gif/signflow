@@ -1,16 +1,31 @@
 import fs from 'fs';
 import path from 'path';
-import { Proposal, CompanySettings, PlanTier } from './types';
+import { Proposal, CompanySettings, User, PlanTier } from './types';
 
 const DATA_DIR = path.join(process.cwd(), 'data');
 const DB_FILE = path.join(DATA_DIR, 'db.json');
 
 interface DatabaseSchema {
-  settings: CompanySettings;
+  users: User[];
+  settings: Record<string, CompanySettings>; // keyed by userId
   proposals: Proposal[];
 }
 
+const DEFAULT_DEMO_USER: User = {
+  id: 'usr_demo_1',
+  name: 'Studio Nova',
+  email: 'demo@studionova.com.br',
+  passwordHash: '123456',
+  companyName: 'Studio Nova Digital',
+  phone: '(11) 99876-5432',
+  document: '42.123.456/0001-89',
+  plan: 'free',
+  planCycle: 'monthly',
+  createdAt: new Date().toISOString(),
+};
+
 const DEFAULT_SETTINGS: CompanySettings = {
+  userId: 'usr_demo_1',
   name: 'Studio Nova Digital',
   tagline: 'Soluções Digitais & Estratégia de Alto Impacto',
   email: 'contato@studionova.com.br',
@@ -20,13 +35,14 @@ const DEFAULT_SETTINGS: CompanySettings = {
   primaryColor: '#4f46e5',
   pixKey: '42123456000189',
   bankDetails: 'Banco Inter (077) - Ag: 0001 - Conta: 1234567-8',
-  plan: 'free', // Default starting plan is Free (3 proposals)
+  plan: 'free',
   planCycle: 'monthly',
 };
 
 const SEED_PROPOSALS: Proposal[] = [
   {
     id: 'prop-1',
+    userId: 'usr_demo_1',
     code: 'PROP-2026-001',
     title: 'Redesign do E-commerce & Otimização Mobile',
     introduction: 'Apresentamos a proposta para renovação da experiência digital da sua loja, visando aumentar a taxa de conversão e velocidade no celular.',
@@ -80,6 +96,7 @@ const SEED_PROPOSALS: Proposal[] = [
   },
   {
     id: 'prop-2',
+    userId: 'usr_demo_1',
     code: 'PROP-2026-002',
     title: 'Gestão de Tráfego Pago & Geração de Leads B2B',
     introduction: 'Estratégia focada na captação contínua de clientes qualificados através de anúncios no Meta Ads e Google Ads.',
@@ -128,7 +145,10 @@ function ensureDb(): DatabaseSchema {
     }
     if (!fs.existsSync(DB_FILE)) {
       const initialData: DatabaseSchema = {
-        settings: DEFAULT_SETTINGS,
+        users: [DEFAULT_DEMO_USER],
+        settings: {
+          [DEFAULT_DEMO_USER.id]: DEFAULT_SETTINGS,
+        },
         proposals: SEED_PROPOSALS,
       };
       fs.writeFileSync(DB_FILE, JSON.stringify(initialData, null, 2), 'utf-8');
@@ -136,16 +156,20 @@ function ensureDb(): DatabaseSchema {
     }
     const content = fs.readFileSync(DB_FILE, 'utf-8');
     const parsed = JSON.parse(content);
-    if (!parsed.settings.plan) {
-      parsed.settings.plan = 'free';
-      parsed.settings.planCycle = 'monthly';
-      saveDb(parsed);
+    
+    // Schema migrations if needed
+    if (!Array.isArray(parsed.users)) {
+      parsed.users = [DEFAULT_DEMO_USER];
+    }
+    if (!parsed.settings || typeof parsed.settings !== 'object' || Array.isArray(parsed.settings)) {
+      parsed.settings = { [DEFAULT_DEMO_USER.id]: DEFAULT_SETTINGS };
     }
     return parsed;
   } catch (error) {
     console.error('Error reading DB:', error);
     return {
-      settings: DEFAULT_SETTINGS,
+      users: [DEFAULT_DEMO_USER],
+      settings: { [DEFAULT_DEMO_USER.id]: DEFAULT_SETTINGS },
       proposals: SEED_PROPOSALS,
     };
   }
@@ -163,29 +187,85 @@ function saveDb(data: DatabaseSchema) {
 }
 
 export const db = {
-  getSettings(): CompanySettings {
+  // User Management
+  findUserByEmail(email: string): User | null {
     const data = ensureDb();
-    return data.settings || DEFAULT_SETTINGS;
+    return data.users.find(u => u.email.toLowerCase() === email.toLowerCase().trim()) || null;
   },
 
-  updateSettings(settings: Partial<CompanySettings>): CompanySettings {
+  findUserById(id: string): User | null {
     const data = ensureDb();
-    data.settings = { ...data.settings, ...settings };
+    return data.users.find(u => u.id === id) || null;
+  },
+
+  createUser(userData: { name: string; email: string; passwordHash: string; companyName: string; phone?: string }): User {
+    const data = ensureDb();
+    const id = `usr_${Date.now()}`;
+    const newUser: User = {
+      id,
+      name: userData.name,
+      email: userData.email.toLowerCase().trim(),
+      passwordHash: userData.passwordHash,
+      companyName: userData.companyName || userData.name,
+      phone: userData.phone || '',
+      plan: 'free',
+      planCycle: 'monthly',
+      createdAt: new Date().toISOString(),
+    };
+
+    data.users.push(newUser);
+
+    // Initialize company profile for this user
+    data.settings[id] = {
+      userId: id,
+      name: userData.companyName || userData.name,
+      email: userData.email,
+      phone: userData.phone || '',
+      document: '',
+      tagline: 'Soluções Comerciais & Serviços',
+      primaryColor: '#16a34a',
+      plan: 'free',
+      planCycle: 'monthly',
+    };
+
     saveDb(data);
-    return data.settings;
+    return newUser;
   },
 
-  setPlan(plan: PlanTier, cycle: 'monthly' | 'annual' = 'monthly'): CompanySettings {
+  // Settings per User
+  getSettings(userId: string = 'usr_demo_1'): CompanySettings {
     const data = ensureDb();
-    data.settings.plan = plan;
-    data.settings.planCycle = cycle;
+    return data.settings[userId] || data.settings['usr_demo_1'] || DEFAULT_SETTINGS;
+  },
+
+  updateSettings(userId: string = 'usr_demo_1', updates: Partial<CompanySettings>): CompanySettings {
+    const data = ensureDb();
+    const current = data.settings[userId] || DEFAULT_SETTINGS;
+    data.settings[userId] = { ...current, ...updates, userId };
     saveDb(data);
-    return data.settings;
+    return data.settings[userId];
   },
 
-  getProposals(): Proposal[] {
+  setPlan(userId: string = 'usr_demo_1', plan: PlanTier, cycle: 'monthly' | 'annual' = 'monthly'): CompanySettings {
     const data = ensureDb();
-    return data.proposals || [];
+    const current = data.settings[userId] || DEFAULT_SETTINGS;
+    data.settings[userId] = { ...current, plan, planCycle: cycle, userId };
+
+    const user = data.users.find(u => u.id === userId);
+    if (user) {
+      user.plan = plan;
+      user.planCycle = cycle;
+    }
+
+    saveDb(data);
+    return data.settings[userId];
+  },
+
+  // Proposals
+  getProposals(userId?: string): Proposal[] {
+    const data = ensureDb();
+    if (!userId) return data.proposals || [];
+    return data.proposals.filter(p => !p.userId || p.userId === userId);
   },
 
   getProposalById(id: string): Proposal | null {
@@ -193,9 +273,10 @@ export const db = {
     return data.proposals.find(p => p.id === id || p.code === id) || null;
   },
 
-  createProposal(proposal: Omit<Proposal, 'id' | 'code' | 'createdAt' | 'updatedAt' | 'viewCount'>): Proposal {
+  createProposal(proposal: Omit<Proposal, 'id' | 'code' | 'createdAt' | 'updatedAt' | 'viewCount'>, userId: string = 'usr_demo_1'): Proposal {
     const data = ensureDb();
-    const count = data.proposals.length + 1;
+    const userProposals = data.proposals.filter(p => p.userId === userId);
+    const count = userProposals.length + 1;
     const year = new Date().getFullYear();
     const code = `PROP-${year}-${String(count).padStart(3, '0')}`;
     const id = `prop-${Date.now()}`;
@@ -203,6 +284,7 @@ export const db = {
     const newProposal: Proposal = {
       ...proposal,
       id,
+      userId,
       code,
       viewCount: 0,
       createdAt: new Date().toISOString(),

@@ -23,7 +23,9 @@ import {
   Check,
   Lock,
   Flame,
-  Star
+  Star,
+  LogIn,
+  UserPlus
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
@@ -97,11 +99,17 @@ export default function HomePage() {
 
           <div className="flex items-center gap-3">
             <Link
-              href="/dashboard"
-              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-emerald-500 hover:from-indigo-500 hover:to-emerald-400 text-white font-bold text-xs shadow-lg shadow-indigo-600/30 transition-all hover:scale-105"
+              href="/login"
+              className="text-xs font-bold text-slate-300 hover:text-white px-3 py-1.5 transition-colors"
             >
-              <span>Abrir Painel</span>
-              <ArrowRight className="w-3.5 h-3.5" />
+              Entrar
+            </Link>
+            <Link
+              href="/cadastro"
+              className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-slate-950 font-black text-xs shadow-lg shadow-emerald-500/20 transition-all hover:scale-105"
+            >
+              <UserPlus className="w-3.5 h-3.5" />
+              <span>Criar Conta Grátis</span>
             </Link>
           </div>
         </div>
@@ -109,14 +117,12 @@ export default function HomePage() {
 
       {/* Hero Section */}
       <section className="relative z-10 pt-16 pb-20 px-4 sm:px-6 max-w-6xl mx-auto text-center flex flex-col items-center">
-        {/* Floating Top Pill */}
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-panel border border-indigo-500/30 text-xs font-semibold text-indigo-300 mb-8 shadow-inner hover:border-indigo-500/60 transition-colors">
           <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
           <Flame className="w-3.5 h-3.5 text-amber-400" />
           <span>Plataforma #1 de Conversão de Orçamentos Comerciais</span>
         </div>
 
-        {/* Hero Title */}
         <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight max-w-5xl leading-[1.08] mb-6">
           Transforme orçamentos em{' '}
           <span className="shimmer-text">
@@ -132,18 +138,18 @@ export default function HomePage() {
         {/* CTA Buttons */}
         <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto mb-16">
           <Link
-            href="/dashboard/propostas/nova"
+            href="/cadastro"
             className="w-full sm:w-auto flex items-center justify-center gap-2.5 px-8 py-4 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-slate-950 font-black text-sm shadow-xl shadow-emerald-500/25 transition-all hover:scale-105 active:scale-95"
           >
             <Sparkles className="w-5 h-5 text-slate-950" />
-            <span>Criar Minha Primeira Proposta Grátis</span>
+            <span>Criar Minha Conta Gratuita</span>
           </Link>
           <Link
-            href="/planos"
+            href="/login"
             className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-4 rounded-2xl glass-panel hover:bg-slate-850 text-slate-200 font-semibold text-sm transition-all"
           >
-            <Zap className="w-4 h-4 text-emerald-400" />
-            <span>Ver Planos a partir de R$ 49/mês</span>
+            <LogIn className="w-4 h-4 text-emerald-400" />
+            <span>Já tenho uma conta</span>
           </Link>
         </div>
 
@@ -308,7 +314,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 📊 CALCULADORA DE ECONOMIA E LUCRO 📊 */}
+      {/* 📊 CALCULADORA DE ROI 📊 */}
       <section id="calculadora" className="py-20 px-4 sm:px-6 max-w-5xl mx-auto relative z-10">
         <div className="glass-panel rounded-3xl p-8 sm:p-12 border border-slate-800 shadow-2xl relative overflow-hidden">
           <div className="text-center max-w-2xl mx-auto mb-10">
@@ -319,13 +325,9 @@ export default function HomePage() {
             <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-white">
               Quanto você está deixando na mesa com PDFs comuns?
             </h2>
-            <p className="text-xs sm:text-sm text-slate-400 mt-2">
-              Ajuste seus números e veja o impacto financeiro de enviar links interativos no WhatsApp.
-            </p>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-            {/* Sliders Box */}
             <div className="space-y-6 bg-slate-900/80 p-6 rounded-2xl border border-slate-800">
               <div>
                 <div className="flex justify-between items-center mb-2 text-xs font-bold text-slate-300">
@@ -359,13 +361,8 @@ export default function HomePage() {
                   className="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-emerald-400"
                 />
               </div>
-
-              <div className="pt-2 text-[11px] text-slate-500">
-                * Estimativa baseada no aumento médio de +25% na taxa de conversão e fechamento imediato no WhatsApp.
-              </div>
             </div>
 
-            {/* Results Box */}
             <div className="p-8 rounded-2xl bg-gradient-to-br from-indigo-950/80 to-slate-900 border border-indigo-500/30 text-center space-y-6">
               <div>
                 <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">
@@ -376,22 +373,11 @@ export default function HomePage() {
                 </span>
               </div>
 
-              <div className="grid grid-cols-2 gap-4 pt-4 border-t border-slate-800 text-left">
-                <div>
-                  <span className="text-[10px] text-slate-400 uppercase block font-semibold">Tempo Economizado</span>
-                  <span className="text-lg font-bold text-white">~{estimatedHoursSaved}h / mês</span>
-                </div>
-                <div>
-                  <span className="text-[10px] text-slate-400 uppercase block font-semibold">Tempo de Resposta</span>
-                  <span className="text-lg font-bold text-indigo-400">32 minutos</span>
-                </div>
-              </div>
-
               <Link
-                href="/planos"
+                href="/cadastro"
                 className="w-full flex items-center justify-center gap-2 py-3 px-6 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs shadow-lg transition-all"
               >
-                <span>Conhecer os Planos & Assinar</span>
+                <span>Criar Minha Conta Grátis</span>
                 <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
@@ -399,137 +385,23 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ⚖️ ANTES VS DEPOIS COMPARISON ⚖️ */}
-      <section id="comparativo" className="py-20 px-4 sm:px-6 max-w-5xl mx-auto relative z-10">
-        <div className="text-center max-w-2xl mx-auto mb-14">
-          <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-white">
-            Por que as propostas tradicionais falham?
-          </h2>
-          <p className="text-xs sm:text-sm text-slate-400 mt-2">
-            Veja a diferença entre o modelo antigo em PDF e o fluxo inteligente do SignFlow.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="p-8 rounded-3xl bg-rose-950/20 border border-rose-500/20 text-left space-y-4">
-            <div className="flex items-center gap-2 text-rose-400 font-bold text-sm">
-              <span className="w-2 h-2 rounded-full bg-rose-500" />
-              <span>O Jeito Antigo (PDFs & E-mails)</span>
-            </div>
-            <ul className="space-y-3 text-xs text-slate-400">
-              <li className="flex items-start gap-2.5">
-                <span className="text-rose-400 font-bold">✕</span>
-                <span>PDF pesado que desformata ao ser aberto no celular do cliente.</span>
-              </li>
-              <li className="flex items-start gap-2.5">
-                <span className="text-rose-400 font-bold">✕</span>
-                <span>Você não sabe se o cliente sequer abriu o documento ou ignorou.</span>
-              </li>
-              <li className="flex items-start gap-2.5">
-                <span className="text-rose-400 font-bold">✕</span>
-                <span>Cliente precisa imprimir, assinar à mão, escanear e devolver.</span>
-              </li>
-              <li className="flex items-start gap-2.5">
-                <span className="text-rose-400 font-bold">✕</span>
-                <span>Ciclo de fechamento lento que dura de 5 a 15 dias para responder.</span>
-              </li>
-            </ul>
-          </div>
-
-          <div className="p-8 rounded-3xl bg-emerald-950/30 border border-emerald-500/40 text-left space-y-4 shadow-xl shadow-emerald-500/5">
-            <div className="flex items-center gap-2 text-emerald-400 font-bold text-sm">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              <span>Com o SignFlow (Link Interativo)</span>
-            </div>
-            <ul className="space-y-3 text-xs text-slate-200">
-              <li className="flex items-start gap-2.5">
-                <Check className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
-                <span>Página responsiva ultra-moderna que abre instantaneamente no WhatsApp.</span>
-              </li>
-              <li className="flex items-start gap-2.5">
-                <Check className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
-                <span>Tracking ao vivo: saiba o momento exato em que o cliente visualizou.</span>
-              </li>
-              <li className="flex items-start gap-2.5">
-                <Check className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
-                <span>Assinatura na tela em 10 segundos com o dedo ou digitação automática.</span>
-              </li>
-              <li className="flex items-start gap-2.5">
-                <Check className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
-                <span>Fechamento imediato com notificação e validade jurídica auditada.</span>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      {/* 🚀 BENTO GRID DE RECURSOS 🚀 */}
-      <section id="recursos" className="py-20 px-4 sm:px-6 max-w-6xl mx-auto relative z-10">
-        <div className="text-center max-w-2xl mx-auto mb-14">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 text-indigo-400 text-xs font-semibold mb-3 border border-indigo-500/20">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>Projetado para Máxima Conversão</span>
-          </div>
-          <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-white">
-            Tudo o que você precisa para profissionalizar suas vendas
-          </h2>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="glass-panel p-8 rounded-3xl border border-slate-800 hover:border-indigo-500/50 transition-all group">
-            <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-              <Layers className="w-6 h-6" />
-            </div>
-            <h3 className="text-lg font-bold text-white mb-2">Modelos Prontos por Nicho</h3>
-            <p className="text-xs text-slate-400 leading-relaxed">
-              Templates otimizados para Desenvolvimento de Sites, Tráfego Pago, Design e Consultoria que preenchem itens e valores em segundos.
-            </p>
-          </div>
-
-          <div className="glass-panel p-8 rounded-3xl border border-slate-800 hover:border-emerald-500/50 transition-all group">
-            <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-              <Smartphone className="w-6 h-6" />
-            </div>
-            <h3 className="text-lg font-bold text-white mb-2">Assinatura Mobile-First</h3>
-            <p className="text-xs text-slate-400 leading-relaxed">
-              Desenho com o dedo na tela em qualquer smartphone ou digitação em caligrafia cursiva elegante.
-            </p>
-          </div>
-
-          <div className="glass-panel p-8 rounded-3xl border border-slate-800 hover:border-indigo-500/50 transition-all group">
-            <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-              <Share2 className="w-6 h-6" />
-            </div>
-            <h3 className="text-lg font-bold text-white mb-2">Disparo 1-Click WhatsApp</h3>
-            <p className="text-xs text-slate-400 leading-relaxed">
-              Gera a mensagem personalizada para o seu cliente com link seguro e encurtado, pronto para enviar.
-            </p>
-          </div>
-        </div>
-      </section>
-
       {/* 🚀 FINAL CALL TO ACTION 🚀 */}
       <section className="py-20 px-4 sm:px-6 max-w-5xl mx-auto relative z-10 text-center">
         <div className="glass-panel-glow p-10 sm:p-16 rounded-3xl border border-emerald-500/30 relative overflow-hidden shadow-2xl">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/10 text-emerald-300 text-xs font-semibold mb-6 border border-emerald-500/20">
-            <Sparkles className="w-4 h-4" />
-            <span>Comece hoje mesmo sem complicação</span>
-          </div>
-
           <h2 className="text-3xl sm:text-5xl font-black text-white max-w-3xl mx-auto tracking-tight leading-tight mb-6">
             Pronto para fechar contratos com a imagem que sua empresa merece?
           </h2>
 
           <p className="text-slate-300 text-xs sm:text-base max-w-xl mx-auto mb-10 leading-relaxed">
-            Acesse o painel agora, escolha um modelo e envie sua primeira proposta comercial em menos de 3 minutos.
+            Crie sua conta gratuita agora, escolha um modelo e envie sua primeira proposta comercial em menos de 3 minutos.
           </p>
 
           <Link
-            href="/planos"
+            href="/cadastro"
             className="inline-flex items-center gap-3 px-8 py-4 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-slate-950 font-black text-sm shadow-xl shadow-emerald-500/30 transition-all hover:scale-105"
           >
             <Sparkles className="w-5 h-5 text-slate-950" />
-            <span>Conhecer Planos & Começar Agora</span>
+            <span>Criar Conta Gratuita Agora</span>
             <ArrowRight className="w-4 h-4" />
           </Link>
         </div>

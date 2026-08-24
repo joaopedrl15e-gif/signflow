@@ -1,12 +1,16 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/storage';
+import { getSessionUser } from '@/lib/auth';
 import { SAAS_PLANS } from '@/lib/plans';
 
 export async function GET() {
   try {
-    const settings = db.getSettings();
-    const proposals = db.getProposals();
-    const currentPlanId = settings.plan || 'free';
+    const user = await getSessionUser();
+    const userId = user ? user.id : 'usr_demo_1';
+    const settings = db.getSettings(userId);
+    const proposals = db.getProposals(userId);
+    
+    const currentPlanId = user?.plan || settings.plan || 'free';
     const currentPlan = SAAS_PLANS.find(p => p.id === currentPlanId) || SAAS_PLANS[0];
 
     const isUnlimited = currentPlan.maxProposals === 'unlimited';
@@ -32,6 +36,8 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
+    const user = await getSessionUser();
+    const userId = user ? user.id : 'usr_demo_1';
     const body = await request.json();
     const { plan, cycle } = body;
 
@@ -39,7 +45,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Plano inválido' }, { status: 400 });
     }
 
-    const updated = db.setPlan(plan, cycle || 'monthly');
+    const updated = db.setPlan(userId, plan, cycle || 'monthly');
     return NextResponse.json({
       success: true,
       message: `Plano atualizado para ${plan.toUpperCase()} com sucesso!`,
