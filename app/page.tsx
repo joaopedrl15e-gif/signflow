@@ -27,19 +27,17 @@ import {
   Crown
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
-import { SAAS_PLANS, LIFETIME_PLAN, STRIPE_CHECKOUT_URL } from '@/lib/plans';
+import { SAAS_PLANS, LIFETIME_PLAN, STRIPE_LINKS } from '@/lib/plans';
 import { UpgradeModal } from '@/components/UpgradeModal';
 
 export default function HomePage() {
   const [demoSigned, setDemoSigned] = useState(false);
   const [demoSigning, setDemoSigning] = useState(false);
 
-  // Pricing Switcher & Upgrade Modal
   const [pricingCycle, setPricingCycle] = useState<'monthly' | 'annual'>('monthly');
   const [isUpgradeModalOpen, setIsUpgradeModalOpen] = useState(false);
   const [selectedPlanForModal, setSelectedPlanForModal] = useState<'starter' | 'pro' | 'agency' | 'lifetime'>('pro');
 
-  // ROI Calculator
   const [proposalsPerMonth, setProposalsPerMonth] = useState(12);
   const [averageTicket, setAverageTicket] = useState(2500);
 
@@ -152,7 +150,7 @@ export default function HomePage() {
             <span>Criar Minha Conta Gratuita</span>
           </Link>
           <a
-            href={STRIPE_CHECKOUT_URL}
+            href={STRIPE_LINKS.pro}
             target="_blank"
             rel="noopener noreferrer"
             className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-4 rounded-2xl glass-panel hover:bg-slate-850 text-slate-200 font-semibold text-sm transition-all"
@@ -370,7 +368,7 @@ export default function HomePage() {
               </span>
               <span className="text-[11px] text-slate-400 block mb-3 font-medium">Pagamento único ou 12x</span>
               <a
-                href={STRIPE_CHECKOUT_URL}
+                href={STRIPE_LINKS.lifetime}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-slate-950 font-black text-xs shadow-lg shadow-amber-500/20 transition-all hover:scale-105"
@@ -469,7 +467,7 @@ export default function HomePage() {
                   </Link>
                 ) : (
                   <a
-                    href={STRIPE_CHECKOUT_URL}
+                    href={plan.stripeUrl || STRIPE_LINKS.pro}
                     target="_blank"
                     rel="noopener noreferrer"
                     className={`w-full py-3 px-4 rounded-xl font-black text-xs transition-all flex items-center justify-center gap-2 ${

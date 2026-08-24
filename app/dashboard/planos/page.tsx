@@ -8,16 +8,17 @@ import {
   ShieldCheck,
   CreditCard,
   ExternalLink,
-  ArrowRight
+  Crown,
+  Flame
 } from 'lucide-react';
-import { SAAS_PLANS, STRIPE_CHECKOUT_URL } from '@/lib/plans';
+import { SAAS_PLANS, LIFETIME_PLAN, STRIPE_LINKS } from '@/lib/plans';
 import { UpgradeModal } from '@/components/UpgradeModal';
 
 export default function DashboardPlansPage() {
   const [subscriptionData, setSubscriptionData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [isUpgradeOpen, setIsUpgradeOpen] = useState(false);
-  const [targetPlan, setTargetPlan] = useState<'pro' | 'agency'>('pro');
+  const [targetPlan, setTargetPlan] = useState<'starter' | 'pro' | 'agency' | 'lifetime'>('pro');
 
   const fetchSubscription = async () => {
     try {
@@ -34,7 +35,7 @@ export default function DashboardPlansPage() {
     fetchSubscription();
   }, []);
 
-  const handleOpenUpgrade = (planId: 'pro' | 'agency') => {
+  const handleOpenUpgrade = (planId: 'starter' | 'pro' | 'agency' | 'lifetime') => {
     setTargetPlan(planId);
     setIsUpgradeOpen(true);
   };
@@ -98,40 +99,75 @@ export default function DashboardPlansPage() {
         {isFree && (
           <div className="flex flex-col sm:flex-row gap-3">
             <a
-              href={STRIPE_CHECKOUT_URL}
+              href={STRIPE_LINKS.pro}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-black text-xs shadow-md shadow-emerald-600/20 transition-all hover:scale-105 shrink-0"
             >
               <CreditCard className="w-4 h-4 text-emerald-200" />
-              <span>Assinar no Stripe (R$ 49/mês)</span>
+              <span>Assinar Plano Pro (R$ 49/mês)</span>
               <ExternalLink className="w-3.5 h-3.5" />
             </a>
 
             <button
-              onClick={() => handleOpenUpgrade('pro')}
-              className="px-4 py-3.5 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition-colors"
+              onClick={() => handleOpenUpgrade('lifetime')}
+              className="px-4 py-3.5 rounded-2xl bg-amber-50 border border-amber-200 hover:bg-amber-100 text-amber-800 font-bold text-xs transition-colors flex items-center justify-center gap-1.5"
             >
-              Ver Opções
+              <Crown className="w-4 h-4 text-amber-600" />
+              <span>Ver Vitalício (R$ 297)</span>
             </button>
           </div>
         )}
       </div>
 
+      {/* 👑 SPECIAL LIFETIME FOUNDER BANNER 👑 */}
+      <div className="rounded-3xl p-6 sm:p-8 bg-gradient-to-r from-amber-950 via-slate-900 to-amber-950 text-white border-2 border-amber-500/50 shadow-xl flex flex-col md:flex-row items-center justify-between gap-6">
+        <div className="space-y-1.5">
+          <div className="flex items-center gap-2">
+            <span className="px-2.5 py-0.5 rounded-full bg-amber-500 text-slate-950 text-[10px] font-black uppercase tracking-wider flex items-center gap-1">
+              <Flame className="w-3 h-3 text-slate-950" />
+              <span>Oferta Vitalícia Founder</span>
+            </span>
+          </div>
+          <h3 className="text-xl sm:text-2xl font-black text-white">
+            Pague uma vez e use o SignFlow para sempre
+          </h3>
+          <p className="text-xs text-slate-300 max-w-lg">
+            Acesso vitalício ao Plano Pro com propostas ilimitadas e zero mensalidades futuras.
+          </p>
+        </div>
+
+        <div className="text-center sm:text-right shrink-0">
+          <span className="text-2xl sm:text-3xl font-black text-amber-400 block mb-2">
+            R$ 297 <span className="text-xs text-slate-400 font-normal">(pagamento único)</span>
+          </span>
+          <a
+            href={STRIPE_LINKS.lifetime}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-slate-950 font-black text-xs shadow-lg transition-all hover:scale-105"
+          >
+            <Crown className="w-4 h-4" />
+            <span>Garantir Vaga Vitalícia</span>
+            <ExternalLink className="w-3.5 h-3.5" />
+          </a>
+        </div>
+      </div>
+
       {/* Available Plans Grid */}
       <div className="space-y-4">
         <h2 className="text-xs font-bold text-slate-400 uppercase tracking-wider">
-          Comparativo de Planos Disponíveis
+          Comparativo de Planos Recorrentes
         </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {SAAS_PLANS.map((plan) => {
             const isCurrent = plan.id === currentPlanId;
 
             return (
               <div
                 key={plan.id}
-                className={`bg-white rounded-3xl p-6 sm:p-7 border flex flex-col justify-between transition-all ${
+                className={`bg-white rounded-3xl p-6 border flex flex-col justify-between transition-all ${
                   isCurrent
                     ? 'border-2 border-emerald-500 shadow-md ring-1 ring-emerald-500/20'
                     : 'border-slate-200/80 shadow-sm hover:border-slate-300'
@@ -139,9 +175,9 @@ export default function DashboardPlansPage() {
               >
                 <div>
                   <div className="flex justify-between items-center mb-2">
-                    <h3 className="text-lg font-black text-slate-900">{plan.name}</h3>
+                    <h3 className="text-base font-black text-slate-900">{plan.name}</h3>
                     {isCurrent && (
-                      <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-black uppercase">
+                      <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[9px] font-black uppercase">
                         Ativo
                       </span>
                     )}
@@ -149,14 +185,14 @@ export default function DashboardPlansPage() {
 
                   <p className="text-xs text-slate-500 mb-4 min-h-[32px]">{plan.description}</p>
 
-                  <div className="mb-6 pb-4 border-b border-slate-100">
-                    <span className="text-3xl font-black text-slate-900">
+                  <div className="mb-5 pb-4 border-b border-slate-100">
+                    <span className="text-2xl sm:text-3xl font-black text-slate-900">
                       R$ {plan.monthlyPrice}
                     </span>
                     <span className="text-xs text-slate-400"> / mês</span>
                   </div>
 
-                  <div className="space-y-2.5 mb-6 text-xs text-slate-700">
+                  <div className="space-y-2 mb-6 text-xs text-slate-700">
                     {plan.features.map((f, idx) => (
                       <div key={idx} className="flex items-start gap-2">
                         <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
@@ -170,26 +206,26 @@ export default function DashboardPlansPage() {
                   {isCurrent ? (
                     <button
                       disabled
-                      className="w-full py-2.5 px-4 rounded-xl bg-slate-100 text-slate-500 font-bold text-xs cursor-default"
+                      className="w-full py-2 px-3 rounded-xl bg-slate-100 text-slate-500 font-bold text-xs cursor-default"
                     >
                       Plano Atual
                     </button>
                   ) : plan.id === 'free' ? (
                     <button
                       disabled
-                      className="w-full py-2.5 px-4 rounded-xl bg-slate-100 text-slate-500 font-bold text-xs cursor-default"
+                      className="w-full py-2 px-3 rounded-xl bg-slate-100 text-slate-500 font-bold text-xs cursor-default"
                     >
-                      Plano Básico
+                      Plano Teste
                     </button>
                   ) : (
                     <a
-                      href={STRIPE_CHECKOUT_URL}
+                      href={plan.stripeUrl || STRIPE_LINKS.pro}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="w-full py-2.5 px-4 rounded-xl bg-slate-900 hover:bg-emerald-600 text-white font-bold text-xs transition-colors flex items-center justify-center gap-1.5"
+                      className="w-full py-2.5 px-3 rounded-xl bg-slate-900 hover:bg-emerald-600 text-white font-bold text-xs transition-colors flex items-center justify-center gap-1.5"
                     >
                       <span>Assinar {plan.name}</span>
-                      <ExternalLink className="w-3.5 h-3.5" />
+                      <ExternalLink className="w-3 h-3" />
                     </a>
                   )}
                 </div>

@@ -1,9 +1,9 @@
 'use client';
 
 import React, { useState } from 'react';
-import { X, Check, Zap, Sparkles, ShieldCheck, CreditCard, Loader2, ExternalLink, Crown, Flame } from 'lucide-react';
+import { X, Check, Zap, Sparkles, ShieldCheck, CreditCard, Loader2, ExternalLink } from 'lucide-react';
 import confetti from 'canvas-confetti';
-import { SAAS_PLANS, LIFETIME_PLAN, STRIPE_CHECKOUT_URL } from '@/lib/plans';
+import { SAAS_PLANS, LIFETIME_PLAN, STRIPE_LINKS } from '@/lib/plans';
 
 interface UpgradeModalProps {
   isOpen: boolean;
@@ -27,6 +27,7 @@ export const UpgradeModal: React.FC<UpgradeModalProps> = ({
   const isLifetime = selectedPlan === 'lifetime';
   const plan = SAAS_PLANS.find(p => p.id === selectedPlan) || SAAS_PLANS[2];
   const price = isLifetime ? LIFETIME_PLAN.oneTimePrice : (billingCycle === 'annual' ? plan.annualPrice : plan.monthlyPrice);
+  const currentStripeUrl = isLifetime ? STRIPE_LINKS.lifetime : STRIPE_LINKS[selectedPlan];
 
   const handleSimulateUpgrade = async () => {
     try {
@@ -196,7 +197,7 @@ export const UpgradeModal: React.FC<UpgradeModalProps> = ({
         {/* Primary Checkout Button via Stripe Link */}
         <div className="space-y-3">
           <a
-            href={STRIPE_CHECKOUT_URL}
+            href={currentStripeUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="w-full flex items-center justify-center gap-2 py-4 px-6 rounded-2xl bg-gradient-to-r from-emerald-600 via-emerald-500 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white font-black text-sm shadow-xl shadow-emerald-600/25 transition-all hover:scale-[1.01] active:scale-[0.99]"

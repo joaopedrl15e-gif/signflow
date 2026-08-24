@@ -17,7 +17,12 @@ export interface Plan {
   stripeUrl?: string;
 }
 
-export const STRIPE_CHECKOUT_URL = 'https://buy.stripe.com/test_00wfZg3Pv1fh2Hw7eheEo00';
+export const STRIPE_LINKS = {
+  starter: 'https://buy.stripe.com/test_14A14m2Lr4rt1Ds7eheEo04',
+  pro: 'https://buy.stripe.com/test_00wfZg3Pv1fh2Hw7eheEo00',
+  agency: 'https://buy.stripe.com/test_dRm7sK85L6zB4PEaqteEo03',
+  lifetime: 'https://buy.stripe.com/test_3cI5kC71HbTV5TIaqteEo01',
+};
 
 export const SAAS_PLANS: Plan[] = [
   {
@@ -53,8 +58,8 @@ export const SAAS_PLANS: Plan[] = [
       'Sem marca d\'água nas propostas',
       'Suporte via e-mail',
     ],
-    ctaText: 'Assinar Starter',
-    stripeUrl: STRIPE_CHECKOUT_URL,
+    ctaText: 'Assinar Starter (R$ 29)',
+    stripeUrl: STRIPE_LINKS.starter,
   },
   {
     id: 'pro',
@@ -74,8 +79,8 @@ export const SAAS_PLANS: Plan[] = [
       'Relatórios e métricas de faturamento',
       'Suporte prioritário via WhatsApp',
     ],
-    ctaText: 'Assinar Plano Pro',
-    stripeUrl: STRIPE_CHECKOUT_URL,
+    ctaText: 'Assinar Plano Pro (R$ 49)',
+    stripeUrl: STRIPE_LINKS.pro,
   },
   {
     id: 'agency',
@@ -93,8 +98,8 @@ export const SAAS_PLANS: Plan[] = [
       'Exportação de relatórios contábeis',
       'Onboarding VIP individual',
     ],
-    ctaText: 'Assinar Agência',
-    stripeUrl: STRIPE_CHECKOUT_URL,
+    ctaText: 'Assinar Agência (R$ 119)',
+    stripeUrl: STRIPE_LINKS.agency,
   }
 ];
 
@@ -104,7 +109,7 @@ export const LIFETIME_PLAN = {
   badge: 'OFERTA DE LANÇAMENTO 🔥',
   description: 'Pague UMA ÚNICA VEZ e tenha acesso eterno ao Plano Pro sem mensalidades.',
   oneTimePrice: 297,
-  originalPrice: 588, // 1 ano de Pro
+  originalPrice: 588,
   installments: 'ou 12x de R$ 29,70',
   features: [
     'Acesso VITALÍCIO ao SignFlow Pro',
@@ -115,5 +120,5 @@ export const LIFETIME_PLAN = {
     'Suporte prioritário vitalício',
   ],
   ctaText: 'Garantir Acesso Vitalício (R$ 297)',
-  stripeUrl: STRIPE_CHECKOUT_URL,
+  stripeUrl: STRIPE_LINKS.lifetime,
 };
