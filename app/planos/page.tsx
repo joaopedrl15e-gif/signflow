@@ -15,13 +15,10 @@ import {
   Crown,
   Flame
 } from 'lucide-react';
-import { SAAS_PLANS, LIFETIME_PLAN, STRIPE_CHECKOUT_URL } from '@/lib/plans';
-import { UpgradeModal } from '@/components/UpgradeModal';
+import { STRIPE_LINKS } from '@/lib/plans';
 
 export default function PricingPage() {
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'annual'>('monthly');
-  const [isUpgradeOpen, setIsUpgradeOpen] = useState(false);
-  const [selectedPlanForModal, setSelectedPlanForModal] = useState<'starter' | 'pro' | 'agency' | 'lifetime'>('pro');
 
   return (
     <div className="min-h-screen bg-slate-950 text-white selection:bg-emerald-500 selection:text-black overflow-x-hidden bg-grid-pattern relative pb-20">
@@ -71,13 +68,13 @@ export default function PricingPage() {
                   <Flame className="w-3 h-3 text-slate-950" />
                   <span>Oferta Especial de Lançamento</span>
                 </span>
-                <span className="text-xs text-amber-400 font-bold">Vagas Limitadas (Primeiros 50)</span>
+                <span className="text-xs text-amber-400 font-bold">Vagas Limitadas</span>
               </div>
               <h3 className="text-2xl sm:text-3xl font-black text-white">
                 Plano Vitalício Founder (Acesso Eterno)
               </h3>
               <p className="text-xs sm:text-sm text-slate-300 max-w-xl leading-relaxed">
-                Pague <strong className="text-amber-400">uma única vez</strong> e tenha todas as ferramentas do Plano Pro liberadas para sempre, sem nenhuma mensalidade ou renovação.
+                Pague <strong className="text-amber-400">uma única vez (R$ 297)</strong> e tenha todas as ferramentas do Plano Pro liberadas para sempre, sem nenhuma mensalidade.
               </p>
               <div className="flex items-center gap-4 text-xs text-slate-400 pt-2 flex-wrap">
                 <span className="flex items-center gap-1"><Check className="w-3.5 h-3.5 text-amber-400" /> Propostas ilimitadas</span>
@@ -93,13 +90,14 @@ export default function PricingPage() {
               </span>
               <span className="text-[11px] text-slate-400 block mb-3 font-medium">Pagamento único ou 12x</span>
               <a
-                href={STRIPE_CHECKOUT_URL}
+                href={STRIPE_LINKS.lifetime}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-slate-950 font-black text-xs shadow-lg shadow-amber-500/20 transition-all hover:scale-105"
               >
                 <Crown className="w-4 h-4 text-slate-950" />
-                <span>Garantir Vaga Vitalícia</span>
+                <span>Garantir Vaga Vitalícia (R$ 297)</span>
+                <ExternalLink className="w-3.5 h-3.5 ml-0.5" />
               </a>
             </div>
           </div>
@@ -136,79 +134,125 @@ export default function PricingPage() {
 
         {/* 4 Pricing Cards Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-left items-stretch mb-24">
-          {SAAS_PLANS.map((plan) => {
-            const isPopular = plan.popular;
-            const price = billingCycle === 'annual' ? plan.annualPrice : plan.monthlyPrice;
-
-            return (
-              <div
-                key={plan.id}
-                className={`rounded-3xl p-6 sm:p-7 flex flex-col justify-between relative transition-all ${
-                  isPopular
-                    ? 'glass-panel-glow border-2 border-emerald-500 shadow-2xl shadow-emerald-500/10 scale-105 z-10'
-                    : 'glass-panel border border-slate-800 hover:border-slate-700'
-                }`}
-              >
-                {plan.badge && (
-                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 px-2.5 py-0.5 rounded-full bg-emerald-500 text-slate-950 text-[9px] font-black uppercase tracking-wider shadow-md">
-                    {plan.badge}
-                  </span>
-                )}
-
-                <div>
-                  <h3 className="text-lg font-bold text-white mb-1">{plan.name}</h3>
-                  <p className="text-xs text-slate-400 mb-5 min-h-[32px]">{plan.description}</p>
-
-                  <div className="mb-5 pb-5 border-b border-slate-800">
-                    <span className="text-3xl sm:text-4xl font-black text-white">
-                      R$ {price}
-                    </span>
-                    <span className="text-xs text-slate-400 font-medium"> / mês</span>
-                    {billingCycle === 'annual' && plan.monthlyPrice > 0 && (
-                      <p className="text-[10px] text-emerald-400 mt-1">Faturado anualmente com 20% OFF</p>
-                    )}
-                  </div>
-
-                  <div className="space-y-2.5 mb-6">
-                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-                      Recursos inclusos:
-                    </span>
-                    {plan.features.map((feature, idx) => (
-                      <div key={idx} className="flex items-start gap-2 text-xs text-slate-300">
-                        <Check className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
-                        <span>{feature}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {plan.id === 'free' ? (
-                  <Link
-                    href="/cadastro"
-                    className="w-full py-3 px-4 rounded-xl font-bold text-xs bg-slate-850 hover:bg-slate-800 text-white border border-slate-700 transition-all flex items-center justify-center gap-2"
-                  >
-                    <span>Começar Grátis</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </Link>
-                ) : (
-                  <a
-                    href={STRIPE_CHECKOUT_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`w-full py-3 px-4 rounded-xl font-black text-xs transition-all flex items-center justify-center gap-2 ${
-                      isPopular
-                        ? 'bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-slate-950 shadow-lg shadow-emerald-500/25 hover:scale-[1.02]'
-                        : 'bg-slate-850 hover:bg-slate-800 text-white border border-slate-700'
-                    }`}
-                  >
-                    <CreditCard className="w-3.5 h-3.5" />
-                    <span>Assinar {plan.name}</span>
-                    <ExternalLink className="w-3 h-3 ml-0.5" />
-                  </a>
-                )}
+          {/* Card 1: Gratuito */}
+          <div className="rounded-3xl p-6 sm:p-7 flex flex-col justify-between glass-panel border border-slate-800 hover:border-slate-700 transition-all">
+            <div>
+              <h3 className="text-lg font-bold text-white mb-1">Gratuito (Teste)</h3>
+              <p className="text-xs text-slate-400 mb-5 min-h-[32px]">Ideal para testar a ferramenta e fechar suas primeiras propostas.</p>
+              <div className="mb-5 pb-5 border-b border-slate-800">
+                <span className="text-3xl sm:text-4xl font-black text-white">R$ 0</span>
+                <span className="text-xs text-slate-400 font-medium"> / mês</span>
               </div>
-            );
-          })}
+              <div className="space-y-2.5 mb-6 text-xs text-slate-300">
+                <div className="flex items-start gap-2"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" /><span>Até 3 propostas ativas</span></div>
+                <div className="flex items-start gap-2"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" /><span>Assinatura na tela</span></div>
+                <div className="flex items-start gap-2"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" /><span>Download em PDF</span></div>
+              </div>
+            </div>
+            <Link
+              href="/cadastro"
+              className="w-full py-3 px-4 rounded-xl font-bold text-xs bg-slate-850 hover:bg-slate-800 text-white border border-slate-700 transition-all flex items-center justify-center gap-2"
+            >
+              <span>Começar Grátis</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+
+          {/* Card 2: Starter (R$ 29) */}
+          <div className="rounded-3xl p-6 sm:p-7 flex flex-col justify-between glass-panel border border-slate-800 hover:border-indigo-500/40 transition-all">
+            <div>
+              <span className="inline-block px-2.5 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 text-[9px] font-black uppercase tracking-wider mb-2 border border-indigo-500/30">
+                ECONÔMICO ⚡
+              </span>
+              <h3 className="text-lg font-bold text-white mb-1">Iniciante Starter</h3>
+              <p className="text-xs text-slate-400 mb-5 min-h-[32px]">Para autônomos com volume moderado de orçamentos.</p>
+              <div className="mb-5 pb-5 border-b border-slate-800">
+                <span className="text-3xl sm:text-4xl font-black text-white">
+                  R$ {billingCycle === 'annual' ? '23' : '29'}
+                </span>
+                <span className="text-xs text-slate-400 font-medium"> / mês</span>
+              </div>
+              <div className="space-y-2.5 mb-6 text-xs text-slate-300">
+                <div className="flex items-start gap-2"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" /><span>Até 10 propostas por mês</span></div>
+                <div className="flex items-start gap-2"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" /><span>Envio no WhatsApp</span></div>
+                <div className="flex items-start gap-2"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" /><span>Sem marca d'água</span></div>
+              </div>
+            </div>
+            <a
+              href={STRIPE_LINKS.starter}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full py-3 px-4 rounded-xl font-bold text-xs bg-indigo-600 hover:bg-indigo-500 text-white transition-all flex items-center justify-center gap-2 shadow-lg shadow-indigo-600/20"
+            >
+              <CreditCard className="w-3.5 h-3.5" />
+              <span>Assinar Starter (R$ 29)</span>
+              <ExternalLink className="w-3 h-3 ml-0.5" />
+            </a>
+          </div>
+
+          {/* Card 3: Pro (R$ 49) */}
+          <div className="rounded-3xl p-6 sm:p-7 flex flex-col justify-between glass-panel-glow border-2 border-emerald-500 shadow-2xl shadow-emerald-500/10 scale-105 z-10 relative">
+            <span className="absolute -top-3 left-1/2 -translate-x-1/2 px-2.5 py-0.5 rounded-full bg-emerald-500 text-slate-950 text-[9px] font-black uppercase tracking-wider shadow-md">
+              MAIS POPULAR ⭐
+            </span>
+            <div>
+              <h3 className="text-lg font-bold text-white mb-1">Profissional Pro</h3>
+              <p className="text-xs text-slate-400 mb-5 min-h-[32px]">Para quem quer fechar contratos semanais sem limites.</p>
+              <div className="mb-5 pb-5 border-b border-slate-800">
+                <span className="text-3xl sm:text-4xl font-black text-white">
+                  R$ {billingCycle === 'annual' ? '39' : '49'}
+                </span>
+                <span className="text-xs text-slate-400 font-medium"> / mês</span>
+              </div>
+              <div className="space-y-2.5 mb-6 text-xs text-slate-300">
+                <div className="flex items-start gap-2"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" /><span>Propostas ILIMITADAS</span></div>
+                <div className="flex items-start gap-2"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" /><span>Assinatura válida juridicamente</span></div>
+                <div className="flex items-start gap-2"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" /><span>Suporte prioritário WhatsApp</span></div>
+              </div>
+            </div>
+            <a
+              href={STRIPE_LINKS.pro}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full py-3 px-4 rounded-xl font-black text-xs bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-slate-950 shadow-lg shadow-emerald-500/25 hover:scale-[1.02] transition-all flex items-center justify-center gap-2"
+            >
+              <CreditCard className="w-3.5 h-3.5" />
+              <span>Assinar Plano Pro (R$ 49)</span>
+              <ExternalLink className="w-3 h-3 ml-0.5" />
+            </a>
+          </div>
+
+          {/* Card 4: Agência (R$ 119) */}
+          <div className="rounded-3xl p-6 sm:p-7 flex flex-col justify-between glass-panel border border-slate-800 hover:border-purple-500/40 transition-all">
+            <div>
+              <span className="inline-block px-2.5 py-0.5 rounded-full bg-purple-500/20 text-purple-300 text-[9px] font-black uppercase tracking-wider mb-2 border border-purple-500/30">
+                ESCALA RÁPIDA 🚀
+              </span>
+              <h3 className="text-lg font-bold text-white mb-1">Agência & Equipe</h3>
+              <p className="text-xs text-slate-400 mb-5 min-h-[32px]">Para agências e empresas com múltiplos vendedores.</p>
+              <div className="mb-5 pb-5 border-b border-slate-800">
+                <span className="text-3xl sm:text-4xl font-black text-white">
+                  R$ {billingCycle === 'annual' ? '99' : '119'}
+                </span>
+                <span className="text-xs text-slate-400 font-medium"> / mês</span>
+              </div>
+              <div className="space-y-2.5 mb-6 text-xs text-slate-300">
+                <div className="flex items-start gap-2"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" /><span>Tudo do Plano Pro</span></div>
+                <div className="flex items-start gap-2"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" /><span>Até 5 membros de equipe</span></div>
+                <div className="flex items-start gap-2"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" /><span>Domínio personalizado</span></div>
+              </div>
+            </div>
+            <a
+              href={STRIPE_LINKS.agency}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full py-3 px-4 rounded-xl font-bold text-xs bg-purple-600 hover:bg-purple-500 text-white transition-all flex items-center justify-center gap-2 shadow-lg shadow-purple-600/20"
+            >
+              <CreditCard className="w-3.5 h-3.5" />
+              <span>Assinar Agência (R$ 119)</span>
+              <ExternalLink className="w-3 h-3 ml-0.5" />
+            </a>
+          </div>
         </div>
 
         {/* FAQ Section */}
@@ -223,14 +267,14 @@ export default function PricingPage() {
             <div className="pt-4 first:pt-0">
               <h4 className="text-sm font-bold text-white mb-1">Como funciona a Oferta Vitalícia?</h4>
               <p className="text-xs text-slate-400 leading-relaxed">
-                Você faz um pagamento único de R$ 297 e nunca mais precisa pagar mensalidades. Sua conta terá acesso a todas as ferramentas do Plano Pro para sempre, incluindo todas as atualizações que lançarmos.
+                Você faz um pagamento único de R$ 297 e nunca mais precisa pagar mensalidades. Sua conta terá acesso a todas as ferramentas do Plano Pro para sempre.
               </p>
             </div>
 
             <div className="pt-4">
               <h4 className="text-sm font-bold text-white mb-1">Como funciona o pagamento via Stripe?</h4>
               <p className="text-xs text-slate-400 leading-relaxed">
-                Você é redirecionado para a página oficial e segura do Stripe, onde pode pagar com cartão de crédito, Apple Pay, Google Pay ou Pix. A ativação é imediata.
+                Você é redirecionado para a página oficial e segura do Stripe, onde pode pagar com cartão de crédito, Apple Pay, Google Pay ou Pix.
               </p>
             </div>
 
@@ -243,12 +287,6 @@ export default function PricingPage() {
           </div>
         </div>
       </main>
-
-      <UpgradeModal
-        isOpen={isUpgradeOpen}
-        onClose={() => setIsUpgradeOpen(false)}
-        initialPlan={selectedPlanForModal}
-      />
     </div>
   );
 }
