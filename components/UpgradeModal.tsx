@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { X, Check, Zap, Sparkles, ShieldCheck, CreditCard, Loader2, ExternalLink } from 'lucide-react';
 import confetti from 'canvas-confetti';
-import { SAAS_PLANS, LIFETIME_PLAN, STRIPE_LINKS } from '@/lib/plans';
+import { SAAS_PLANS, LIFETIME_PLAN, CHECKOUT_LINKS } from '@/lib/plans';
 
 interface UpgradeModalProps {
   isOpen: boolean;
@@ -27,7 +27,7 @@ export const UpgradeModal: React.FC<UpgradeModalProps> = ({
   const isLifetime = selectedPlan === 'lifetime';
   const plan = SAAS_PLANS.find(p => p.id === selectedPlan) || SAAS_PLANS[2];
   const price = isLifetime ? LIFETIME_PLAN.oneTimePrice : (billingCycle === 'annual' ? plan.annualPrice : plan.monthlyPrice);
-  const currentStripeUrl = isLifetime ? STRIPE_LINKS.lifetime : STRIPE_LINKS[selectedPlan];
+  const currentCheckoutUrl = isLifetime ? CHECKOUT_LINKS.lifetime : CHECKOUT_LINKS[selectedPlan];
 
   const handleSimulateUpgrade = async () => {
     try {
@@ -74,7 +74,7 @@ export const UpgradeModal: React.FC<UpgradeModalProps> = ({
         <div className="text-left mb-6">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold border border-emerald-200 mb-2">
             <Sparkles className="w-3.5 h-3.5" />
-            <span>Checkout Seguro Stripe 🔒</span>
+            <span>Checkout Seguro (Pix & Cartão) 🔒</span>
           </div>
           <h2 className="text-2xl font-black text-slate-900 tracking-tight">
             Escolha seu Plano de Upgrade
@@ -194,10 +194,10 @@ export const UpgradeModal: React.FC<UpgradeModalProps> = ({
           </div>
         </div>
 
-        {/* Primary Checkout Button via Stripe Link */}
+        {/* Primary Checkout Button via Cakto Link */}
         <div className="space-y-3">
           <a
-            href={currentStripeUrl}
+            href={currentCheckoutUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="w-full flex items-center justify-center gap-2 py-4 px-6 rounded-2xl bg-gradient-to-r from-emerald-600 via-emerald-500 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white font-black text-sm shadow-xl shadow-emerald-600/25 transition-all hover:scale-[1.01] active:scale-[0.99]"
@@ -205,8 +205,8 @@ export const UpgradeModal: React.FC<UpgradeModalProps> = ({
             <CreditCard className="w-4 h-4 text-emerald-100" />
             <span>
               {isLifetime
-                ? 'Garantir Acesso Vitalício por R$ 297 (Único)'
-                : `Pagar R$ ${price}/mês com Stripe (Cartão/Pix)`}
+                ? 'Garantir Acesso Vitalício por R$ 297 (Pix ou Cartão)'
+                : `Pagar R$ ${price}/mês com Pix ou Cartão`}
             </span>
             <ExternalLink className="w-4 h-4 text-white ml-1" />
           </a>
@@ -233,7 +233,7 @@ export const UpgradeModal: React.FC<UpgradeModalProps> = ({
 
         <p className="text-center text-[11px] text-slate-400 mt-4 flex items-center justify-center gap-1.5">
           <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-          <span>Pagamento processado com segurança criptografada pelo Stripe. Cancele quando quiser.</span>
+          <span>Pagamento 100% criptografado e seguro com liberação imediata via Pix.</span>
         </p>
       </div>
     </div>

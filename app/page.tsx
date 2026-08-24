@@ -26,7 +26,7 @@ import {
   Crown
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
-import { SAAS_PLANS, LIFETIME_PLAN, STRIPE_LINKS } from '@/lib/plans';
+import { SAAS_PLANS, LIFETIME_PLAN, CHECKOUT_LINKS } from '@/lib/plans';
 import { UpgradeModal } from '@/components/UpgradeModal';
 
 export default function HomePage() {
@@ -322,7 +322,7 @@ export default function HomePage() {
       <section id="planos" className="py-24 px-4 sm:px-6 max-w-6xl mx-auto relative z-10 text-center">
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-panel border border-emerald-500/30 text-emerald-300 text-xs font-bold mb-6">
           <Sparkles className="w-3.5 h-3.5" />
-          <span>Planos Transparentes e Sem Taxas Ocultas</span>
+          <span>Planos Transparentes com Liberação Imediata</span>
         </div>
 
         <h2 className="text-3xl sm:text-5xl font-black tracking-tight text-white mb-4">
@@ -362,9 +362,9 @@ export default function HomePage() {
               <span className="text-3xl sm:text-4xl font-black text-amber-400 block">
                 R$ 297
               </span>
-              <span className="text-[11px] text-slate-400 block mb-3 font-medium">Pagamento único ou 12x</span>
+              <span className="text-[11px] text-slate-400 block mb-3 font-medium">Pagamento único no Pix ou Cartão</span>
               <a
-                href={STRIPE_LINKS.lifetime}
+                href={CHECKOUT_LINKS.lifetime}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-slate-950 font-black text-xs shadow-lg shadow-amber-500/20 transition-all hover:scale-105"
@@ -406,7 +406,7 @@ export default function HomePage() {
           </button>
         </div>
 
-        {/* 4 Pricing Cards with DIRECT STRIPE URLS */}
+        {/* 4 Pricing Cards with DIRECT CAKTO URLS */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-left items-stretch mb-16">
           {/* Card 1: Gratuito */}
           <div className="rounded-3xl p-6 sm:p-7 flex flex-col justify-between glass-panel border border-slate-800 hover:border-slate-700 transition-all">
@@ -453,7 +453,7 @@ export default function HomePage() {
               </div>
             </div>
             <a
-              href={STRIPE_LINKS.starter}
+              href={CHECKOUT_LINKS.starter}
               target="_blank"
               rel="noopener noreferrer"
               className="w-full py-3 px-4 rounded-xl font-bold text-xs bg-indigo-600 hover:bg-indigo-500 text-white transition-all flex items-center justify-center gap-2 shadow-lg shadow-indigo-600/20"
@@ -485,7 +485,7 @@ export default function HomePage() {
               </div>
             </div>
             <a
-              href={STRIPE_LINKS.pro}
+              href={CHECKOUT_LINKS.pro}
               target="_blank"
               rel="noopener noreferrer"
               className="w-full py-3 px-4 rounded-xl font-black text-xs bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-slate-950 shadow-lg shadow-emerald-500/25 hover:scale-[1.02] transition-all flex items-center justify-center gap-2"
@@ -517,7 +517,7 @@ export default function HomePage() {
               </div>
             </div>
             <a
-              href={STRIPE_LINKS.agency}
+              href={CHECKOUT_LINKS.agency}
               target="_blank"
               rel="noopener noreferrer"
               className="w-full py-3 px-4 rounded-xl font-bold text-xs bg-purple-600 hover:bg-purple-500 text-white transition-all flex items-center justify-center gap-2 shadow-lg shadow-purple-600/20"
@@ -531,7 +531,7 @@ export default function HomePage() {
 
         <div className="flex items-center justify-center gap-2 text-xs text-slate-400">
           <ShieldCheck className="w-4 h-4 text-emerald-400" />
-          <span>Garantia de 7 dias ou seu dinheiro de volta • Processado oficialmente pelo Stripe</span>
+          <span>Garantia de 7 dias ou seu dinheiro de volta • Pagamento 100% seguro com liberação no Pix</span>
         </div>
       </section>
 

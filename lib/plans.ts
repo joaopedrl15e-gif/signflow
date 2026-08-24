@@ -14,15 +14,17 @@ export interface Plan {
   maxProposals: number | 'unlimited';
   features: string[];
   ctaText: string;
-  stripeUrl?: string;
+  checkoutUrl?: string;
 }
 
-export const STRIPE_LINKS = {
-  starter: 'https://buy.stripe.com/test_dRm7sK85L6zB4PEaqteEo03',
-  pro: 'https://buy.stripe.com/test_00wfZg3Pv1fh2Hw7eheEo00',
-  agency: 'https://buy.stripe.com/test_14A14m2Lr4rt1Ds7eheEo04', // R$ 119
-  lifetime: 'https://buy.stripe.com/test_3cI5kC71HbTV5TIaqteEo01',
+export const CHECKOUT_LINKS = {
+  starter: 'https://pay.cakto.com.br/3583yzs_1061311', // Cakto R$ 29
+  pro: 'https://pay.cakto.com.br/z4fwano_1061322',     // Cakto R$ 49
+  agency: 'https://pay.cakto.com.br/u4r4dc6_1061327',  // Cakto R$ 119
+  lifetime: 'https://pay.cakto.com.br/5nzfpk7_1061333', // Cakto R$ 297
 };
+
+export const STRIPE_LINKS = CHECKOUT_LINKS;
 
 export const SAAS_PLANS: Plan[] = [
   {
@@ -59,7 +61,7 @@ export const SAAS_PLANS: Plan[] = [
       'Suporte via e-mail',
     ],
     ctaText: 'Assinar Starter (R$ 29)',
-    stripeUrl: STRIPE_LINKS.starter,
+    checkoutUrl: CHECKOUT_LINKS.starter,
   },
   {
     id: 'pro',
@@ -80,7 +82,7 @@ export const SAAS_PLANS: Plan[] = [
       'Suporte prioritário via WhatsApp',
     ],
     ctaText: 'Assinar Plano Pro (R$ 49)',
-    stripeUrl: STRIPE_LINKS.pro,
+    checkoutUrl: CHECKOUT_LINKS.pro,
   },
   {
     id: 'agency',
@@ -99,7 +101,7 @@ export const SAAS_PLANS: Plan[] = [
       'Onboarding VIP individual',
     ],
     ctaText: 'Assinar Agência (R$ 119)',
-    stripeUrl: STRIPE_LINKS.agency,
+    checkoutUrl: CHECKOUT_LINKS.agency,
   }
 ];
 
@@ -120,5 +122,5 @@ export const LIFETIME_PLAN = {
     'Suporte prioritário vitalício',
   ],
   ctaText: 'Garantir Acesso Vitalício (R$ 297)',
-  stripeUrl: STRIPE_LINKS.lifetime,
+  checkoutUrl: CHECKOUT_LINKS.lifetime,
 };

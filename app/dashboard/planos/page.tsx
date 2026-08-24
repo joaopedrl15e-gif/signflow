@@ -11,7 +11,7 @@ import {
   Crown,
   Flame
 } from 'lucide-react';
-import { SAAS_PLANS, LIFETIME_PLAN, STRIPE_LINKS } from '@/lib/plans';
+import { SAAS_PLANS, LIFETIME_PLAN, CHECKOUT_LINKS } from '@/lib/plans';
 import { UpgradeModal } from '@/components/UpgradeModal';
 
 export default function DashboardPlansPage() {
@@ -99,7 +99,7 @@ export default function DashboardPlansPage() {
         {isFree && (
           <div className="flex flex-col sm:flex-row gap-3">
             <a
-              href={STRIPE_LINKS.pro}
+              href={CHECKOUT_LINKS.pro}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-black text-xs shadow-md shadow-emerald-600/20 transition-all hover:scale-105 shrink-0"
@@ -139,16 +139,16 @@ export default function DashboardPlansPage() {
 
         <div className="text-center sm:text-right shrink-0">
           <span className="text-2xl sm:text-3xl font-black text-amber-400 block mb-2">
-            R$ 297 <span className="text-xs text-slate-400 font-normal">(pagamento único)</span>
+            R$ 297 <span className="text-xs text-slate-400 font-normal">(pagamento único no Pix/Cartão)</span>
           </span>
           <a
-            href={STRIPE_LINKS.lifetime}
+            href={CHECKOUT_LINKS.lifetime}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-slate-950 font-black text-xs shadow-lg transition-all hover:scale-105"
           >
             <Crown className="w-4 h-4" />
-            <span>Garantir Vaga Vitalícia</span>
+            <span>Garantir Vaga Vitalícia (R$ 297)</span>
             <ExternalLink className="w-3.5 h-3.5" />
           </a>
         </div>
@@ -219,7 +219,7 @@ export default function DashboardPlansPage() {
                     </button>
                   ) : (
                     <a
-                      href={plan.stripeUrl || STRIPE_LINKS.pro}
+                      href={plan.checkoutUrl || CHECKOUT_LINKS.pro}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="w-full py-2.5 px-3 rounded-xl bg-slate-900 hover:bg-emerald-600 text-white font-bold text-xs transition-colors flex items-center justify-center gap-1.5"

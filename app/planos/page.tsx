@@ -15,7 +15,7 @@ import {
   Crown,
   Flame
 } from 'lucide-react';
-import { STRIPE_LINKS } from '@/lib/plans';
+import { CHECKOUT_LINKS } from '@/lib/plans';
 
 export default function PricingPage() {
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'annual'>('monthly');
@@ -90,7 +90,7 @@ export default function PricingPage() {
               </span>
               <span className="text-[11px] text-slate-400 block mb-3 font-medium">Pagamento único ou 12x</span>
               <a
-                href={STRIPE_LINKS.lifetime}
+                href={CHECKOUT_LINKS.lifetime}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-slate-950 font-black text-xs shadow-lg shadow-amber-500/20 transition-all hover:scale-105"
@@ -158,7 +158,7 @@ export default function PricingPage() {
             </Link>
           </div>
 
-          {/* Card 2: Starter (R$ 29) */}
+          {/* Card 2: Starter (R$ 29 - Cakto Real) */}
           <div className="rounded-3xl p-6 sm:p-7 flex flex-col justify-between glass-panel border border-slate-800 hover:border-indigo-500/40 transition-all">
             <div>
               <span className="inline-block px-2.5 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 text-[9px] font-black uppercase tracking-wider mb-2 border border-indigo-500/30">
@@ -179,7 +179,7 @@ export default function PricingPage() {
               </div>
             </div>
             <a
-              href={STRIPE_LINKS.starter}
+              href={CHECKOUT_LINKS.starter}
               target="_blank"
               rel="noopener noreferrer"
               className="w-full py-3 px-4 rounded-xl font-bold text-xs bg-indigo-600 hover:bg-indigo-500 text-white transition-all flex items-center justify-center gap-2 shadow-lg shadow-indigo-600/20"
@@ -211,7 +211,7 @@ export default function PricingPage() {
               </div>
             </div>
             <a
-              href={STRIPE_LINKS.pro}
+              href={CHECKOUT_LINKS.pro}
               target="_blank"
               rel="noopener noreferrer"
               className="w-full py-3 px-4 rounded-xl font-black text-xs bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-slate-950 shadow-lg shadow-emerald-500/25 hover:scale-[1.02] transition-all flex items-center justify-center gap-2"
@@ -243,7 +243,7 @@ export default function PricingPage() {
               </div>
             </div>
             <a
-              href={STRIPE_LINKS.agency}
+              href={CHECKOUT_LINKS.agency}
               target="_blank"
               rel="noopener noreferrer"
               className="w-full py-3 px-4 rounded-xl font-bold text-xs bg-purple-600 hover:bg-purple-500 text-white transition-all flex items-center justify-center gap-2 shadow-lg shadow-purple-600/20"
@@ -272,16 +272,16 @@ export default function PricingPage() {
             </div>
 
             <div className="pt-4">
-              <h4 className="text-sm font-bold text-white mb-1">Como funciona o pagamento via Stripe?</h4>
+              <h4 className="text-sm font-bold text-white mb-1">Quais formas de pagamento são aceitas?</h4>
               <p className="text-xs text-slate-400 leading-relaxed">
-                Você é redirecionado para a página oficial e segura do Stripe, onde pode pagar com cartão de crédito, Apple Pay, Google Pay ou Pix.
+                Aceitamos PIX instantâneo com liberação na hora e Cartão de Crédito em até 12x.
               </p>
             </div>
 
             <div className="pt-4">
               <h4 className="text-sm font-bold text-white mb-1">Posso cancelar a qualquer momento?</h4>
               <p className="text-xs text-slate-400 leading-relaxed">
-                Sim! Não há nenhuma fidelidade ou multa nos planos mensais. Você pode cancelar sua assinatura quando desejar com apenas 1 clique no painel.
+                Sim! Não há nenhuma fidelidade ou multa nos planos mensais. Você pode cancelar quando desejar com apenas 1 clique.
               </p>
             </div>
           </div>
