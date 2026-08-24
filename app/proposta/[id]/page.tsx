@@ -369,10 +369,31 @@ export default function PublicProposalPage() {
           </div>
         </div>
 
+        {/* Viral Product-Led Growth Banner */}
+        <div className="bg-slate-900 text-white p-6 sm:p-7 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left no-print">
+          <div className="space-y-1">
+            <div className="flex items-center justify-center sm:justify-start gap-2">
+              <Sparkles className="w-4 h-4 text-emerald-400" />
+              <span className="text-xs font-black text-white">Gostou desta proposta interativa?</span>
+            </div>
+            <p className="text-[11px] text-slate-400">
+              Crie propostas de alto luxo e feche contratos 3x mais rápido pelo WhatsApp com o <strong>SignFlow</strong>.
+            </p>
+          </div>
+          <a
+            href="https://signflow-mu-silk.vercel.app/cadastro"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-slate-950 font-black text-xs shadow-md shadow-emerald-500/20 transition-all hover:scale-105 shrink-0"
+          >
+            Criar Conta Grátis 🚀
+          </a>
+        </div>
+
         {/* Footer */}
-        <div className="bg-slate-50 border-t border-slate-200 p-6 text-center text-xs text-slate-400">
+        <div className="bg-slate-950 border-t border-slate-800 p-5 text-center text-xs text-slate-500">
           <p>
-            Documento gerado eletronicamente via <strong>SignFlow</strong> • {proposal.company.name}
+            Documento gerado com validade jurídica via <strong>SignFlow</strong> • {proposal.company.name}
           </p>
         </div>
       </div>
