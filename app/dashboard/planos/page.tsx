@@ -6,12 +6,11 @@ import {
   Check,
   Sparkles,
   ShieldCheck,
-  TrendingUp,
   CreditCard,
-  Layers,
+  ExternalLink,
   ArrowRight
 } from 'lucide-react';
-import { SAAS_PLANS, Plan } from '@/lib/plans';
+import { SAAS_PLANS, STRIPE_CHECKOUT_URL } from '@/lib/plans';
 import { UpgradeModal } from '@/components/UpgradeModal';
 
 export default function DashboardPlansPage() {
@@ -46,7 +45,7 @@ export default function DashboardPlansPage() {
 
   const currentPlanId = subscriptionData?.plan || 'free';
   const isFree = currentPlanId === 'free';
-  const usage = subscriptionData?.usage || { current: 2, max: 3, percentage: 66 };
+  const usage = subscriptionData?.usage || { current: 0, max: 3, percentage: 0 };
 
   return (
     <div className="max-w-5xl mx-auto space-y-8 pb-16">
@@ -80,7 +79,6 @@ export default function DashboardPlansPage() {
               : 'Você tem acesso ILIMITADO a todas as ferramentas do SignFlow!'}
           </p>
 
-          {/* Progress Bar */}
           <div className="pt-2 max-w-md">
             <div className="flex justify-between text-xs text-slate-500 mb-1 font-medium">
               <span>Propostas Criadas</span>
@@ -98,14 +96,25 @@ export default function DashboardPlansPage() {
         </div>
 
         {isFree && (
-          <button
-            onClick={() => handleOpenUpgrade('pro')}
-            className="flex items-center gap-2 px-6 py-3.5 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-black text-xs shadow-md shadow-emerald-600/20 transition-all hover:scale-105 shrink-0"
-          >
-            <Sparkles className="w-4 h-4 text-emerald-200" />
-            <span>Desbloquear Propostas Ilimitadas</span>
-            <ArrowRight className="w-4 h-4" />
-          </button>
+          <div className="flex flex-col sm:flex-row gap-3">
+            <a
+              href={STRIPE_CHECKOUT_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-black text-xs shadow-md shadow-emerald-600/20 transition-all hover:scale-105 shrink-0"
+            >
+              <CreditCard className="w-4 h-4 text-emerald-200" />
+              <span>Assinar no Stripe (R$ 49/mês)</span>
+              <ExternalLink className="w-3.5 h-3.5" />
+            </a>
+
+            <button
+              onClick={() => handleOpenUpgrade('pro')}
+              className="px-4 py-3.5 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition-colors"
+            >
+              Ver Opções
+            </button>
+          </div>
         )}
       </div>
 
@@ -165,13 +174,23 @@ export default function DashboardPlansPage() {
                     >
                       Plano Atual
                     </button>
-                  ) : (
+                  ) : plan.id === 'free' ? (
                     <button
-                      onClick={() => handleOpenUpgrade(plan.id as any)}
-                      className="w-full py-2.5 px-4 rounded-xl bg-slate-900 hover:bg-emerald-600 text-white font-bold text-xs transition-colors"
+                      disabled
+                      className="w-full py-2.5 px-4 rounded-xl bg-slate-100 text-slate-500 font-bold text-xs cursor-default"
                     >
-                      Migrar para {plan.name}
+                      Plano Básico
                     </button>
+                  ) : (
+                    <a
+                      href={STRIPE_CHECKOUT_URL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full py-2.5 px-4 rounded-xl bg-slate-900 hover:bg-emerald-600 text-white font-bold text-xs transition-colors flex items-center justify-center gap-1.5"
+                    >
+                      <span>Assinar {plan.name}</span>
+                      <ExternalLink className="w-3.5 h-3.5" />
+                    </a>
                   )}
                 </div>
               </div>

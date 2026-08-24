@@ -9,11 +9,11 @@ import {
   ShieldCheck,
   Zap,
   HelpCircle,
-  MessageSquare,
-  Flame,
-  ChevronLeft
+  ChevronLeft,
+  CreditCard,
+  ExternalLink
 } from 'lucide-react';
-import { SAAS_PLANS } from '@/lib/plans';
+import { SAAS_PLANS, STRIPE_CHECKOUT_URL } from '@/lib/plans';
 import { UpgradeModal } from '@/components/UpgradeModal';
 
 export default function PricingPage() {
@@ -23,10 +23,9 @@ export default function PricingPage() {
 
   const handleSelectPlan = (planId: 'free' | 'pro' | 'agency') => {
     if (planId === 'free') {
-      window.location.href = '/dashboard/propostas/nova';
+      window.location.href = '/cadastro';
     } else {
-      setSelectedPlanForModal(planId);
-      setIsUpgradeOpen(true);
+      window.open(STRIPE_CHECKOUT_URL, '_blank');
     }
   };
 
@@ -38,12 +37,20 @@ export default function PricingPage() {
           <ChevronLeft className="w-4 h-4" />
           <span>Voltar para a Página Inicial</span>
         </Link>
-        <Link
-          href="/dashboard"
-          className="px-4 py-2 rounded-xl bg-slate-900 border border-slate-800 text-xs font-bold hover:bg-slate-850 transition-colors"
-        >
-          Acessar Painel
-        </Link>
+        <div className="flex items-center gap-3">
+          <Link
+            href="/login"
+            className="text-xs font-bold text-slate-400 hover:text-white transition-colors"
+          >
+            Entrar
+          </Link>
+          <Link
+            href="/cadastro"
+            className="px-4 py-2 rounded-xl bg-emerald-500 text-slate-950 text-xs font-bold hover:bg-emerald-400 transition-colors"
+          >
+            Criar Conta Grátis
+          </Link>
+        </div>
       </header>
 
       {/* Main Pricing Section */}
@@ -138,18 +145,26 @@ export default function PricingPage() {
                   </div>
                 </div>
 
-                <button
-                  type="button"
-                  onClick={() => handleSelectPlan(plan.id)}
-                  className={`w-full py-3.5 px-4 rounded-2xl font-black text-xs transition-all flex items-center justify-center gap-2 ${
-                    isPopular
-                      ? 'bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-slate-950 shadow-lg shadow-emerald-500/25 hover:scale-[1.02]'
-                      : 'bg-slate-850 hover:bg-slate-800 text-white border border-slate-700'
-                  }`}
-                >
-                  <span>{plan.ctaText}</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </button>
+                {plan.id === 'free' ? (
+                  <Link
+                    href="/cadastro"
+                    className="w-full py-3.5 px-4 rounded-2xl font-bold text-xs bg-slate-850 hover:bg-slate-800 text-white border border-slate-700 transition-all flex items-center justify-center gap-2"
+                  >
+                    <span>Começar Gratuitamente</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
+                ) : (
+                  <a
+                    href={STRIPE_CHECKOUT_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full py-3.5 px-4 rounded-2xl font-black text-xs bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-slate-950 shadow-lg shadow-emerald-500/25 hover:scale-[1.02] transition-all flex items-center justify-center gap-2"
+                  >
+                    <CreditCard className="w-4 h-4" />
+                    <span>Pagar com Stripe</span>
+                    <ExternalLink className="w-3.5 h-3.5 ml-1" />
+                  </a>
+                )}
               </div>
             );
           })}
@@ -165,16 +180,16 @@ export default function PricingPage() {
 
           <div className="space-y-6 divide-y divide-slate-800">
             <div className="pt-4 first:pt-0">
-              <h4 className="text-sm font-bold text-white mb-1">Como funciona o limite do Plano Gratuito?</h4>
+              <h4 className="text-sm font-bold text-white mb-1">Como funciona o pagamento via Stripe?</h4>
               <p className="text-xs text-slate-400 leading-relaxed">
-                Você pode criar até 3 propostas comerciais completas sem pagar nada. Assim que você fechar seus primeiros contratos ou quiser criar mais, basta fazer o upgrade para o Plano Pro.
+                Você é redirecionado para a página oficial e segura do Stripe, onde pode pagar com cartão de crédito, Apple Pay, Google Pay ou Pix. A ativação é imediata.
               </p>
             </div>
 
             <div className="pt-4">
               <h4 className="text-sm font-bold text-white mb-1">Posso cancelar a qualquer momento?</h4>
               <p className="text-xs text-slate-400 leading-relaxed">
-                Sim! Não há nenhuma fidelidade ou multa. Você pode cancelar sua assinatura mensal quando desejar com apenas 1 clique no painel.
+                Sim! Não há nenhuma fidelidade ou multa. Você pode cancelar sua assinatura mensal quando desejar com apenas 1 clique no painel do cliente.
               </p>
             </div>
 
@@ -184,18 +199,10 @@ export default function PricingPage() {
                 Sim. A plataforma registra o endereço IP, navegador, data, hora, CPF/CNPJ e imagem da assinatura, cumprindo os requisitos da legislação brasileira (MP 2.200-2/2001).
               </p>
             </div>
-
-            <div className="pt-4">
-              <h4 className="text-sm font-bold text-white mb-1">Quais são as formas de pagamento aceitas?</h4>
-              <p className="text-xs text-slate-400 leading-relaxed">
-                Aceitamos Pix instantâneo e todos os cartões de crédito (Visa, Mastercard, Elo, Hipercard, Amex).
-              </p>
-            </div>
           </div>
         </div>
       </main>
 
-      {/* Upgrade Modal */}
       <UpgradeModal
         isOpen={isUpgradeOpen}
         onClose={() => setIsUpgradeOpen(false)}

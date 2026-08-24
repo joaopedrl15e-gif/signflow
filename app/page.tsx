@@ -21,10 +21,12 @@ import {
   Flame,
   HelpCircle,
   LogIn,
-  UserPlus
+  UserPlus,
+  CreditCard,
+  ExternalLink
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
-import { SAAS_PLANS } from '@/lib/plans';
+import { SAAS_PLANS, STRIPE_CHECKOUT_URL } from '@/lib/plans';
 import { UpgradeModal } from '@/components/UpgradeModal';
 
 export default function HomePage() {
@@ -64,8 +66,7 @@ export default function HomePage() {
     if (planId === 'free') {
       window.location.href = '/cadastro';
     } else {
-      setSelectedPlanForModal(planId);
-      setIsUpgradeModalOpen(true);
+      window.open(STRIPE_CHECKOUT_URL, '_blank');
     }
   };
 
@@ -158,11 +159,14 @@ export default function HomePage() {
             <span>Criar Minha Conta Gratuita</span>
           </Link>
           <a
-            href="#planos"
+            href={STRIPE_CHECKOUT_URL}
+            target="_blank"
+            rel="noopener noreferrer"
             className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-4 rounded-2xl glass-panel hover:bg-slate-850 text-slate-200 font-semibold text-sm transition-all"
           >
-            <Zap className="w-4 h-4 text-emerald-400" />
-            <span>Ver Tabela de Planos</span>
+            <CreditCard className="w-4 h-4 text-emerald-400" />
+            <span>Assinar Plano Pro no Stripe</span>
+            <ExternalLink className="w-3.5 h-3.5 text-slate-400" />
           </a>
         </div>
 
@@ -342,7 +346,7 @@ export default function HomePage() {
           Comece gratuitamente e faça upgrade quando quiser criar propostas comerciais ilimitadas e acelerar suas vendas.
         </p>
 
-        {/* Billing Switcher (Mensal vs Anual -20%) */}
+        {/* Billing Switcher */}
         <div className="flex items-center justify-center gap-3 p-1.5 glass-panel rounded-2xl w-fit mx-auto text-xs font-bold mb-16">
           <button
             type="button"
@@ -419,27 +423,34 @@ export default function HomePage() {
                   </div>
                 </div>
 
-                <button
-                  type="button"
-                  onClick={() => handleSelectPlan(plan.id)}
-                  className={`w-full py-3.5 px-4 rounded-2xl font-black text-xs transition-all flex items-center justify-center gap-2 ${
-                    isPopular
-                      ? 'bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-slate-950 shadow-lg shadow-emerald-500/25 hover:scale-[1.02]'
-                      : 'bg-slate-850 hover:bg-slate-800 text-white border border-slate-700'
-                  }`}
-                >
-                  <span>{plan.ctaText}</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </button>
+                {plan.id === 'free' ? (
+                  <Link
+                    href="/cadastro"
+                    className="w-full py-3.5 px-4 rounded-2xl font-bold text-xs bg-slate-850 hover:bg-slate-800 text-white border border-slate-700 transition-all flex items-center justify-center gap-2"
+                  >
+                    <span>Começar Gratuitamente</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
+                ) : (
+                  <a
+                    href={STRIPE_CHECKOUT_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full py-3.5 px-4 rounded-2xl font-black text-xs bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-slate-950 shadow-lg shadow-emerald-500/25 hover:scale-[1.02] transition-all flex items-center justify-center gap-2"
+                  >
+                    <CreditCard className="w-4 h-4" />
+                    <span>Pagar com Stripe</span>
+                    <ExternalLink className="w-3.5 h-3.5 ml-1" />
+                  </a>
+                )}
               </div>
             );
           })}
         </div>
 
-        {/* Garantia Selo */}
         <div className="flex items-center justify-center gap-2 text-xs text-slate-400">
           <ShieldCheck className="w-4 h-4 text-emerald-400" />
-          <span>Garantia de 7 dias ou seu dinheiro de volta • Cancele quando quiser</span>
+          <span>Garantia de 7 dias ou seu dinheiro de volta • Processado oficialmente pelo Stripe</span>
         </div>
       </section>
 
@@ -548,7 +559,6 @@ export default function HomePage() {
         </div>
       </footer>
 
-      {/* Modal de Upgrade Interativo ao Vivo */}
       <UpgradeModal
         isOpen={isUpgradeModalOpen}
         onClose={() => setIsUpgradeModalOpen(false)}

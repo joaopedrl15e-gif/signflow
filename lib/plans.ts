@@ -9,12 +9,15 @@ export interface Plan {
   badge?: string;
   description: string;
   monthlyPrice: number;
-  annualPrice: number; // per month billed annually
+  annualPrice: number;
   popular?: boolean;
   maxProposals: number | 'unlimited';
   features: string[];
   ctaText: string;
+  stripeUrl?: string;
 }
+
+export const STRIPE_CHECKOUT_URL = 'https://buy.stripe.com/test_00wfZg3Pv1fh2Hw7eheEo00';
 
 export const SAAS_PLANS: Plan[] = [
   {
@@ -53,6 +56,7 @@ export const SAAS_PLANS: Plan[] = [
       'Suporte prioritário via WhatsApp',
     ],
     ctaText: 'Assinar Plano Pro',
+    stripeUrl: STRIPE_CHECKOUT_URL,
   },
   {
     id: 'agency',
@@ -71,5 +75,6 @@ export const SAAS_PLANS: Plan[] = [
       'Onboarding VIP individual',
     ],
     ctaText: 'Assinar Plano Agência',
+    stripeUrl: STRIPE_CHECKOUT_URL,
   }
 ];
