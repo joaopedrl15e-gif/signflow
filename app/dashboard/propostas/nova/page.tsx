@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   Sparkles,
@@ -14,16 +14,34 @@ import {
   Layers,
   ArrowRight,
   Loader2,
-  ChevronLeft
+  ChevronLeft,
+  Lock
 } from 'lucide-react';
 import { PROPOSAL_TEMPLATES } from '@/lib/templates';
 import { ProposalItem, ProposalMilestone, ProposalTemplate } from '@/lib/types';
 import { formatCurrency } from '@/lib/utils';
+import { UpgradeModal } from '@/components/UpgradeModal';
 
 export default function NewProposalPage() {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedTemplateId, setSelectedTemplateId] = useState<string>('template-web-dev');
+
+  // Subscription verification
+  const [subscription, setSubscription] = useState<any>(null);
+  const [isUpgradeModalOpen, setIsUpgradeModalOpen] = useState(false);
+
+  useEffect(() => {
+    fetch('/api/subscription')
+      .then(res => res.json())
+      .then(data => {
+        setSubscription(data);
+        if (data && !data.usage?.canCreateMore) {
+          setIsUpgradeModalOpen(true);
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   // Form State
   const [title, setTitle] = useState('Criação de Website & Landing Page de Alta Conversão');
@@ -147,6 +165,11 @@ export default function NewProposalPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    if (subscription && !subscription.usage?.canCreateMore) {
+      setIsUpgradeModalOpen(true);
+      return;
+    }
+
     if (!clientName.trim()) {
       alert('Por favor, informe o nome do cliente.');
       return;
@@ -199,8 +222,32 @@ export default function NewProposalPage() {
     }
   };
 
+  const isLimitReached = subscription && !subscription.usage?.canCreateMore;
+
   return (
     <form onSubmit={handleSubmit} className="max-w-5xl mx-auto space-y-8 pb-16">
+      {/* Limit Reached Warning Alert */}
+      {isLimitReached && (
+        <div className="p-5 rounded-3xl bg-amber-50 border border-amber-200 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-2xl bg-amber-500 text-white flex items-center justify-center shrink-0">
+              <Lock className="w-5 h-5" />
+            </div>
+            <div>
+              <p className="text-sm font-bold text-amber-900">Você atingiu o limite de 3 propostas gratuitas!</p>
+              <p className="text-xs text-amber-700">Faça o upgrade para o Plano Pro por R$ 49/mês para continuar criando orçamentos ilimitados.</p>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={() => setIsUpgradeModalOpen(true)}
+            className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-xs font-black shadow-sm transition-all hover:scale-105 shrink-0"
+          >
+            Fazer Upgrade Agora
+          </button>
+        </div>
+      )}
+
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
@@ -606,6 +653,13 @@ export default function NewProposalPage() {
           <span>Salvar e Gerar Link da Proposta</span>
         </button>
       </div>
+
+      {/* Upgrade Modal */}
+      <UpgradeModal
+        isOpen={isUpgradeModalOpen}
+        onClose={() => setIsUpgradeModalOpen(false)}
+        initialPlan="pro"
+      />
     </form>
   );
 }

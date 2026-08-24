@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { Proposal, CompanySettings } from './types';
+import { Proposal, CompanySettings, PlanTier } from './types';
 
 const DATA_DIR = path.join(process.cwd(), 'data');
 const DB_FILE = path.join(DATA_DIR, 'db.json');
@@ -20,6 +20,8 @@ const DEFAULT_SETTINGS: CompanySettings = {
   primaryColor: '#4f46e5',
   pixKey: '42123456000189',
   bankDetails: 'Banco Inter (077) - Ag: 0001 - Conta: 1234567-8',
+  plan: 'free', // Default starting plan is Free (3 proposals)
+  planCycle: 'monthly',
 };
 
 const SEED_PROPOSALS: Proposal[] = [
@@ -116,45 +118,6 @@ const SEED_PROPOSALS: Proposal[] = [
     notesAndConditions: 'O valor do investimento em anúncios é pago diretamente pelo cliente às plataformas.',
     viewCount: 3,
     lastViewedAt: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
-  },
-  {
-    id: 'prop-3',
-    code: 'PROP-2026-003',
-    title: 'Consultoria de Automação de Processos & CRM',
-    introduction: 'Mapeamento e automação de rotinas de atendimento e vendas utilizando integrações inteligentes.',
-    status: 'draft',
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-    validUntil: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000).toISOString(),
-    company: DEFAULT_SETTINGS,
-    client: {
-      name: 'Roberto Mendes',
-      companyName: 'Mendes Contabilidade & Finanças',
-      email: 'roberto@mendescontab.com.br',
-      phone: '(31) 99123-4567',
-      document: '09.876.543/0001-11',
-    },
-    category: 'Consultoria',
-    deliverables: [
-      'Mapeamento completo do funil de vendas e atendimento',
-      'Configuração do CRM com etapas de qualificação de leads',
-      'Integração com WhatsApp e envio automático de lembretes',
-      'Treinamento da equipe de vendas',
-    ],
-    milestones: [
-      { id: 'm1', title: 'Diagnóstico e Levantamento', duration: '5 dias' },
-      { id: 'm2', title: 'Implementação do CRM e Automações', duration: '10 dias' },
-      { id: 'm3', title: 'Treinamento e Entrega', duration: '3 dias' },
-    ],
-    items: [
-      { id: 'i1', title: 'Consultoria Estratégica & Mapeamento', quantity: 1, unitPrice: 1800, total: 1800 },
-      { id: 'i2', title: 'Desenvolvimento das Automações e CRM', quantity: 1, unitPrice: 2700, total: 2700 },
-    ],
-    subtotal: 4500,
-    total: 4500,
-    paymentTerms: '3x de R$ 1.500 no Pix ou cartão.',
-    notesAndConditions: 'Válido por 10 dias.',
-    viewCount: 0,
   }
 ];
 
@@ -172,7 +135,13 @@ function ensureDb(): DatabaseSchema {
       return initialData;
     }
     const content = fs.readFileSync(DB_FILE, 'utf-8');
-    return JSON.parse(content);
+    const parsed = JSON.parse(content);
+    if (!parsed.settings.plan) {
+      parsed.settings.plan = 'free';
+      parsed.settings.planCycle = 'monthly';
+      saveDb(parsed);
+    }
+    return parsed;
   } catch (error) {
     console.error('Error reading DB:', error);
     return {
@@ -202,6 +171,14 @@ export const db = {
   updateSettings(settings: Partial<CompanySettings>): CompanySettings {
     const data = ensureDb();
     data.settings = { ...data.settings, ...settings };
+    saveDb(data);
+    return data.settings;
+  },
+
+  setPlan(plan: PlanTier, cycle: 'monthly' | 'annual' = 'monthly'): CompanySettings {
+    const data = ensureDb();
+    data.settings.plan = plan;
+    data.settings.planCycle = cycle;
     saveDb(data);
     return data.settings;
   },
@@ -271,7 +248,6 @@ export const db = {
     proposal.viewCount = (proposal.viewCount || 0) + 1;
     proposal.lastViewedAt = new Date().toISOString();
     
-    // Automatically transition from 'draft' or 'sent' to 'viewed' if not yet accepted/declined
     if (proposal.status === 'draft' || proposal.status === 'sent') {
       proposal.status = 'viewed';
     }

@@ -1,5 +1,7 @@
 export type ProposalStatus = 'draft' | 'sent' | 'viewed' | 'accepted' | 'declined' | 'expired';
 
+export type PlanTier = 'free' | 'pro' | 'agency';
+
 export interface ProposalItem {
   id: string;
   title: string;
@@ -46,11 +48,13 @@ export interface CompanySettings {
   primaryColor?: string;
   pixKey?: string;
   bankDetails?: string;
+  plan?: PlanTier;
+  planCycle?: 'monthly' | 'annual';
 }
 
 export interface Proposal {
   id: string;
-  code: string; // e.g. PROP-2026-001
+  code: string;
   title: string;
   introduction?: string;
   status: ProposalStatus;

@@ -28,11 +28,9 @@ import {
 import confetti from 'canvas-confetti';
 
 export default function HomePage() {
-  // Live Demo Widget state in Hero
   const [demoSigned, setDemoSigned] = useState(false);
   const [demoSigning, setDemoSigning] = useState(false);
 
-  // Interactive ROI Calculator state
   const [proposalsPerMonth, setProposalsPerMonth] = useState(12);
   const [averageTicket, setAverageTicket] = useState(2500);
 
@@ -56,9 +54,8 @@ export default function HomePage() {
     setDemoSigned(false);
   };
 
-  // Calculations for ROI Calculator
   const estimatedHoursSaved = Math.round(proposalsPerMonth * 1.8);
-  const potentialNewWinsRevenue = Math.round(proposalsPerMonth * averageTicket * 0.25); // +25% conversion
+  const potentialNewWinsRevenue = Math.round(proposalsPerMonth * averageTicket * 0.25);
   const formattedRevenue = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(potentialNewWinsRevenue);
 
   return (
@@ -91,8 +88,11 @@ export default function HomePage() {
           <nav className="hidden md:flex items-center gap-6 text-xs font-medium text-slate-300">
             <a href="#demo" className="hover:text-white transition-colors">Demonstração</a>
             <a href="#recursos" className="hover:text-white transition-colors">Recursos</a>
-            <a href="#calculadora" className="hover:text-white transition-colors">Calculadora de Lucro</a>
-            <a href="#comparativo" className="hover:text-white transition-colors">Antes vs Depois</a>
+            <a href="#calculadora" className="hover:text-white transition-colors">Calculadora de ROI</a>
+            <Link href="/planos" className="text-emerald-400 font-bold hover:text-emerald-300 transition-colors flex items-center gap-1">
+              <Zap className="w-3.5 h-3.5" />
+              <span>Planos & Preços</span>
+            </Link>
           </nav>
 
           <div className="flex items-center gap-3">
@@ -138,13 +138,13 @@ export default function HomePage() {
             <Sparkles className="w-5 h-5 text-slate-950" />
             <span>Criar Minha Primeira Proposta Grátis</span>
           </Link>
-          <a
-            href="#demo"
+          <Link
+            href="/planos"
             className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-4 rounded-2xl glass-panel hover:bg-slate-850 text-slate-200 font-semibold text-sm transition-all"
           >
-            <MousePointerClick className="w-4 h-4 text-indigo-400" />
-            <span>Testar Demonstração Interativa</span>
-          </a>
+            <Zap className="w-4 h-4 text-emerald-400" />
+            <span>Ver Planos a partir de R$ 49/mês</span>
+          </Link>
         </div>
 
         {/* Social Proof Stats Bar */}
@@ -169,7 +169,6 @@ export default function HomePage() {
 
         {/* 🌟 HERO INTERACTIVE LIVE DEMO WIDGET 🌟 */}
         <div id="demo" className="w-full max-w-4xl mt-12 relative">
-          {/* Floating dynamic tags around the card */}
           <div className="hidden lg:flex items-center gap-2 px-4 py-2.5 rounded-2xl glass-panel-glow text-xs font-semibold text-emerald-300 absolute -top-6 -left-8 shadow-2xl animate-float z-20">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
             <MessageSquare className="w-4 h-4 text-emerald-400" />
@@ -183,7 +182,6 @@ export default function HomePage() {
 
           {/* Main Card Container */}
           <div className="glass-panel-glow rounded-3xl p-6 sm:p-8 text-left relative overflow-hidden shadow-2xl border border-indigo-500/30">
-            {/* Window header */}
             <div className="flex items-center justify-between border-b border-slate-800 pb-4 mb-6">
               <div className="flex items-center gap-2">
                 <div className="w-3 h-3 rounded-full bg-rose-500/80" />
@@ -202,7 +200,6 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Simulated Proposal Header */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 rounded-2xl bg-slate-900/90 border border-slate-800 mb-6">
               <div>
                 <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-400 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/20">
@@ -223,7 +220,6 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Interactive Scope & Signature Trigger */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
               <div className="p-4 rounded-2xl bg-slate-900/60 border border-slate-800 space-y-2 text-xs">
                 <span className="font-bold text-slate-300 block text-[11px] uppercase tracking-wider">
@@ -243,7 +239,6 @@ export default function HomePage() {
                 </div>
               </div>
 
-              {/* Signature Action Box */}
               <div className={`p-5 rounded-2xl border transition-all flex flex-col justify-between ${
                 demoSigned
                   ? 'bg-emerald-950/40 border-emerald-500/50 shadow-lg shadow-emerald-500/10'
@@ -393,10 +388,10 @@ export default function HomePage() {
               </div>
 
               <Link
-                href="/dashboard/propostas/nova"
+                href="/planos"
                 className="w-full flex items-center justify-center gap-2 py-3 px-6 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs shadow-lg transition-all"
               >
-                <span>Começar a Aumentar Minhas Vendas</span>
+                <span>Conhecer os Planos & Assinar</span>
                 <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
@@ -416,7 +411,6 @@ export default function HomePage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Old Way */}
           <div className="p-8 rounded-3xl bg-rose-950/20 border border-rose-500/20 text-left space-y-4">
             <div className="flex items-center gap-2 text-rose-400 font-bold text-sm">
               <span className="w-2 h-2 rounded-full bg-rose-500" />
@@ -442,7 +436,6 @@ export default function HomePage() {
             </ul>
           </div>
 
-          {/* SignFlow Way */}
           <div className="p-8 rounded-3xl bg-emerald-950/30 border border-emerald-500/40 text-left space-y-4 shadow-xl shadow-emerald-500/5">
             <div className="flex items-center gap-2 text-emerald-400 font-bold text-sm">
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
@@ -483,7 +476,6 @@ export default function HomePage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Card 1 */}
           <div className="glass-panel p-8 rounded-3xl border border-slate-800 hover:border-indigo-500/50 transition-all group">
             <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
               <Layers className="w-6 h-6" />
@@ -494,7 +486,6 @@ export default function HomePage() {
             </p>
           </div>
 
-          {/* Card 2 */}
           <div className="glass-panel p-8 rounded-3xl border border-slate-800 hover:border-emerald-500/50 transition-all group">
             <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
               <Smartphone className="w-6 h-6" />
@@ -505,7 +496,6 @@ export default function HomePage() {
             </p>
           </div>
 
-          {/* Card 3 */}
           <div className="glass-panel p-8 rounded-3xl border border-slate-800 hover:border-indigo-500/50 transition-all group">
             <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
               <Share2 className="w-6 h-6" />
@@ -513,39 +503,6 @@ export default function HomePage() {
             <h3 className="text-lg font-bold text-white mb-2">Disparo 1-Click WhatsApp</h3>
             <p className="text-xs text-slate-400 leading-relaxed">
               Gera a mensagem personalizada para o seu cliente com link seguro e encurtado, pronto para enviar.
-            </p>
-          </div>
-
-          {/* Card 4 */}
-          <div className="glass-panel p-8 rounded-3xl border border-slate-800 hover:border-emerald-500/50 transition-all group">
-            <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-              <ShieldCheck className="w-6 h-6" />
-            </div>
-            <h3 className="text-lg font-bold text-white mb-2">Auditoria & Segurança</h3>
-            <p className="text-xs text-slate-400 leading-relaxed">
-              Registro completo de IP, dispositivo, data/hora e documento do signatário com validade jurídica.
-            </p>
-          </div>
-
-          {/* Card 5 */}
-          <div className="glass-panel p-8 rounded-3xl border border-slate-800 hover:border-indigo-500/50 transition-all group">
-            <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-              <TrendingUp className="w-6 h-6" />
-            </div>
-            <h3 className="text-lg font-bold text-white mb-2">Métricas de Faturamento</h3>
-            <p className="text-xs text-slate-400 leading-relaxed">
-              Painel completo com gráficos de receita total, valores em negociação e taxa de conversão dos orçamentos.
-            </p>
-          </div>
-
-          {/* Card 6 */}
-          <div className="glass-panel p-8 rounded-3xl border border-slate-800 hover:border-emerald-500/50 transition-all group">
-            <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-              <DollarSign className="w-6 h-6" />
-            </div>
-            <h3 className="text-lg font-bold text-white mb-2">Chave Pix & Recebimento</h3>
-            <p className="text-xs text-slate-400 leading-relaxed">
-              Exiba sua chave Pix e dados bancários na própria proposta para que o cliente realize o pagamento da entrada imediatamente.
             </p>
           </div>
         </div>
@@ -568,11 +525,11 @@ export default function HomePage() {
           </p>
 
           <Link
-            href="/dashboard/propostas/nova"
+            href="/planos"
             className="inline-flex items-center gap-3 px-8 py-4 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-slate-950 font-black text-sm shadow-xl shadow-emerald-500/30 transition-all hover:scale-105"
           >
             <Sparkles className="w-5 h-5 text-slate-950" />
-            <span>Criar Minha Primeira Proposta Agora</span>
+            <span>Conhecer Planos & Começar Agora</span>
             <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
