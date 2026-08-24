@@ -23,7 +23,8 @@ import {
   UserPlus,
   CreditCard,
   ExternalLink,
-  Crown
+  Crown,
+  Lock
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { SAAS_PLANS, LIFETIME_PLAN, CHECKOUT_LINKS } from '@/lib/plans';
@@ -47,12 +48,12 @@ export default function HomePage() {
       setDemoSigned(true);
       try {
         confetti({
-          particleCount: 80,
-          spread: 60,
-          origin: { y: 0.7 },
+          particleCount: 90,
+          spread: 70,
+          origin: { y: 0.65 },
         });
       } catch {}
-    }, 900);
+    }, 850);
   };
 
   const handleResetDemo = () => {
@@ -65,24 +66,40 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-slate-950 text-white selection:bg-emerald-500 selection:text-black overflow-x-hidden bg-grid-pattern relative">
-      {/* Radial ambient glow orbs */}
-      <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-radial-gradient pointer-events-none z-0" />
-      <div className="fixed top-1/3 -left-48 w-96 h-96 bg-indigo-600/15 rounded-full blur-[120px] pointer-events-none animate-pulse-glow" />
-      <div className="fixed top-1/2 -right-48 w-96 h-96 bg-emerald-500/15 rounded-full blur-[120px] pointer-events-none animate-pulse-glow" />
+      {/* 🌌 ULTRA-MODERN AURORA GLOW BACKGROUND LIGHTS 🌌 */}
+      <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[1200px] h-[600px] bg-radial-gradient pointer-events-none z-0" />
+      
+      {/* Aurora Orb 1 (Emerald Green Glow) */}
+      <div className="fixed top-[-5%] left-[10%] w-[550px] h-[550px] bg-emerald-500/20 rounded-full blur-[140px] pointer-events-none animate-aurora-1 z-0" />
+      
+      {/* Aurora Orb 2 (Indigo / Cyan Glow) */}
+      <div className="fixed top-[20%] right-[5%] w-[600px] h-[600px] bg-indigo-600/20 rounded-full blur-[150px] pointer-events-none animate-aurora-2 z-0" />
+      
+      {/* Aurora Orb 3 (Cyan / Purple Accent Glow) */}
+      <div className="fixed top-[55%] left-[15%] w-[500px] h-[500px] bg-cyan-500/15 rounded-full blur-[130px] pointer-events-none animate-aurora-3 z-0" />
+
+      {/* Aurora Orb 4 (Bottom Amber / Emerald Glow) */}
+      <div className="fixed bottom-[10%] right-[15%] w-[550px] h-[550px] bg-emerald-600/15 rounded-full blur-[140px] pointer-events-none animate-pulse-glow z-0" />
+
+      {/* Neon Top Accent Line */}
+      <div className="fixed top-0 left-0 right-0 h-[2px] neon-line z-50 pointer-events-none opacity-80" />
 
       {/* Floating Navbar */}
       <header className="sticky top-4 z-50 max-w-6xl mx-auto px-4 sm:px-6">
-        <div className="glass-panel-glow rounded-2xl px-5 py-3.5 flex items-center justify-between shadow-2xl">
-          <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-emerald-400 p-0.5 shadow-lg shadow-indigo-500/30 group-hover:scale-105 transition-transform">
+        <div className="glass-panel-glow rounded-2xl px-5 py-3.5 flex items-center justify-between shadow-2xl relative overflow-hidden group">
+          {/* Subtle shimmer sheen inside navbar */}
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/[0.04] to-transparent pointer-events-none" />
+
+          <Link href="/" className="flex items-center gap-3 group relative z-10">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-500 via-emerald-400 to-teal-300 p-0.5 shadow-lg shadow-emerald-500/20 group-hover:scale-105 transition-transform">
               <div className="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center">
                 <Sparkles className="w-5 h-5 text-emerald-400" />
               </div>
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="font-extrabold text-lg tracking-tight text-white">SignFlow</span>
-                <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 text-[10px] font-bold tracking-wider uppercase border border-emerald-500/30">
+                <span className="font-black text-lg tracking-tight text-white">SignFlow</span>
+                <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-extrabold tracking-wider uppercase border border-emerald-500/40">
                   v2.0
                 </span>
               </div>
@@ -90,17 +107,16 @@ export default function HomePage() {
             </div>
           </Link>
 
-          <nav className="hidden md:flex items-center gap-6 text-xs font-medium text-slate-300">
-            <a href="#demo" className="hover:text-white transition-colors">Demonstração</a>
-            <a href="#recursos" className="hover:text-white transition-colors">Recursos</a>
-            <a href="#calculadora" className="hover:text-white transition-colors">Calculadora de ROI</a>
-            <a href="#planos" className="text-emerald-400 font-bold hover:text-emerald-300 transition-colors flex items-center gap-1">
+          <nav className="hidden md:flex items-center gap-6 text-xs font-medium text-slate-300 relative z-10">
+            <a href="#demo" className="hover:text-emerald-400 transition-colors">Demonstração</a>
+            <a href="#calculadora" className="hover:text-emerald-400 transition-colors">Calculadora de ROI</a>
+            <a href="#planos" className="text-emerald-400 font-bold hover:text-emerald-300 transition-colors flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20">
               <Zap className="w-3.5 h-3.5" />
               <span>Planos & Preços</span>
             </a>
           </nav>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 relative z-10">
             <Link
               href="/login"
               className="text-xs font-bold text-slate-300 hover:text-white px-3 py-1.5 transition-colors"
@@ -109,7 +125,7 @@ export default function HomePage() {
             </Link>
             <Link
               href="/cadastro"
-              className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-slate-950 font-black text-xs shadow-lg shadow-emerald-500/20 transition-all hover:scale-105"
+              className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-400 hover:from-emerald-400 hover:to-teal-300 text-slate-950 font-black text-xs shadow-lg shadow-emerald-500/25 transition-all hover:scale-105"
             >
               <UserPlus className="w-3.5 h-3.5" />
               <span>Criar Conta Grátis</span>
@@ -120,7 +136,18 @@ export default function HomePage() {
 
       {/* Hero Section */}
       <section className="relative z-10 pt-16 pb-20 px-4 sm:px-6 max-w-6xl mx-auto text-center flex flex-col items-center">
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-panel border border-indigo-500/30 text-xs font-semibold text-indigo-300 mb-8 shadow-inner hover:border-indigo-500/60 transition-colors">
+        {/* Floating Accent Badges (Left & Right) */}
+        <div className="hidden xl:flex items-center gap-2 px-3.5 py-2 rounded-2xl glass-panel text-[11px] font-bold text-emerald-300 absolute top-28 left-2 shadow-2xl animate-float border border-emerald-500/30">
+          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+          <span>🎉 Contrato R$ 6.400 assinado há 2m</span>
+        </div>
+
+        <div className="hidden xl:flex items-center gap-2 px-3.5 py-2 rounded-2xl glass-panel text-[11px] font-bold text-indigo-300 absolute top-40 right-2 shadow-2xl animate-float-slow border border-indigo-500/30">
+          <ShieldCheck className="w-4 h-4 text-indigo-400" />
+          <span>Validade Jurídica MP 2.200-2</span>
+        </div>
+
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-panel border border-indigo-500/40 text-xs font-semibold text-indigo-300 mb-8 shadow-inner hover:border-indigo-500/70 transition-colors">
           <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
           <Flame className="w-3.5 h-3.5 text-amber-400" />
           <span>Plataforma #1 de Conversão de Orçamentos Comerciais</span>
@@ -142,14 +169,14 @@ export default function HomePage() {
         <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto mb-16">
           <Link
             href="/cadastro"
-            className="w-full sm:w-auto flex items-center justify-center gap-2.5 px-8 py-4 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-slate-950 font-black text-sm shadow-xl shadow-emerald-500/25 transition-all hover:scale-105 active:scale-95"
+            className="w-full sm:w-auto flex items-center justify-center gap-2.5 px-8 py-4 rounded-2xl bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-400 hover:from-emerald-400 hover:to-teal-300 text-slate-950 font-black text-sm shadow-xl shadow-emerald-500/30 transition-all hover:scale-105 active:scale-95"
           >
             <Sparkles className="w-5 h-5 text-slate-950" />
             <span>Criar Minha Conta Gratuita</span>
           </Link>
           <a
             href="#planos"
-            className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-4 rounded-2xl glass-panel hover:bg-slate-850 text-slate-200 font-semibold text-sm transition-all"
+            className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-4 rounded-2xl glass-panel hover:bg-slate-850 text-slate-200 font-semibold text-sm transition-all border border-slate-800 hover:border-slate-700"
           >
             <CreditCard className="w-4 h-4 text-emerald-400" />
             <span>Ver Todos os Planos</span>
@@ -190,7 +217,7 @@ export default function HomePage() {
           </div>
 
           {/* Main Card Container */}
-          <div className="glass-panel-glow rounded-3xl p-6 sm:p-8 text-left relative overflow-hidden shadow-2xl border border-indigo-500/30">
+          <div className="glass-panel-glow rounded-3xl p-6 sm:p-8 text-left relative overflow-hidden shadow-2xl border border-emerald-500/30">
             <div className="flex items-center justify-between border-b border-slate-800 pb-4 mb-6">
               <div className="flex items-center gap-2">
                 <div className="w-3 h-3 rounded-full bg-rose-500/80" />
@@ -583,7 +610,7 @@ export default function HomePage() {
 
           <Link
             href="/cadastro"
-            className="inline-flex items-center gap-3 px-8 py-4 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-slate-950 font-black text-sm shadow-xl shadow-emerald-500/30 transition-all hover:scale-105"
+            className="inline-flex items-center gap-3 px-8 py-4 rounded-2xl bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-400 hover:from-emerald-400 hover:to-teal-300 text-slate-950 font-black text-sm shadow-xl shadow-emerald-500/30 transition-all hover:scale-105"
           >
             <Sparkles className="w-5 h-5 text-slate-950" />
             <span>Criar Conta Gratuita Agora</span>
