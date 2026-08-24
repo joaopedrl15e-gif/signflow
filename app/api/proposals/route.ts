@@ -5,8 +5,12 @@ import { getSessionUser } from '@/lib/auth';
 export async function GET() {
   try {
     const user = await getSessionUser();
-    const userId = user ? user.id : 'usr_demo_1';
-    const proposals = db.getProposals(userId);
+    if (!user) {
+      // If unauthenticated or no session, return clean empty list
+      return NextResponse.json([]);
+    }
+
+    const proposals = db.getProposals(user.id);
     return NextResponse.json(proposals);
   } catch (error) {
     return NextResponse.json({ error: 'Erro ao buscar propostas' }, { status: 500 });
@@ -16,13 +20,19 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const user = await getSessionUser();
-    const userId = user ? user.id : 'usr_demo_1';
+    if (!user) {
+      return NextResponse.json(
+        { error: 'Você precisa estar logado para criar propostas.' },
+        { status: 401 }
+      );
+    }
+
     const body = await request.json();
-    const settings = db.getSettings(userId);
+    const settings = db.getSettings(user.id);
     
-    // Check subscription plan limits for this user
-    const currentProposals = db.getProposals(userId);
-    const userPlan = user?.plan || settings.plan || 'free';
+    // Check subscription plan limits for this specific user
+    const currentProposals = db.getProposals(user.id);
+    const userPlan = user.plan || settings.plan || 'free';
     if (userPlan === 'free' && currentProposals.length >= 3) {
       return NextResponse.json(
         { error: 'Limite de 3 propostas gratuitas atingido. Faça upgrade para o Plano Pro.' },
@@ -36,7 +46,7 @@ export async function POST(request: Request) {
       status: body.status || 'draft',
     };
 
-    const created = db.createProposal(proposalData, userId);
+    const created = db.createProposal(proposalData, user.id);
     return NextResponse.json(created, { status: 201 });
   } catch (error) {
     return NextResponse.json({ error: 'Erro ao criar proposta' }, { status: 500 });

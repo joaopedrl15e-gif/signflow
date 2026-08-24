@@ -1,19 +1,24 @@
 import fs from 'fs';
 import path from 'path';
+import os from 'os';
 import { Proposal, CompanySettings, User, PlanTier } from './types';
 
-const DATA_DIR = path.join(process.cwd(), 'data');
-const DB_FILE = path.join(DATA_DIR, 'db.json');
+// In serverless environments like Vercel, process.cwd() is read-only.
+const IS_VERCEL = process.env.VERCEL === '1' || process.env.NODE_ENV === 'production';
+const DATA_DIR = IS_VERCEL ? os.tmpdir() : path.join(process.cwd(), 'data');
+const DB_FILE = path.join(DATA_DIR, 'signflow_db.json');
 
 interface DatabaseSchema {
   users: User[];
-  settings: Record<string, CompanySettings>; // keyed by userId
+  settings: Record<string, CompanySettings>;
   proposals: Proposal[];
 }
 
+const DEMO_USER_ID = 'usr_demo_1';
+
 const DEFAULT_DEMO_USER: User = {
-  id: 'usr_demo_1',
-  name: 'Studio Nova',
+  id: DEMO_USER_ID,
+  name: 'Studio Nova (Demo)',
   email: 'demo@studionova.com.br',
   passwordHash: '123456',
   companyName: 'Studio Nova Digital',
@@ -24,8 +29,8 @@ const DEFAULT_DEMO_USER: User = {
   createdAt: new Date().toISOString(),
 };
 
-const DEFAULT_SETTINGS: CompanySettings = {
-  userId: 'usr_demo_1',
+const DEFAULT_DEMO_SETTINGS: CompanySettings = {
+  userId: DEMO_USER_ID,
   name: 'Studio Nova Digital',
   tagline: 'Soluções Digitais & Estratégia de Alto Impacto',
   email: 'contato@studionova.com.br',
@@ -42,7 +47,7 @@ const DEFAULT_SETTINGS: CompanySettings = {
 const SEED_PROPOSALS: Proposal[] = [
   {
     id: 'prop-1',
-    userId: 'usr_demo_1',
+    userId: DEMO_USER_ID,
     code: 'PROP-2026-001',
     title: 'Redesign do E-commerce & Otimização Mobile',
     introduction: 'Apresentamos a proposta para renovação da experiência digital da sua loja, visando aumentar a taxa de conversão e velocidade no celular.',
@@ -50,7 +55,7 @@ const SEED_PROPOSALS: Proposal[] = [
     createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
     updatedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
     validUntil: new Date(Date.now() + 10 * 24 * 60 * 60 * 1000).toISOString(),
-    company: DEFAULT_SETTINGS,
+    company: DEFAULT_DEMO_SETTINGS,
     client: {
       name: 'Carlos Eduardo Silveira',
       companyName: 'Silveira Modas & Calçados',
@@ -96,7 +101,7 @@ const SEED_PROPOSALS: Proposal[] = [
   },
   {
     id: 'prop-2',
-    userId: 'usr_demo_1',
+    userId: DEMO_USER_ID,
     code: 'PROP-2026-002',
     title: 'Gestão de Tráfego Pago & Geração de Leads B2B',
     introduction: 'Estratégia focada na captação contínua de clientes qualificados através de anúncios no Meta Ads e Google Ads.',
@@ -104,7 +109,7 @@ const SEED_PROPOSALS: Proposal[] = [
     createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
     updatedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
     validUntil: new Date(Date.now() + 8 * 24 * 60 * 60 * 1000).toISOString(),
-    company: DEFAULT_SETTINGS,
+    company: DEFAULT_DEMO_SETTINGS,
     client: {
       name: 'Dra. Mariana Albuquerque',
       companyName: 'Clínica OdontoPrime',
@@ -138,6 +143,14 @@ const SEED_PROPOSALS: Proposal[] = [
   }
 ];
 
+let memoryDb: DatabaseSchema = {
+  users: [DEFAULT_DEMO_USER],
+  settings: {
+    [DEMO_USER_ID]: DEFAULT_DEMO_SETTINGS,
+  },
+  proposals: SEED_PROPOSALS,
+};
+
 function ensureDb(): DatabaseSchema {
   try {
     if (!fs.existsSync(DATA_DIR)) {
@@ -147,60 +160,53 @@ function ensureDb(): DatabaseSchema {
       const initialData: DatabaseSchema = {
         users: [DEFAULT_DEMO_USER],
         settings: {
-          [DEFAULT_DEMO_USER.id]: DEFAULT_SETTINGS,
+          [DEMO_USER_ID]: DEFAULT_DEMO_SETTINGS,
         },
         proposals: SEED_PROPOSALS,
       };
       fs.writeFileSync(DB_FILE, JSON.stringify(initialData, null, 2), 'utf-8');
+      memoryDb = initialData;
       return initialData;
     }
     const content = fs.readFileSync(DB_FILE, 'utf-8');
     const parsed = JSON.parse(content);
-    
-    // Schema migrations if needed
-    if (!Array.isArray(parsed.users)) {
-      parsed.users = [DEFAULT_DEMO_USER];
+    if (!Array.isArray(parsed.users)) parsed.users = [DEFAULT_DEMO_USER];
+    if (!parsed.settings || typeof parsed.settings !== 'object') {
+      parsed.settings = { [DEMO_USER_ID]: DEFAULT_DEMO_SETTINGS };
     }
-    if (!parsed.settings || typeof parsed.settings !== 'object' || Array.isArray(parsed.settings)) {
-      parsed.settings = { [DEFAULT_DEMO_USER.id]: DEFAULT_SETTINGS };
-    }
+    memoryDb = parsed;
     return parsed;
   } catch (error) {
-    console.error('Error reading DB:', error);
-    return {
-      users: [DEFAULT_DEMO_USER],
-      settings: { [DEFAULT_DEMO_USER.id]: DEFAULT_SETTINGS },
-      proposals: SEED_PROPOSALS,
-    };
+    return memoryDb;
   }
 }
 
 function saveDb(data: DatabaseSchema) {
+  memoryDb = data;
   try {
     if (!fs.existsSync(DATA_DIR)) {
       fs.mkdirSync(DATA_DIR, { recursive: true });
     }
     fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2), 'utf-8');
-  } catch (error) {
-    console.error('Error saving DB:', error);
-  }
+  } catch (error) {}
 }
 
 export const db = {
-  // User Management
   findUserByEmail(email: string): User | null {
     const data = ensureDb();
+    if (!email) return null;
     return data.users.find(u => u.email.toLowerCase() === email.toLowerCase().trim()) || null;
   },
 
   findUserById(id: string): User | null {
     const data = ensureDb();
+    if (!id) return null;
     return data.users.find(u => u.id === id) || null;
   },
 
   createUser(userData: { name: string; email: string; passwordHash: string; companyName: string; phone?: string }): User {
     const data = ensureDb();
-    const id = `usr_${Date.now()}`;
+    const id = `usr_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`;
     const newUser: User = {
       id,
       name: userData.name,
@@ -215,14 +221,14 @@ export const db = {
 
     data.users.push(newUser);
 
-    // Initialize company profile for this user
+    // Initial clean company settings for this new user
     data.settings[id] = {
       userId: id,
       name: userData.companyName || userData.name,
       email: userData.email,
       phone: userData.phone || '',
       document: '',
-      tagline: 'Soluções Comerciais & Serviços',
+      tagline: 'Propostas Comerciais & Serviços',
       primaryColor: '#16a34a',
       plan: 'free',
       planCycle: 'monthly',
@@ -232,23 +238,38 @@ export const db = {
     return newUser;
   },
 
-  // Settings per User
-  getSettings(userId: string = 'usr_demo_1'): CompanySettings {
+  getSettings(userId: string): CompanySettings {
     const data = ensureDb();
-    return data.settings[userId] || data.settings['usr_demo_1'] || DEFAULT_SETTINGS;
+    if (data.settings && data.settings[userId]) {
+      return data.settings[userId];
+    }
+    // Return empty default for new users (NEVER default demo user data)
+    const user = data.users.find(u => u.id === userId);
+    const newSettings: CompanySettings = {
+      userId,
+      name: user?.companyName || user?.name || 'Minha Empresa',
+      email: user?.email || '',
+      phone: user?.phone || '',
+      document: '',
+      tagline: 'Propostas Comerciais',
+      primaryColor: '#16a34a',
+      plan: user?.plan || 'free',
+      planCycle: user?.planCycle || 'monthly',
+    };
+    return newSettings;
   },
 
-  updateSettings(userId: string = 'usr_demo_1', updates: Partial<CompanySettings>): CompanySettings {
+  updateSettings(userId: string, updates: Partial<CompanySettings>): CompanySettings {
     const data = ensureDb();
-    const current = data.settings[userId] || DEFAULT_SETTINGS;
+    const current = this.getSettings(userId);
     data.settings[userId] = { ...current, ...updates, userId };
     saveDb(data);
     return data.settings[userId];
   },
 
-  setPlan(userId: string = 'usr_demo_1', plan: PlanTier, cycle: 'monthly' | 'annual' = 'monthly'): CompanySettings {
+  setPlan(userId: string, plan: PlanTier, cycle: 'monthly' | 'annual' = 'monthly'): CompanySettings {
     const data = ensureDb();
-    const current = data.settings[userId] || DEFAULT_SETTINGS;
+    const current = this.getSettings(userId);
     data.settings[userId] = { ...current, plan, planCycle: cycle, userId };
 
     const user = data.users.find(u => u.id === userId);
@@ -261,11 +282,12 @@ export const db = {
     return data.settings[userId];
   },
 
-  // Proposals
-  getProposals(userId?: string): Proposal[] {
+  // STRICT USER ISOLATION: Only returns proposals belonging to this userId!
+  getProposals(userId: string): Proposal[] {
     const data = ensureDb();
-    if (!userId) return data.proposals || [];
-    return data.proposals.filter(p => !p.userId || p.userId === userId);
+    if (!userId) return [];
+    // Strict match only:
+    return (data.proposals || []).filter(p => p.userId === userId);
   },
 
   getProposalById(id: string): Proposal | null {
@@ -273,9 +295,9 @@ export const db = {
     return data.proposals.find(p => p.id === id || p.code === id) || null;
   },
 
-  createProposal(proposal: Omit<Proposal, 'id' | 'code' | 'createdAt' | 'updatedAt' | 'viewCount'>, userId: string = 'usr_demo_1'): Proposal {
+  createProposal(proposal: Omit<Proposal, 'id' | 'code' | 'createdAt' | 'updatedAt' | 'viewCount'>, userId: string): Proposal {
     const data = ensureDb();
-    const userProposals = data.proposals.filter(p => p.userId === userId);
+    const userProposals = (data.proposals || []).filter(p => p.userId === userId);
     const count = userProposals.length + 1;
     const year = new Date().getFullYear();
     const code = `PROP-${year}-${String(count).padStart(3, '0')}`;
