@@ -18,9 +18,9 @@ export interface Plan {
 }
 
 export const STRIPE_LINKS = {
-  starter: 'https://buy.stripe.com/test_14A14m2Lr4rt1Ds7eheEo04',
+  starter: 'https://buy.stripe.com/test_dRm7sK85L6zB4PEaqteEo03',
   pro: 'https://buy.stripe.com/test_00wfZg3Pv1fh2Hw7eheEo00',
-  agency: 'https://buy.stripe.com/test_dRm7sK85L6zB4PEaqteEo03',
+  agency: 'https://buy.stripe.com/test_14A14m2Lr4rt1Ds7eheEo04', // R$ 119
   lifetime: 'https://buy.stripe.com/test_3cI5kC71HbTV5TIaqteEo01',
 };
 
