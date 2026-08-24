@@ -1,17 +1,17 @@
 export type ProposalStatus = 'draft' | 'sent' | 'viewed' | 'accepted' | 'declined' | 'expired';
 
-export type PlanTier = 'free' | 'pro' | 'agency';
+export type PlanTier = 'free' | 'starter' | 'pro' | 'agency' | 'lifetime';
 
 export interface User {
   id: string;
   name: string;
   email: string;
-  passwordHash: string; // Plain/SHA for demo or bcrypt
+  passwordHash: string;
   companyName: string;
   phone?: string;
   document?: string;
   plan: PlanTier;
-  planCycle?: 'monthly' | 'annual';
+  planCycle?: 'monthly' | 'annual' | 'lifetime';
   createdAt: string;
 }
 
@@ -63,12 +63,12 @@ export interface CompanySettings {
   pixKey?: string;
   bankDetails?: string;
   plan?: PlanTier;
-  planCycle?: 'monthly' | 'annual';
+  planCycle?: 'monthly' | 'annual' | 'lifetime';
 }
 
 export interface Proposal {
   id: string;
-  userId?: string; // Multi-tenant ownership
+  userId?: string;
   code: string;
   title: string;
   introduction?: string;

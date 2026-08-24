@@ -1,15 +1,15 @@
 'use client';
 
 import React, { useState } from 'react';
-import { X, Check, Zap, Sparkles, ShieldCheck, QrCode, CreditCard, Loader2, ArrowRight, ExternalLink } from 'lucide-react';
+import { X, Check, Zap, Sparkles, ShieldCheck, CreditCard, Loader2, ExternalLink, Crown, Flame } from 'lucide-react';
 import confetti from 'canvas-confetti';
-import { SAAS_PLANS, STRIPE_CHECKOUT_URL } from '@/lib/plans';
+import { SAAS_PLANS, LIFETIME_PLAN, STRIPE_CHECKOUT_URL } from '@/lib/plans';
 
 interface UpgradeModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSuccess?: () => void;
-  initialPlan?: 'pro' | 'agency';
+  initialPlan?: 'starter' | 'pro' | 'agency' | 'lifetime';
 }
 
 export const UpgradeModal: React.FC<UpgradeModalProps> = ({
@@ -18,20 +18,15 @@ export const UpgradeModal: React.FC<UpgradeModalProps> = ({
   onSuccess,
   initialPlan = 'pro',
 }) => {
-  const [selectedPlan, setSelectedPlan] = useState<'pro' | 'agency'>(initialPlan);
+  const [selectedPlan, setSelectedPlan] = useState<'starter' | 'pro' | 'agency' | 'lifetime'>(initialPlan);
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'annual'>('monthly');
-  const [paymentMethod, setPaymentMethod] = useState<'card' | 'pix'>('card');
   const [isProcessing, setIsProcessing] = useState(false);
 
   if (!isOpen) return null;
 
-  const plan = SAAS_PLANS.find(p => p.id === selectedPlan) || SAAS_PLANS[1];
-  const price = billingCycle === 'annual' ? plan.annualPrice : plan.monthlyPrice;
-
-  const handleCheckoutStripe = () => {
-    // Redirect directly to the user's Stripe Checkout link
-    window.open(STRIPE_CHECKOUT_URL, '_blank');
-  };
+  const isLifetime = selectedPlan === 'lifetime';
+  const plan = SAAS_PLANS.find(p => p.id === selectedPlan) || SAAS_PLANS[2];
+  const price = isLifetime ? LIFETIME_PLAN.oneTimePrice : (billingCycle === 'annual' ? plan.annualPrice : plan.monthlyPrice);
 
   const handleSimulateUpgrade = async () => {
     try {
@@ -39,7 +34,7 @@ export const UpgradeModal: React.FC<UpgradeModalProps> = ({
       const res = await fetch('/api/subscription', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ plan: selectedPlan, cycle: billingCycle }),
+        body: JSON.stringify({ plan: selectedPlan, cycle: isLifetime ? 'lifetime' : billingCycle }),
       });
 
       if (!res.ok) throw new Error('Erro ao ativar plano');
@@ -81,112 +76,120 @@ export const UpgradeModal: React.FC<UpgradeModalProps> = ({
             <span>Checkout Seguro Stripe 🔒</span>
           </div>
           <h2 className="text-2xl font-black text-slate-900 tracking-tight">
-            Faça Upgrade para o SignFlow Pro
+            Escolha seu Plano de Upgrade
           </h2>
           <p className="text-xs text-slate-500 mt-1">
-            Elimine o limite de propostas e feche contratos toda semana com sua marca própria.
+            Selecione o plano ideal para a sua necessidade e comece agora.
           </p>
         </div>
 
-        {/* Plan Selector & Billing Toggle */}
-        <div className="space-y-4 mb-6">
-          <div className="flex items-center justify-center gap-2 p-1 bg-slate-100 rounded-2xl w-fit mx-auto text-xs font-bold">
+        {/* Plan Selector Grid */}
+        <div className="space-y-3 mb-6">
+          {/* Plan Selector Pills */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
             <button
               type="button"
-              onClick={() => setBillingCycle('monthly')}
-              className={`px-4 py-1.5 rounded-xl transition-all ${
-                billingCycle === 'monthly'
-                  ? 'bg-white text-slate-900 shadow-sm'
-                  : 'text-slate-500 hover:text-slate-900'
-              }`}
-            >
-              Mensal
-            </button>
-            <button
-              type="button"
-              onClick={() => setBillingCycle('annual')}
-              className={`px-4 py-1.5 rounded-xl transition-all flex items-center gap-1.5 ${
-                billingCycle === 'annual'
-                  ? 'bg-white text-slate-900 shadow-sm'
-                  : 'text-slate-500 hover:text-slate-900'
-              }`}
-            >
-              <span>Anual</span>
-              <span className="px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[10px] font-extrabold">
-                -20% OFF
-              </span>
-            </button>
-          </div>
-
-          <div className="grid grid-cols-2 gap-3">
-            <button
-              type="button"
-              onClick={() => setSelectedPlan('pro')}
-              className={`p-4 rounded-2xl border text-left transition-all relative ${
-                selectedPlan === 'pro'
-                  ? 'border-emerald-500 bg-emerald-50/40 ring-2 ring-emerald-500/20 shadow-sm'
+              onClick={() => setSelectedPlan('starter')}
+              className={`p-3 rounded-2xl border text-center transition-all ${
+                selectedPlan === 'starter'
+                  ? 'border-indigo-500 bg-indigo-50/50 ring-2 ring-indigo-500/20'
                   : 'border-slate-200 hover:border-slate-300'
               }`}
             >
-              <div className="flex justify-between items-center mb-1">
-                <span className="text-xs font-black text-slate-900">Plano Pro</span>
-                <span className="text-[10px] font-bold text-emerald-700 bg-emerald-100 px-1.5 py-0.5 rounded">
-                  Mais Popular
-                </span>
-              </div>
-              <div className="text-lg font-black text-emerald-600">
-                R$ {billingCycle === 'annual' ? '39' : '49'}
-                <span className="text-[10px] text-slate-400 font-normal">/mês</span>
-              </div>
-              <p className="text-[11px] text-slate-500 mt-1">Propostas ilimitadas + WhatsApp</p>
+              <span className="text-[11px] font-black block text-slate-900">Starter</span>
+              <span className="text-xs font-bold text-indigo-600">R$ 29/mês</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setSelectedPlan('pro')}
+              className={`p-3 rounded-2xl border text-center transition-all relative ${
+                selectedPlan === 'pro'
+                  ? 'border-emerald-500 bg-emerald-50/50 ring-2 ring-emerald-500/20'
+                  : 'border-slate-200 hover:border-slate-300'
+              }`}
+            >
+              <span className="absolute -top-2 left-1/2 -translate-x-1/2 px-1.5 py-0.2 rounded bg-emerald-500 text-white text-[8px] font-extrabold">
+                TOP ⭐
+              </span>
+              <span className="text-[11px] font-black block text-slate-900">Pro</span>
+              <span className="text-xs font-bold text-emerald-600">R$ 49/mês</span>
             </button>
 
             <button
               type="button"
               onClick={() => setSelectedPlan('agency')}
-              className={`p-4 rounded-2xl border text-left transition-all relative ${
+              className={`p-3 rounded-2xl border text-center transition-all ${
                 selectedPlan === 'agency'
-                  ? 'border-indigo-500 bg-indigo-50/40 ring-2 ring-indigo-500/20 shadow-sm'
+                  ? 'border-purple-500 bg-purple-50/50 ring-2 ring-purple-500/20'
                   : 'border-slate-200 hover:border-slate-300'
               }`}
             >
-              <div className="flex justify-between items-center mb-1">
-                <span className="text-xs font-black text-slate-900">Agência</span>
-                <span className="text-[10px] font-bold text-indigo-700 bg-indigo-100 px-1.5 py-0.5 rounded">
-                  Equipes
-                </span>
-              </div>
-              <div className="text-lg font-black text-indigo-600">
-                R$ {billingCycle === 'annual' ? '99' : '119'}
-                <span className="text-[10px] text-slate-400 font-normal">/mês</span>
-              </div>
-              <p className="text-[11px] text-slate-500 mt-1">Até 5 usuários + White-label</p>
+              <span className="text-[11px] font-black block text-slate-900">Agência</span>
+              <span className="text-xs font-bold text-purple-600">R$ 119/mês</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setSelectedPlan('lifetime')}
+              className={`p-3 rounded-2xl border text-center transition-all relative ${
+                selectedPlan === 'lifetime'
+                  ? 'border-amber-500 bg-amber-50/60 ring-2 ring-amber-500/20'
+                  : 'border-amber-200 bg-amber-50/20 hover:border-amber-400'
+              }`}
+            >
+              <span className="absolute -top-2 left-1/2 -translate-x-1/2 px-1.5 py-0.2 rounded bg-amber-500 text-white text-[8px] font-extrabold">
+                ÚNICO 🔥
+              </span>
+              <span className="text-[11px] font-black block text-slate-900">Vitalício</span>
+              <span className="text-xs font-bold text-amber-700">R$ 297</span>
             </button>
           </div>
+
+          {/* Monthly / Annual Toggle for non-lifetime */}
+          {!isLifetime && (
+            <div className="flex items-center justify-center gap-2 p-1 bg-slate-100 rounded-2xl w-fit mx-auto text-xs font-bold mt-2">
+              <button
+                type="button"
+                onClick={() => setBillingCycle('monthly')}
+                className={`px-4 py-1 rounded-xl transition-all ${
+                  billingCycle === 'monthly'
+                    ? 'bg-white text-slate-900 shadow-sm'
+                    : 'text-slate-500 hover:text-slate-900'
+                }`}
+              >
+                Mensal
+              </button>
+              <button
+                type="button"
+                onClick={() => setBillingCycle('annual')}
+                className={`px-4 py-1 rounded-xl transition-all flex items-center gap-1.5 ${
+                  billingCycle === 'annual'
+                    ? 'bg-white text-slate-900 shadow-sm'
+                    : 'text-slate-500 hover:text-slate-900'
+                }`}
+              >
+                <span>Anual</span>
+                <span className="px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[9px] font-extrabold">
+                  -20% OFF
+                </span>
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Benefits Checklist */}
         <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 mb-6 space-y-2 text-xs">
           <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-            O que você desbloqueia no Plano Pro:
+            {isLifetime ? 'Benefícios da Oferta Vitalícia Founder:' : `Recursos inclusos no Plano ${plan.name}:`}
           </span>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-slate-700">
-            <div className="flex items-center gap-2">
-              <Check className="w-4 h-4 text-emerald-600 shrink-0" />
-              <span>Propostas e contratos ilimitados</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Check className="w-4 h-4 text-emerald-600 shrink-0" />
-              <span>Assinatura digital sem limites</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Check className="w-4 h-4 text-emerald-600 shrink-0" />
-              <span>Sem marca d'água nas propostas</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Check className="w-4 h-4 text-emerald-600 shrink-0" />
-              <span>Envio 1-Clique no WhatsApp</span>
-            </div>
+            {(isLifetime ? LIFETIME_PLAN.features : plan.features).slice(0, 4).map((f, idx) => (
+              <div key={idx} className="flex items-center gap-2">
+                <Check className="w-4 h-4 text-emerald-600 shrink-0" />
+                <span>{f}</span>
+              </div>
+            ))}
           </div>
         </div>
 
@@ -199,11 +202,14 @@ export const UpgradeModal: React.FC<UpgradeModalProps> = ({
             className="w-full flex items-center justify-center gap-2 py-4 px-6 rounded-2xl bg-gradient-to-r from-emerald-600 via-emerald-500 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white font-black text-sm shadow-xl shadow-emerald-600/25 transition-all hover:scale-[1.01] active:scale-[0.99]"
           >
             <CreditCard className="w-4 h-4 text-emerald-100" />
-            <span>Pagar R$ {price}/mês com Stripe (Cartão/Pix)</span>
+            <span>
+              {isLifetime
+                ? 'Garantir Acesso Vitalício por R$ 297 (Único)'
+                : `Pagar R$ ${price}/mês com Stripe (Cartão/Pix)`}
+            </span>
             <ExternalLink className="w-4 h-4 text-white ml-1" />
           </a>
 
-          {/* Quick Activation Simulation Button */}
           <button
             type="button"
             onClick={handleSimulateUpgrade}

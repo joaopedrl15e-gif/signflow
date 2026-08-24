@@ -4,7 +4,7 @@ export interface PlanFeature {
 }
 
 export interface Plan {
-  id: 'free' | 'pro' | 'agency';
+  id: 'free' | 'starter' | 'pro' | 'agency' | 'lifetime';
   name: string;
   badge?: string;
   description: string;
@@ -23,7 +23,7 @@ export const SAAS_PLANS: Plan[] = [
   {
     id: 'free',
     name: 'Gratuito (Teste)',
-    description: 'Ideal para você testar a ferramenta e fechar suas primeiras vendas.',
+    description: 'Ideal para testar a ferramenta e fechar suas primeiras propostas.',
     monthlyPrice: 0,
     annualPrice: 0,
     maxProposals: 3,
@@ -35,14 +35,33 @@ export const SAAS_PLANS: Plan[] = [
       'Download em PDF',
       'Marca d\'água SignFlow no rodapé',
     ],
-    ctaText: 'Plano Atual (Grátis)',
+    ctaText: 'Plano Gratuito',
+  },
+  {
+    id: 'starter',
+    name: 'Iniciante Starter',
+    badge: 'ECONÔMICO ⚡',
+    description: 'Para autônomos e freelancers com volume moderado de orçamentos.',
+    monthlyPrice: 29,
+    annualPrice: 23,
+    maxProposals: 10,
+    features: [
+      'Até 10 propostas comerciais por mês',
+      'Assinatura digital válida juridicamente',
+      'Envio em 1-Clique no WhatsApp',
+      'Exportação em PDF sem limites',
+      'Sem marca d\'água nas propostas',
+      'Suporte via e-mail',
+    ],
+    ctaText: 'Assinar Starter',
+    stripeUrl: STRIPE_CHECKOUT_URL,
   },
   {
     id: 'pro',
     name: 'Profissional Pro',
     badge: 'MAIS POPULAR ⭐',
     popular: true,
-    description: 'Para freelancers, consultores e autônomos que querem fechar contratos toda semana.',
+    description: 'Para quem quer fechar contratos semanais sem nenhum limite de propostas.',
     monthlyPrice: 49,
     annualPrice: 39,
     maxProposals: 'unlimited',
@@ -62,7 +81,7 @@ export const SAAS_PLANS: Plan[] = [
     id: 'agency',
     name: 'Agência & Equipe',
     badge: 'ESCALA RÁPIDA 🚀',
-    description: 'Para agências, produtoras e empresas com múltiplos vendedores.',
+    description: 'Para agências e empresas com múltiplos vendedores e marcas.',
     monthlyPrice: 119,
     annualPrice: 99,
     maxProposals: 'unlimited',
@@ -74,7 +93,27 @@ export const SAAS_PLANS: Plan[] = [
       'Exportação de relatórios contábeis',
       'Onboarding VIP individual',
     ],
-    ctaText: 'Assinar Plano Agência',
+    ctaText: 'Assinar Agência',
     stripeUrl: STRIPE_CHECKOUT_URL,
   }
 ];
+
+export const LIFETIME_PLAN = {
+  id: 'lifetime' as const,
+  name: 'Plano Vitalício Founder',
+  badge: 'OFERTA DE LANÇAMENTO 🔥',
+  description: 'Pague UMA ÚNICA VEZ e tenha acesso eterno ao Plano Pro sem mensalidades.',
+  oneTimePrice: 297,
+  originalPrice: 588, // 1 ano de Pro
+  installments: 'ou 12x de R$ 29,70',
+  features: [
+    'Acesso VITALÍCIO ao SignFlow Pro',
+    'Zero mensalidades para sempre',
+    'Propostas e contratos ilimitados',
+    'Todas as atualizações futuras inclusas',
+    'Selo exclusivo de Membro Fundador',
+    'Suporte prioritário vitalício',
+  ],
+  ctaText: 'Garantir Acesso Vitalício (R$ 297)',
+  stripeUrl: STRIPE_CHECKOUT_URL,
+};
