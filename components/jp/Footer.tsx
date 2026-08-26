@@ -34,33 +34,33 @@ export const Footer: React.FC = () => {
   };
 
   return (
-    <footer className="border-t border-purple-500/15 bg-[#030014] py-12 px-4 sm:px-6 relative z-10 text-zinc-400 text-xs">
-      <div className="max-w-6xl mx-auto space-y-8">
+    <footer className="border-t border-white/10 bg-[#030014] py-12 px-4 sm:px-6 lg:px-8 relative z-10 text-gray-400 text-xs sm:text-sm">
+      <div className="max-w-7xl mx-auto space-y-8">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
           {/* Logo & Bio */}
           <div className="space-y-1.5">
             <div className="flex items-center justify-center md:justify-start gap-2.5">
-              <div className="w-7 h-7 rounded-lg bg-gradient-to-tr from-purple-600 to-cyan-400 p-0.5 flex items-center justify-center">
-                <div className="w-full h-full bg-[#030014] rounded-[6px] flex items-center justify-center font-mono font-bold text-xs text-white">
+              <div className="w-8 h-8 rounded-xl bg-gradient-to-r from-[#6366f1] to-[#a855f7] p-0.5 flex items-center justify-center">
+                <div className="w-full h-full bg-[#030014] rounded-[10px] flex items-center justify-center font-bold text-xs text-white">
                   JP
                 </div>
               </div>
-              <span className="font-bold text-white text-sm">João Pedro</span>
-              <span className="text-zinc-600">•</span>
-              <span className="text-zinc-400">Frontend Developer</span>
+              <span className="font-bold text-white text-base">João Pedro</span>
+              <span className="text-gray-600">•</span>
+              <span className="text-gray-400">Frontend Developer</span>
             </div>
-            <p className="text-[11px] text-zinc-500 font-normal">
+            <p className="text-xs text-gray-500 font-normal">
               Criando experiências digitais modernas, rápidas e responsivas.
             </p>
           </div>
 
           {/* Navigation Links */}
-          <div className="flex flex-wrap justify-center gap-4 text-xs">
+          <div className="flex flex-wrap justify-center gap-6 text-sm">
             {NAV_LINKS.map((link) => (
               <button
                 key={link.id}
                 onClick={() => scrollTo(link.id)}
-                className="text-zinc-400 hover:text-white transition-colors cursor-pointer"
+                className="text-gray-400 hover:text-white transition-colors cursor-pointer"
               >
                 {link.label}
               </button>
@@ -73,7 +73,7 @@ export const Footer: React.FC = () => {
               href="https://instagram.com/_jaopimentel"
               target="_blank"
               rel="noopener noreferrer"
-              className="p-2 rounded-lg bg-purple-950/40 hover:bg-purple-900/60 border border-purple-500/20 text-zinc-300 hover:text-white transition-colors"
+              className="p-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-gray-300 hover:text-white transition-colors"
               aria-label="Instagram"
             >
               <Instagram className="w-4 h-4" />
@@ -81,7 +81,7 @@ export const Footer: React.FC = () => {
 
             <a
               href="mailto:pimentarp153@icloud.com"
-              className="p-2 rounded-lg bg-purple-950/40 hover:bg-purple-900/60 border border-purple-500/20 text-zinc-300 hover:text-white transition-colors"
+              className="p-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-gray-300 hover:text-white transition-colors"
               aria-label="Email"
             >
               <Mail className="w-4 h-4" />
@@ -89,16 +89,16 @@ export const Footer: React.FC = () => {
 
             <button
               onClick={scrollToTop}
-              className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-purple-950/40 hover:bg-purple-900/60 border border-purple-500/20 text-zinc-300 hover:text-white transition-all text-xs font-mono cursor-pointer"
+              className="flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-gray-300 hover:text-white transition-all text-xs font-mono cursor-pointer"
             >
               <span>Topo</span>
-              <ArrowUp className="w-3.5 h-3.5 text-cyan-400" />
+              <ArrowUp className="w-4 h-4 text-purple-400" />
             </button>
           </div>
         </div>
 
         {/* Bottom Copyright */}
-        <div className="pt-6 border-t border-purple-500/10 text-center text-[11px] text-zinc-500 font-mono">
+        <div className="pt-6 border-t border-white/5 text-center text-xs text-gray-500">
           © 2026 João Pedro. Criado com criatividade e tecnologia.
         </div>
       </div>

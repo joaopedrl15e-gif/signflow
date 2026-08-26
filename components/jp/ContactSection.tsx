@@ -8,7 +8,6 @@ import {
   CheckCircle2,
   AlertCircle,
   ArrowRight,
-  Sparkles,
   MessageSquareCode
 } from 'lucide-react';
 
@@ -36,7 +35,7 @@ export const ContactSection: React.FC = () => {
     }
 
     if (!message.trim()) {
-      setErrorMsg('Por favor, escreva sua mensagem ou detalhes do projeto.');
+      setErrorMsg('Por favor, escreva os detalhes da sua mensagem ou projeto.');
       return;
     }
 
@@ -50,45 +49,39 @@ export const ContactSection: React.FC = () => {
       const body = encodeURIComponent(`Nome: ${name}\nE-mail: ${email}\nTipo de Projeto: ${projectType}\n\nMensagem:\n${message}`);
 
       window.location.href = `mailto:pimentarp153@icloud.com?subject=${subject}&body=${body}`;
-    }, 700);
+    }, 600);
   };
 
   return (
-    <section id="contato" className="py-24 px-4 sm:px-6 max-w-6xl mx-auto relative z-10">
+    <section id="contato" className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative z-10">
       {/* Header */}
-      <div className="text-center max-w-3xl mx-auto space-y-3 mb-16">
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-purple-950/40 border border-purple-500/30 text-purple-300 text-xs font-mono">
-          <MessageSquareCode className="w-3.5 h-3.5" />
-          <span>Contato</span>
+      <div className="text-center mb-16 px-[5%]">
+        <div className="inline-block relative group">
+          <h2 className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#6366f1] to-[#a855f7]">
+            Vamos criar algo juntos?
+          </h2>
         </div>
-
-        <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight">
-          Vamos criar algo juntos?
-        </h2>
-
-        <p className="text-zinc-300 text-sm sm:text-base leading-relaxed">
+        <p className="mt-2 text-gray-400 max-w-2xl mx-auto text-base sm:text-lg">
           Tem uma ideia de site ou projeto? Envie uma mensagem e conte o que você precisa.
         </p>
-
-        <div className="w-20 h-1 bg-gradient-to-r from-purple-500 via-blue-500 to-cyan-400 rounded-full mx-auto mt-2" />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        {/* Coluna 1: Formulário Validado */}
+        {/* Coluna 1: Formulário */}
         <div className="lg:col-span-7">
-          <div className="rounded-3xl p-6 sm:p-8 bg-[#07031e]/90 border border-purple-500/20 shadow-2xl space-y-6">
+          <div className="rounded-3xl p-6 sm:p-8 bg-gradient-to-br from-slate-900/90 to-slate-800/90 backdrop-blur-lg border border-white/10 shadow-2xl space-y-6">
             {isSubmitted ? (
               <div className="py-12 text-center space-y-4 animate-in fade-in">
                 <div className="w-16 h-16 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 flex items-center justify-center mx-auto shadow-lg">
                   <CheckCircle2 className="w-8 h-8" />
                 </div>
-                <h3 className="text-2xl font-bold text-white">Mensagem Preparada!</h3>
-                <p className="text-xs sm:text-sm text-zinc-300 max-w-md mx-auto leading-relaxed">
+                <h3 className="text-2xl font-bold text-white">Mensagem Pronta para Envio!</h3>
+                <p className="text-sm text-gray-300 max-w-md mx-auto leading-relaxed">
                   Seu aplicativo de e-mail foi aberto com os dados preenchidos para envio a <strong>pimentarp153@icloud.com</strong>.
                 </p>
                 <button
                   onClick={() => setIsSubmitted(false)}
-                  className="px-6 py-2.5 rounded-xl bg-purple-950/60 hover:bg-purple-900/60 text-purple-200 text-xs font-semibold cursor-pointer transition-colors"
+                  className="px-6 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white text-xs font-medium cursor-pointer transition-colors"
                 >
                   Enviar outra mensagem
                 </button>
@@ -96,7 +89,7 @@ export const ContactSection: React.FC = () => {
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4">
                 {errorMsg && (
-                  <div className="p-3 rounded-xl bg-rose-950/40 border border-rose-500/30 text-rose-300 text-xs flex items-center gap-2 animate-in fade-in">
+                  <div className="p-3.5 rounded-xl bg-rose-950/40 border border-rose-500/30 text-rose-300 text-xs flex items-center gap-2 animate-in fade-in">
                     <AlertCircle className="w-4 h-4 shrink-0" />
                     <span>{errorMsg}</span>
                   </div>
@@ -104,36 +97,36 @@ export const ContactSection: React.FC = () => {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-1">
-                    <label className="block text-xs font-mono text-zinc-400">Seu Nome *</label>
+                    <label className="block text-xs font-mono text-gray-400">Seu Nome *</label>
                     <input
                       type="text"
                       required
                       value={name}
                       onChange={(e) => setName(e.target.value)}
-                      placeholder="Ex: Gabriel Silva"
-                      className="w-full px-4 py-3 bg-[#030014] border border-purple-500/20 rounded-xl text-white text-xs outline-none focus:border-cyan-400 transition-colors"
+                      placeholder="Ex: Matheus Oliveira"
+                      className="w-full px-4 py-3 bg-[#030014] border border-white/10 rounded-xl text-white text-sm outline-none focus:border-purple-500 transition-colors"
                     />
                   </div>
 
                   <div className="space-y-1">
-                    <label className="block text-xs font-mono text-zinc-400">Seu E-mail *</label>
+                    <label className="block text-xs font-mono text-gray-400">Seu E-mail *</label>
                     <input
                       type="email"
                       required
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="email@exemplo.com"
-                      className="w-full px-4 py-3 bg-[#030014] border border-purple-500/20 rounded-xl text-white text-xs outline-none focus:border-cyan-400 transition-colors"
+                      className="w-full px-4 py-3 bg-[#030014] border border-white/10 rounded-xl text-white text-sm outline-none focus:border-purple-500 transition-colors"
                     />
                   </div>
                 </div>
 
                 <div className="space-y-1">
-                  <label className="block text-xs font-mono text-zinc-400">Tipo de Projeto</label>
+                  <label className="block text-xs font-mono text-gray-400">Tipo de Projeto</label>
                   <select
                     value={projectType}
                     onChange={(e) => setProjectType(e.target.value)}
-                    className="w-full px-4 py-3 bg-[#030014] border border-purple-500/20 rounded-xl text-white text-xs outline-none focus:border-cyan-400 transition-colors cursor-pointer"
+                    className="w-full px-4 py-3 bg-[#030014] border border-white/10 rounded-xl text-white text-sm outline-none focus:border-purple-500 transition-colors cursor-pointer"
                   >
                     <option value="Landing Page">Landing Page Profissional</option>
                     <option value="Sistema Web / SaaS">Sistema Web / SaaS</option>
@@ -144,21 +137,21 @@ export const ContactSection: React.FC = () => {
                 </div>
 
                 <div className="space-y-1">
-                  <label className="block text-xs font-mono text-zinc-400">Mensagem *</label>
+                  <label className="block text-xs font-mono text-gray-400">Mensagem *</label>
                   <textarea
                     rows={4}
                     required
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
                     placeholder="Conte sobre sua ideia, prazos ou objetivos..."
-                    className="w-full px-4 py-3 bg-[#030014] border border-purple-500/20 rounded-xl text-white text-xs outline-none focus:border-cyan-400 transition-colors resize-none"
+                    className="w-full px-4 py-3 bg-[#030014] border border-white/10 rounded-xl text-white text-sm outline-none focus:border-purple-500 transition-colors resize-none"
                   />
                 </div>
 
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full py-3.5 rounded-xl bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-bold text-xs shadow-xl shadow-purple-600/30 transition-all hover:scale-[1.01] flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                  className="w-full py-4 rounded-xl bg-gradient-to-r from-[#6366f1] to-[#a855f7] hover:from-[#5457cd] hover:to-[#9333ea] text-white font-medium text-sm shadow-xl shadow-purple-600/30 transition-all hover:scale-[1.01] flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
                 >
                   {isSubmitting ? (
                     <span className="animate-pulse">Preparando envio...</span>
@@ -174,52 +167,52 @@ export const ContactSection: React.FC = () => {
           </div>
         </div>
 
-        {/* Coluna 2: Cards de Contato (Instagram & Email) */}
+        {/* Coluna 2: Cards Sociais */}
         <div className="lg:col-span-5 space-y-4">
           <a
             href="https://instagram.com/_jaopimentel"
             target="_blank"
             rel="noopener noreferrer"
-            className="p-5 rounded-3xl bg-[#07031e]/90 border border-purple-500/20 hover:border-purple-400/50 transition-all duration-300 flex items-center justify-between group shadow-xl hover:shadow-purple-950/40 hover:-translate-y-1"
+            className="p-6 rounded-3xl bg-gradient-to-br from-slate-900/90 to-slate-800/90 backdrop-blur-lg border border-white/10 hover:border-purple-500/40 transition-all duration-300 flex items-center justify-between group shadow-xl hover:shadow-purple-950/40 hover:-translate-y-1"
           >
-            <div className="flex items-center gap-3.5">
-              <div className="w-12 h-12 rounded-2xl bg-purple-950/60 border border-purple-500/30 flex items-center justify-center text-purple-400 group-hover:scale-110 transition-transform shadow-md">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-purple-400 group-hover:scale-110 transition-transform shadow-md">
                 <Instagram className="w-6 h-6" />
               </div>
               <div>
-                <h4 className="font-bold text-white text-sm group-hover:text-purple-300 transition-colors">
+                <h4 className="font-bold text-white text-base group-hover:text-purple-300 transition-colors">
                   Instagram
                 </h4>
-                <p className="text-xs font-mono text-zinc-400">@_jaopimentel</p>
+                <p className="text-xs sm:text-sm font-mono text-gray-400">@_jaopimentel</p>
               </div>
             </div>
-            <ArrowRight className="w-4 h-4 text-zinc-500 group-hover:text-purple-300 group-hover:translate-x-1 transition-all" />
+            <ArrowRight className="w-5 h-5 text-gray-500 group-hover:text-purple-300 group-hover:translate-x-1 transition-all" />
           </a>
 
           <a
             href="mailto:pimentarp153@icloud.com"
-            className="p-5 rounded-3xl bg-[#07031e]/90 border border-purple-500/20 hover:border-cyan-400/50 transition-all duration-300 flex items-center justify-between group shadow-xl hover:shadow-purple-950/40 hover:-translate-y-1"
+            className="p-6 rounded-3xl bg-gradient-to-br from-slate-900/90 to-slate-800/90 backdrop-blur-lg border border-white/10 hover:border-cyan-400/40 transition-all duration-300 flex items-center justify-between group shadow-xl hover:shadow-purple-950/40 hover:-translate-y-1"
           >
-            <div className="flex items-center gap-3.5">
-              <div className="w-12 h-12 rounded-2xl bg-cyan-950/60 border border-cyan-500/30 flex items-center justify-center text-cyan-300 group-hover:scale-110 transition-transform shadow-md">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-cyan-300 group-hover:scale-110 transition-transform shadow-md">
                 <Mail className="w-6 h-6" />
               </div>
               <div>
-                <h4 className="font-bold text-white text-sm group-hover:text-cyan-300 transition-colors">
+                <h4 className="font-bold text-white text-base group-hover:text-cyan-300 transition-colors">
                   E-mail Direto
                 </h4>
-                <p className="text-xs font-mono text-zinc-400">pimentarp153@icloud.com</p>
+                <p className="text-xs sm:text-sm font-mono text-gray-400">pimentarp153@icloud.com</p>
               </div>
             </div>
-            <ArrowRight className="w-4 h-4 text-zinc-500 group-hover:text-cyan-300 group-hover:translate-x-1 transition-all" />
+            <ArrowRight className="w-5 h-5 text-gray-500 group-hover:text-cyan-300 group-hover:translate-x-1 transition-all" />
           </a>
 
-          <div className="p-6 rounded-3xl bg-[#07031e]/60 border border-purple-500/15 space-y-2 text-xs text-zinc-300">
-            <span className="text-[11px] font-mono text-cyan-400 font-bold uppercase block">
+          <div className="p-6 rounded-3xl bg-white/5 border border-white/10 space-y-2 text-xs sm:text-sm text-gray-300">
+            <span className="text-xs font-mono text-[#a855f7] font-bold uppercase block">
               Disponibilidade
             </span>
             <p className="leading-relaxed">
-              Atualmente disponível para novos projetos, criação de landing pages e desenvolvimento de soluções sob medida.
+              Atualmente disponível para novos projetos, criação de landing pages e desenvolvimento de soluções web sob medida.
             </p>
           </div>
         </div>
