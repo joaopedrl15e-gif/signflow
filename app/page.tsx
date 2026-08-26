@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import {
   Sparkles,
@@ -8,66 +8,26 @@ import {
   ShieldCheck,
   Zap,
   CheckCircle2,
-  Share2,
-  FileCheck,
-  Eye,
+  Phone,
   MessageSquare,
-  TrendingUp,
-  Clock,
-  Layers,
-  Smartphone,
-  Check,
   Flame,
-  HelpCircle,
-  LogIn,
-  UserPlus,
-  CreditCard,
-  ExternalLink,
-  Crown,
-  Lock,
   Star,
-  Activity,
-  Send,
-  PenTool,
-  RotateCcw
+  ExternalLink,
+  Laptop,
+  Smartphone,
+  Clock,
+  Check,
+  HelpCircle,
+  Scissors,
+  Briefcase
 } from 'lucide-react';
-import confetti from 'canvas-confetti';
-import { SAAS_PLANS, LIFETIME_PLAN, CHECKOUT_LINKS } from '@/lib/plans';
-import { UpgradeModal } from '@/components/UpgradeModal';
+import { AGENCY_CONFIG, AGENCY_PACKAGES, DEMO_SHOWCASES } from '@/lib/agency';
 
-// Live Ticker items for social proof
-const LIVE_CONVERSIONS = [
-  { text: 'Rafael M. assinou o Plano Pro (R$ 49/mês)', time: 'há 3m', city: 'São Paulo • SP', icon: '⚡' },
-  { text: 'Proposta de R$ 8.500 assinada no celular via WhatsApp', time: 'há 11m', city: 'Belo Horizonte • MG', icon: '✍️' },
-  { text: 'Agência Lumina garantiu a Vaga Vitalícia (R$ 297)', time: 'há 24m', city: 'Curitiba • PR', icon: '👑' },
-  { text: 'Lucas Silveira enviou proposta de Website em 1 clique', time: 'há 38m', city: 'Rio de Janeiro • RJ', icon: '🚀' },
-];
-
-export default function HomePage() {
-  // Cursor Spotlight & Trailing Dot State
+export default function AgencyHomePage() {
   const [mousePos, setMousePos] = useState({ x: -100, y: -100 });
   const [trailingPos, setTrailingPos] = useState({ x: -100, y: -100 });
 
-  // Interactive Live Signature State
-  const [demoSigned, setDemoSigned] = useState(false);
-  const [demoSigning, setDemoSigning] = useState(false);
-  const [isDrawing, setIsDrawing] = useState(false);
-  const [hasDrawn, setHasDrawn] = useState(false);
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
-
-  // Social Proof Toast State
-  const [tickerIndex, setTickerIndex] = useState(0);
-  const [toastVisible, setToastVisible] = useState(true);
-
-  // Upgrade Modal State
-  const [isUpgradeModalOpen, setIsUpgradeModalOpen] = useState(false);
-  const [selectedPlanForModal, setSelectedPlanForModal] = useState<'starter' | 'pro' | 'agency' | 'lifetime'>('pro');
-
-  // ROI Calculator State
-  const [proposalsPerMonth, setProposalsPerMonth] = useState(12);
-  const [averageTicket, setAverageTicket] = useState(2500);
-
-  // Mouse Move Listener for Trail & Spotlight
+  // Mouse Spotlight
   useEffect(() => {
     const onMove = (e: MouseEvent) => {
       setMousePos({ x: e.clientX, y: e.clientY });
@@ -76,7 +36,7 @@ export default function HomePage() {
     return () => window.removeEventListener('mousemove', onMove);
   }, []);
 
-  // Smooth Trailing Dot Animation
+  // Smooth Trailing Dot
   useEffect(() => {
     let animationFrameId: number;
     const smoothFollow = () => {
@@ -90,98 +50,14 @@ export default function HomePage() {
     return () => cancelAnimationFrame(animationFrameId);
   }, [mousePos]);
 
-  // Rotate Live Conversion Toast
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setToastVisible(false);
-      setTimeout(() => {
-        setTickerIndex((prev) => (prev + 1) % LIVE_CONVERSIONS.length);
-        setToastVisible(true);
-      }, 400);
-    }, 6000);
-    return () => clearInterval(interval);
-  }, []);
-
-  // Canvas Drawing Handlers
-  const startDrawing = (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
-    if (demoSigned) return;
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    const rect = canvas.getBoundingClientRect();
-    const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
-    const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
-
-    ctx.beginPath();
-    ctx.moveTo(clientX - rect.left, clientY - rect.top);
-    setIsDrawing(true);
-    setHasDrawn(true);
-  };
-
-  const draw = (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
-    if (!isDrawing || demoSigned) return;
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    const rect = canvas.getBoundingClientRect();
-    const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
-    const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
-
-    ctx.lineWidth = 3.5;
-    ctx.lineCap = 'round';
-    ctx.lineJoin = 'round';
-    ctx.strokeStyle = '#34d399'; // Emerald neon
-    ctx.lineTo(clientX - rect.left, clientY - rect.top);
-    ctx.stroke();
-  };
-
-  const stopDrawing = () => {
-    setIsDrawing(false);
-  };
-
-  const clearCanvas = () => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    setHasDrawn(false);
-  };
-
-  const handleTestDemoSignature = () => {
-    if (demoSigned) return;
-    setDemoSigning(true);
-    setTimeout(() => {
-      setDemoSigning(false);
-      setDemoSigned(true);
-      try {
-        confetti({
-          particleCount: 100,
-          spread: 80,
-          origin: { y: 0.65 },
-        });
-      } catch {}
-    }, 800);
-  };
-
-  const handleResetDemo = () => {
-    setDemoSigned(false);
-    clearCanvas();
-  };
-
-  const estimatedHoursSaved = Math.round(proposalsPerMonth * 1.8);
-  const potentialNewWinsRevenue = Math.round(proposalsPerMonth * averageTicket * 0.25);
-  const formattedRevenue = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(potentialNewWinsRevenue);
-
-  const currentToast = LIVE_CONVERSIONS[tickerIndex];
+  const defaultWhatsappMsg = encodeURIComponent(
+    'Olá! Vi o portfólio no site e gostaria de um orçamento para criar um site profissional para o meu negócio.'
+  );
+  const whatsappUrl = `https://wa.me/${AGENCY_CONFIG.phone}?text=${defaultWhatsappMsg}`;
 
   return (
     <div className="min-h-screen bg-slate-950 text-white selection:bg-emerald-500 selection:text-black overflow-x-hidden bg-grid-pattern relative">
-      {/* 🟢 CUSTOM INTERACTIVE TRAILING CURSOR HALO 🟢 */}
+      {/* 🟢 CUSTOM CURSOR HALO 🟢 */}
       <div
         className="pointer-events-none fixed z-50 rounded-full border border-emerald-400/60 transition-transform duration-75 hidden md:block"
         style={{
@@ -208,50 +84,18 @@ export default function HomePage() {
         }}
       />
 
-      {/* 🌌 ULTRA-MODERN AURORA GLOW BACKGROUND LIGHTS 🌌 */}
+      {/* 🌌 AURORA GLOW LIGHTS 🌌 */}
       <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[1300px] h-[650px] bg-radial-gradient pointer-events-none z-0" />
-      
-      {/* Aurora Orb 1 (Emerald Glow) */}
       <div className="fixed top-[-5%] left-[8%] w-[600px] h-[600px] bg-emerald-500/20 rounded-full blur-[140px] pointer-events-none animate-aurora-1 z-0" />
-      
-      {/* Aurora Orb 2 (Indigo / Violet Glow) */}
       <div className="fixed top-[18%] right-[5%] w-[650px] h-[650px] bg-indigo-600/25 rounded-full blur-[160px] pointer-events-none animate-aurora-2 z-0" />
-      
-      {/* Aurora Orb 3 (Cyan Glow) */}
-      <div className="fixed top-[52%] left-[12%] w-[550px] h-[550px] bg-cyan-500/18 rounded-full blur-[130px] pointer-events-none animate-aurora-3 z-0" />
-
-      {/* Aurora Orb 4 (Bottom Amber/Emerald Glow) */}
       <div className="fixed bottom-[8%] right-[12%] w-[600px] h-[600px] bg-emerald-600/18 rounded-full blur-[150px] pointer-events-none animate-pulse-glow z-0" />
 
       {/* Neon Top Laser Accent Line */}
       <div className="fixed top-0 left-0 right-0 h-[2px] neon-line z-50 pointer-events-none opacity-90 shadow-sm shadow-emerald-500/50" />
 
-      {/* 💬 LIVE SOCIAL PROOF POPUP TICKER (Bottom Left) 💬 */}
-      <div className="fixed bottom-6 left-6 z-40 hidden sm:block pointer-events-none">
-        <div
-          className={`glass-panel-glow px-4 py-3 rounded-2xl flex items-center gap-3 border border-emerald-500/40 shadow-2xl transition-all duration-300 transform ${
-            toastVisible ? 'translate-y-0 opacity-100 scale-100' : 'translate-y-4 opacity-0 scale-95'
-          }`}
-        >
-          <div className="w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-300 flex items-center justify-center text-sm shrink-0 border border-emerald-500/30">
-            {currentToast.icon}
-          </div>
-          <div>
-            <p className="text-xs font-bold text-slate-100 leading-tight line-clamp-1">{currentToast.text}</p>
-            <div className="flex items-center gap-2 text-[10px] text-slate-400 mt-0.5">
-              <span className="text-emerald-400 font-semibold">{currentToast.city}</span>
-              <span>•</span>
-              <span>{currentToast.time}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
       {/* Floating Navbar */}
       <header className="sticky top-4 z-50 max-w-6xl mx-auto px-4 sm:px-6">
         <div className="glass-panel-glow rounded-2xl px-5 py-3.5 flex items-center justify-between shadow-2xl relative overflow-hidden group">
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/[0.05] to-transparent pointer-events-none" />
-
           <Link href="/" className="flex items-center gap-3 group relative z-10">
             <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-500 via-emerald-400 to-teal-300 p-0.5 shadow-lg shadow-emerald-500/25 group-hover:scale-105 transition-transform">
               <div className="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center">
@@ -260,567 +104,271 @@ export default function HomePage() {
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="font-black text-lg tracking-tight text-white">SignFlow</span>
+                <span className="font-black text-lg tracking-tight text-white">{AGENCY_CONFIG.name}</span>
                 <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-extrabold tracking-wider uppercase border border-emerald-500/40">
-                  v2.0
+                  ESTÚDIO WEB
                 </span>
               </div>
-              <p className="text-[10px] text-slate-400 -mt-0.5">Propostas & Assinatura Digital</p>
+              <p className="text-[10px] text-slate-400 -mt-0.5">{AGENCY_CONFIG.tagline}</p>
             </div>
           </Link>
 
           <nav className="hidden md:flex items-center gap-6 text-xs font-medium text-slate-300 relative z-10">
-            <a href="#demo" className="hover:text-emerald-400 transition-colors">Demonstração</a>
-            <a href="#calculadora" className="hover:text-emerald-400 transition-colors">Calculadora de ROI</a>
-            <a href="#planos" className="text-emerald-400 font-bold hover:text-emerald-300 transition-colors flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 hover:border-emerald-500/60 shadow-sm">
-              <Zap className="w-3.5 h-3.5" />
-              <span>Planos & Preços</span>
-            </a>
+            <a href="#modelos" className="hover:text-emerald-400 transition-colors">Modelos Prontos</a>
+            <a href="#servicos" className="hover:text-emerald-400 transition-colors">Preços & Pacotes</a>
+            <a href="#vantagens" className="hover:text-emerald-400 transition-colors">Por Que Ter um Site?</a>
           </nav>
 
           <div className="flex items-center gap-3 relative z-10">
-            <Link
-              href="/login"
-              className="text-xs font-bold text-slate-300 hover:text-white px-3 py-1.5 transition-colors"
-            >
-              Entrar
-            </Link>
-            <Link
-              href="/cadastro"
+            <a
+              href={whatsappUrl}
+              target="_blank"
+              rel="noopener noreferrer"
               className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-400 hover:from-emerald-400 hover:to-teal-300 text-slate-950 font-black text-xs shadow-lg shadow-emerald-500/25 transition-all hover:scale-105"
             >
-              <UserPlus className="w-3.5 h-3.5" />
-              <span>Criar Conta Grátis</span>
-            </Link>
+              <Phone className="w-3.5 h-3.5" />
+              <span>Pedir Meu Site no WhatsApp</span>
+            </a>
           </div>
         </div>
       </header>
 
       {/* Hero Section */}
       <section className="relative z-10 pt-16 pb-20 px-4 sm:px-6 max-w-6xl mx-auto text-center flex flex-col items-center">
-        {/* Floating Badges (Left & Right) */}
-        <div className="hidden xl:flex items-center gap-2 px-3.5 py-2 rounded-2xl glass-panel text-[11px] font-bold text-emerald-300 absolute top-28 left-2 shadow-2xl animate-float border border-emerald-500/30">
-          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-          <span>🎉 Contrato R$ 6.400 assinado há 2m</span>
-        </div>
-
-        <div className="hidden xl:flex items-center gap-2 px-3.5 py-2 rounded-2xl glass-panel text-[11px] font-bold text-indigo-300 absolute top-40 right-2 shadow-2xl animate-float-slow border border-indigo-500/30">
-          <ShieldCheck className="w-4 h-4 text-indigo-400" />
-          <span>Validade Jurídica MP 2.200-2</span>
-        </div>
-
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-panel border border-indigo-500/40 text-xs font-semibold text-indigo-300 mb-8 shadow-inner hover:border-indigo-500/70 transition-colors">
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-panel border border-indigo-500/40 text-xs font-semibold text-indigo-300 mb-8 shadow-inner">
           <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
           <Flame className="w-3.5 h-3.5 text-amber-400" />
-          <span>Plataforma #1 de Conversão de Orçamentos Comerciais</span>
+          <span>Sites Profissionais Entregues em 24h a 48h</span>
         </div>
 
         <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight max-w-5xl leading-[1.08] mb-6">
-          Transforme orçamentos em{' '}
+          Coloque sua empresa no Google com um{' '}
           <span className="shimmer-text">
-            contratos assinados
+            site de alta conversão
           </span>{' '}
-          em minutos.
+          em 24 horas.
         </h1>
 
         <p className="text-slate-300 text-sm sm:text-lg max-w-2xl mb-10 leading-relaxed font-normal">
-          Abandone PDFs estáticos que ninguém lê. Crie propostas interativas de alto luxo, dispare direto no WhatsApp do cliente e colete assinaturas na tela com validade jurídica.
+          Chega de perder clientes para a concorrência. Desenvolvemos sites rápidos, modernos e otimizados para smartphones que transformam visitantes em mensagens diretas no seu WhatsApp.
         </p>
 
         {/* CTA Buttons */}
         <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto mb-16">
-          <Link
-            href="/cadastro"
+          <a
+            href={whatsappUrl}
+            target="_blank"
+            rel="noopener noreferrer"
             className="w-full sm:w-auto flex items-center justify-center gap-2.5 px-8 py-4 rounded-2xl bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-400 hover:from-emerald-400 hover:to-teal-300 text-slate-950 font-black text-sm shadow-xl shadow-emerald-500/30 transition-all hover:scale-105 active:scale-95"
           >
             <Sparkles className="w-5 h-5 text-slate-950" />
-            <span>Criar Minha Conta Gratuita</span>
-          </Link>
+            <span>Fazer Orçamento pelo WhatsApp</span>
+          </a>
           <a
-            href="#planos"
+            href="#modelos"
             className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-4 rounded-2xl glass-panel hover:bg-slate-850 text-slate-200 font-semibold text-sm transition-all border border-slate-800 hover:border-slate-700"
           >
-            <CreditCard className="w-4 h-4 text-emerald-400" />
-            <span>Ver Todos os Planos</span>
+            <Laptop className="w-4 h-4 text-emerald-400" />
+            <span>Ver Modelos Prontos</span>
           </a>
         </div>
 
-        {/* Social Proof Stats Bar */}
+        {/* Social Proof Numbers */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 w-full max-w-4xl pt-4 pb-12 border-y border-slate-800/80">
           <div className="text-center">
-            <p className="text-2xl sm:text-3xl font-black text-white tracking-tight">R$ 4.8M+</p>
-            <p className="text-[11px] text-slate-400 mt-0.5">Gerados em propostas</p>
+            <p className="text-2xl sm:text-3xl font-black text-white tracking-tight">24h - 48h</p>
+            <p className="text-[11px] text-slate-400 mt-0.5">Prazo de entrega recorde</p>
           </div>
           <div className="text-center">
-            <p className="text-2xl sm:text-3xl font-black text-emerald-400 tracking-tight">3.2 min</p>
-            <p className="text-[11px] text-slate-400 mt-0.5">Tempo médio de criação</p>
+            <p className="text-2xl sm:text-3xl font-black text-emerald-400 tracking-tight">100%</p>
+            <p className="text-[11px] text-slate-400 mt-0.5">Responsivo para Celulares</p>
           </div>
           <div className="text-center">
-            <p className="text-2xl sm:text-3xl font-black text-indigo-400 tracking-tight">94.8%</p>
-            <p className="text-[11px] text-slate-400 mt-0.5">Taxa de aprovação</p>
+            <p className="text-2xl sm:text-3xl font-black text-indigo-400 tracking-tight">0.8s</p>
+            <p className="text-[11px] text-slate-400 mt-0.5">Carregamento Ultra-Rápido</p>
           </div>
           <div className="text-center">
             <p className="text-2xl sm:text-3xl font-black text-amber-400 tracking-tight">1-Click</p>
-            <p className="text-[11px] text-slate-400 mt-0.5">Envio no WhatsApp</p>
-          </div>
-        </div>
-
-        {/* 🌟 HERO INTERACTIVE LIVE DEMO WIDGET 🌟 */}
-        <div id="demo" className="w-full max-w-4xl mt-12 relative">
-          <div className="hidden lg:flex items-center gap-2 px-4 py-2.5 rounded-2xl glass-panel-glow text-xs font-semibold text-emerald-300 absolute -top-6 -left-8 shadow-2xl animate-float z-20">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-            <MessageSquare className="w-4 h-4 text-emerald-400" />
-            <span>Enviado no WhatsApp • há 2m</span>
-          </div>
-
-          <div className="hidden lg:flex items-center gap-2 px-4 py-2.5 rounded-2xl glass-panel-glow text-xs font-semibold text-indigo-300 absolute -bottom-6 -right-6 shadow-2xl animate-float-slow z-20">
-            <ShieldCheck className="w-4 h-4 text-indigo-400" />
-            <span>Assinatura Criptografada com IP & Data</span>
-          </div>
-
-          {/* Main Card Container */}
-          <div className="glass-panel-glow rounded-3xl p-6 sm:p-8 text-left relative overflow-hidden shadow-2xl border border-emerald-500/30">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-4 mb-6">
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-rose-500/80" />
-                <div className="w-3 h-3 rounded-full bg-amber-500/80" />
-                <div className="w-3 h-3 rounded-full bg-emerald-500/80" />
-                <span className="text-[11px] font-mono text-slate-400 ml-2">
-                  app.signflow.com/proposta/demo-2026
-                </span>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 text-xs font-semibold">
-                  <Eye className="w-3.5 h-3.5" />
-                  <span>Modo Interativo ao Vivo</span>
-                </span>
-              </div>
-            </div>
-
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 rounded-2xl bg-slate-900/90 border border-slate-800 mb-6">
-              <div>
-                <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-400 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/20">
-                  Desenvolvimento & Branding
-                </span>
-                <h3 className="text-lg sm:text-xl font-bold text-white mt-1.5">
-                  Criação de Website & Posicionamento de Marca
-                </h3>
-                <p className="text-xs text-slate-400 mt-0.5">
-                  Apresentado a: <strong className="text-slate-200">Dra. Camila Vasconcelos</strong>
-                </p>
-              </div>
-
-              <div className="sm:text-right">
-                <span className="text-[10px] text-slate-400 uppercase block font-semibold">Investimento Total</span>
-                <span className="text-2xl font-black text-emerald-400">R$ 6.400,00</span>
-                <span className="text-[11px] text-slate-400 block mt-0.5">50% entrada + 50% entrega</span>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-              <div className="p-4 rounded-2xl bg-slate-900/60 border border-slate-800 space-y-2 text-xs">
-                <span className="font-bold text-slate-300 block text-[11px] uppercase tracking-wider">
-                  Entregáveis Inclusos:
-                </span>
-                <div className="flex items-center gap-2 text-slate-300">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span>Design exclusivo mobile-first no Figma</span>
-                </div>
-                <div className="flex items-center gap-2 text-slate-300">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span>Desenvolvimento Next.js com carregamento em &lt; 0.8s</span>
-                </div>
-                <div className="flex items-center gap-2 text-slate-300">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span>Botão direto de WhatsApp e Pixel de Rastreio</span>
-                </div>
-              </div>
-
-              {/* Interactive Canvas Signature Box */}
-              <div className={`p-5 rounded-2xl border transition-all flex flex-col justify-between ${
-                demoSigned
-                  ? 'bg-emerald-950/40 border-emerald-500/50 shadow-lg shadow-emerald-500/10'
-                  : 'bg-indigo-950/40 border-indigo-500/40'
-              }`}>
-                <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs font-bold text-white flex items-center gap-1.5">
-                      <ShieldCheck className={`w-4 h-4 ${demoSigned ? 'text-emerald-400' : 'text-indigo-400'}`} />
-                      {demoSigned ? 'Contrato Aceito & Assinado!' : 'Assine com seu Mouse ou Toque:'}
-                    </span>
-                    {demoSigned && (
-                      <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-bold">
-                        Válido Juridicamente
-                      </span>
-                    )}
-                  </div>
-
-                  {demoSigned ? (
-                    <div className="space-y-2">
-                      <div className="bg-slate-900 p-2.5 rounded-xl border border-emerald-500/30 flex items-center justify-between">
-                        <div>
-                          <p className="font-signature text-2xl text-emerald-300">Camila Vasconcelos</p>
-                          <p className="text-[10px] text-slate-400">Doc: 12.345.678/0001-90 • IP: 177.135.24.11</p>
-                        </div>
-                        <Check className="w-5 h-5 text-emerald-400" />
-                      </div>
-                      <p className="text-[11px] text-emerald-300/80">
-                        🎉 Status atualizado instantaneamente no Dashboard!
-                      </p>
-                    </div>
-                  ) : (
-                    <div className="space-y-2">
-                      <div className="relative bg-slate-900/90 rounded-xl border border-indigo-500/30 overflow-hidden">
-                        <canvas
-                          ref={canvasRef}
-                          width={320}
-                          height={85}
-                          onMouseDown={startDrawing}
-                          onMouseMove={draw}
-                          onMouseUp={stopDrawing}
-                          onMouseLeave={stopDrawing}
-                          onTouchStart={startDrawing}
-                          onTouchMove={draw}
-                          onTouchEnd={stopDrawing}
-                          className="w-full h-[85px] cursor-crosshair touch-none"
-                        />
-                        {!hasDrawn && (
-                          <div className="absolute inset-0 flex items-center justify-center pointer-events-none text-slate-500 text-[11px] gap-1">
-                            <PenTool className="w-3.5 h-3.5 text-indigo-400" />
-                            <span>Desenhe sua assinatura aqui</span>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                <div className="pt-3">
-                  {demoSigned ? (
-                    <button
-                      onClick={handleResetDemo}
-                      className="w-full py-2.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-300 transition-colors flex items-center justify-center gap-1.5"
-                    >
-                      <RotateCcw className="w-3.5 h-3.5" />
-                      <span>Reiniciar Teste de Assinatura</span>
-                    </button>
-                  ) : (
-                    <div className="flex gap-2">
-                      {hasDrawn && (
-                        <button
-                          type="button"
-                          onClick={clearCanvas}
-                          className="py-2.5 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-400 text-xs font-semibold"
-                        >
-                          Limpar
-                        </button>
-                      )}
-                      <button
-                        onClick={handleTestDemoSignature}
-                        disabled={demoSigning}
-                        className="flex-1 py-3 px-4 rounded-xl bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-400 hover:from-emerald-400 hover:to-teal-300 text-slate-950 font-extrabold text-xs shadow-lg shadow-emerald-500/20 transition-all flex items-center justify-center gap-2 hover:scale-[1.02]"
-                      >
-                        {demoSigning ? (
-                          <span>Criptografando com IP & Data...</span>
-                        ) : (
-                          <>
-                            <FileCheck className="w-4 h-4 text-slate-950" />
-                            <span>{hasDrawn ? 'Confirmar Minha Assinatura' : 'Assinar com 1-Clique'}</span>
-                          </>
-                        )}
-                      </button>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
+            <p className="text-[11px] text-slate-400 mt-0.5">Botão Direto no WhatsApp</p>
           </div>
         </div>
       </section>
 
-      {/* 💰 SEÇÃO DE PLANOS & VALORES EMBUTIDA NO SITE 💰 */}
-      <section id="planos" className="py-24 px-4 sm:px-6 max-w-6xl mx-auto relative z-10 text-center">
+      {/* 🌟 SEÇÃO DE MODELOS DE DEMONSTRAÇÃO AO VIVO (SHOWCASE) 🌟 */}
+      <section id="modelos" className="py-24 px-4 sm:px-6 max-w-6xl mx-auto relative z-10 text-center">
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-panel border border-emerald-500/30 text-emerald-300 text-xs font-bold mb-6">
           <Sparkles className="w-3.5 h-3.5" />
-          <span>Planos Transparentes com Liberação Imediata via Pix</span>
+          <span>Veja Nossos Modelos de Demonstração Funcionando</span>
         </div>
 
         <h2 className="text-3xl sm:text-5xl font-black tracking-tight text-white mb-4">
-          Escolha o plano ideal para acelerar seu fechamento
+          Escolha o modelo perfeito para o seu segmento
         </h2>
 
         <p className="text-slate-400 text-sm sm:text-base max-w-xl mx-auto mb-16">
-          Comece gratuitamente e faça upgrade quando quiser criar propostas comerciais ilimitadas e aumentar sua taxa de conversão.
+          Clique nos modelos abaixo para navegar e testar a experiência exata que seus clientes terão no celular e computador.
         </p>
 
-        {/* 👑 SPECIAL LIFETIME DEAL BANNER ON HOMEPAGE 👑 */}
-        <div className="max-w-4xl mx-auto mb-16 rounded-3xl p-6 sm:p-8 bg-gradient-to-r from-amber-950/70 via-slate-900 to-amber-950/70 border-2 border-amber-500/60 shadow-2xl relative overflow-hidden text-left group">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
-            <div className="space-y-2.5">
-              <div className="flex items-center gap-2">
-                <span className="px-3 py-1 rounded-full bg-amber-500 text-slate-950 text-[10px] font-black uppercase tracking-wider flex items-center gap-1 shadow-md">
-                  <Flame className="w-3.5 h-3.5 text-slate-950" />
-                  <span>Oferta Vitalícia Founder • Vagas Limitadas</span>
-                </span>
-              </div>
-              <h3 className="text-2xl sm:text-3xl font-black text-white">
-                Plano Vitalício Founder (Acesso Eterno)
-              </h3>
-              <p className="text-xs sm:text-sm text-slate-300 max-w-xl leading-relaxed">
-                Pague <strong className="text-amber-400">uma única vez</strong> e tenha todas as ferramentas do Plano Pro liberadas para sempre, sem nenhuma mensalidade ou renovação futura.
-              </p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-slate-300 pt-2">
-                <span className="flex items-center gap-1.5"><Check className="w-4 h-4 text-amber-400 shrink-0" /> Propostas & Contratos ILIMITADOS</span>
-                <span className="flex items-center gap-1.5"><Check className="w-4 h-4 text-amber-400 shrink-0" /> Assinatura digital válida (MP 2.200-2)</span>
-                <span className="flex items-center gap-1.5"><Check className="w-4 h-4 text-amber-400 shrink-0" /> Chave Pix integrada para sinal</span>
-                <span className="flex items-center gap-1.5"><Check className="w-4 h-4 text-amber-400 shrink-0" /> Zero mensalidades para sempre</span>
-              </div>
-            </div>
+        {/* 4 Demo Showcase Cards Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
+          {DEMO_SHOWCASES.map((demo) => (
+            <div
+              key={demo.id}
+              className="glass-panel rounded-3xl p-6 sm:p-8 border border-slate-800 hover:border-emerald-500/40 transition-all flex flex-col justify-between group shadow-xl"
+            >
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <span className="text-[10px] font-black uppercase tracking-wider text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20">
+                    {demo.category}
+                  </span>
+                  <span className="text-xs font-bold text-slate-400">{demo.niche}</span>
+                </div>
 
-            <div className="text-center sm:text-right shrink-0 bg-slate-950/90 p-6 rounded-2xl border border-amber-500/40 shadow-xl">
-              <span className="text-[11px] text-slate-400 line-through block">De R$ 588,00/ano</span>
-              <span className="text-3xl sm:text-4xl font-black text-amber-400 block">
-                R$ 297
-              </span>
-              <span className="text-[11px] text-slate-400 block mb-4 font-medium">Pagamento único no Pix ou Cartão</span>
-              <a
-                href={CHECKOUT_LINKS.lifetime}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-slate-950 font-black text-xs shadow-lg shadow-amber-500/25 transition-all hover:scale-105"
-              >
-                <Crown className="w-4 h-4 text-slate-950" />
-                <span>Garantir Vaga Vitalícia (R$ 297)</span>
-                <ExternalLink className="w-3.5 h-3.5 ml-0.5" />
-              </a>
+                <h3 className="text-xl sm:text-2xl font-black text-white group-hover:text-emerald-400 transition-colors">
+                  {demo.title}
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-300 mt-2 leading-relaxed">
+                  {demo.description}
+                </p>
+              </div>
+
+              <div className="mt-8 pt-6 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <Link
+                  href={demo.href}
+                  className="w-full sm:w-auto flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-black transition-colors"
+                >
+                  <Laptop className="w-3.5 h-3.5 text-emerald-400" />
+                  <span>Ver Demonstração ao Vivo</span>
+                  <ExternalLink className="w-3.5 h-3.5 ml-0.5" />
+                </Link>
+
+                <a
+                  href={`https://wa.me/${AGENCY_CONFIG.phone}?text=${encodeURIComponent(
+                    `Olá! Vi o modelo de demonstração "${demo.title}" e gostaria de criar um site nesse estilo para minha empresa!`
+                  )}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full sm:w-auto flex items-center justify-center gap-1.5 px-5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-black shadow-md transition-all hover:scale-105"
+                >
+                  <Phone className="w-3.5 h-3.5" />
+                  <span>Pedir Este Modelo (R$ 350)</span>
+                </a>
+              </div>
             </div>
-          </div>
+          ))}
+        </div>
+      </section>
+
+      {/* 💰 PACOTES E PREÇOS DOS SITES 💰 */}
+      <section id="servicos" className="py-24 px-4 sm:px-6 max-w-6xl mx-auto relative z-10 text-center">
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-panel border border-emerald-500/30 text-emerald-300 text-xs font-bold mb-6">
+          <Sparkles className="w-3.5 h-3.5" />
+          <span>Investimento Acessível com Retorno Rápido</span>
         </div>
 
-        {/* 4 Upgraded Pricing Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-left items-stretch mb-16">
-          {/* Card 1: Gratuito */}
-          <div className="rounded-3xl p-6 sm:p-7 flex flex-col justify-between glass-panel border border-slate-800 hover:border-slate-700 transition-all">
-            <div>
-              <h3 className="text-lg font-bold text-white mb-1">Gratuito (Teste)</h3>
-              <p className="text-xs text-slate-400 mb-5 min-h-[32px]">Ideal para testar a ferramenta e fechar suas primeiras propostas.</p>
-              <div className="mb-5 pb-5 border-b border-slate-800">
-                <span className="text-3xl sm:text-4xl font-black text-white">R$ 0</span>
-                <span className="text-xs text-slate-400 font-medium"> / mês</span>
-              </div>
-              <div className="space-y-2.5 mb-6 text-xs text-slate-300">
-                <div className="flex items-start gap-2"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" /><span>Até 3 propostas ativas</span></div>
-                <div className="flex items-start gap-2"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" /><span>Assinatura na tela (touch/mouse)</span></div>
-                <div className="flex items-start gap-2"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" /><span>Validade jurídica MP 2.200-2</span></div>
-                <div className="flex items-start gap-2"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" /><span>Acesso a 4 modelos validados</span></div>
-                <div className="flex items-start gap-2"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" /><span>Download em PDF</span></div>
-              </div>
-            </div>
-            <Link
-              href="/cadastro"
-              className="w-full py-3 px-4 rounded-xl font-bold text-xs bg-slate-850 hover:bg-slate-800 text-white border border-slate-700 transition-all flex items-center justify-center gap-2"
-            >
-              <span>Começar Grátis</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
-          </div>
+        <h2 className="text-3xl sm:text-5xl font-black tracking-tight text-white mb-4">
+          Pacotes Completos e Sem Mensalidades Obrigatórias
+        </h2>
 
-          {/* Card 2: Starter (R$ 29) */}
-          <div className="rounded-3xl p-6 sm:p-7 flex flex-col justify-between glass-panel border border-slate-800 hover:border-indigo-500/40 transition-all">
-            <div>
-              <span className="inline-block px-2.5 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 text-[9px] font-black uppercase tracking-wider mb-2 border border-indigo-500/30">
-                ECONÔMICO ⚡
-              </span>
-              <h3 className="text-lg font-bold text-white mb-1">Iniciante Starter</h3>
-              <p className="text-xs text-slate-400 mb-5 min-h-[32px]">Para autônomos com volume moderado de orçamentos.</p>
-              <div className="mb-5 pb-5 border-b border-slate-800">
-                <span className="text-3xl sm:text-4xl font-black text-white">R$ 29</span>
-                <span className="text-xs text-slate-400 font-medium"> / mês</span>
-              </div>
-              <div className="space-y-2.5 mb-6 text-xs text-slate-300">
-                <div className="flex items-start gap-2"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" /><span>Até 10 propostas por mês</span></div>
-                <div className="flex items-start gap-2"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" /><span><strong>100% Sem marca d'água</strong></span></div>
-                <div className="flex items-start gap-2"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" /><span>Envio em 1-Clique no WhatsApp</span></div>
-                <div className="flex items-start gap-2"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" /><span>Chave Pix para receber sinal</span></div>
-                <div className="flex items-start gap-2"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" /><span>PDFs ilimitados em alta resolução</span></div>
-              </div>
-            </div>
-            <a
-              href={CHECKOUT_LINKS.starter}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full py-3 px-4 rounded-xl font-bold text-xs bg-indigo-600 hover:bg-indigo-500 text-white transition-all flex items-center justify-center gap-2 shadow-lg shadow-indigo-600/20"
-            >
-              <CreditCard className="w-3.5 h-3.5" />
-              <span>Assinar Starter (R$ 29)</span>
-              <ExternalLink className="w-3 h-3 ml-0.5" />
-            </a>
-          </div>
+        <p className="text-slate-400 text-sm sm:text-base max-w-xl mx-auto mb-16">
+          Pague uma única vez pelo desenvolvimento do seu site e tenha uma máquina de vendas funcionando 24h por dia.
+        </p>
 
-          {/* Card 3: Pro (R$ 49) */}
-          <div className="rounded-3xl p-6 sm:p-7 flex flex-col justify-between glass-panel-glow border-2 border-emerald-500 shadow-2xl shadow-emerald-500/10 scale-105 z-10 relative">
-            <span className="absolute -top-3 left-1/2 -translate-x-1/2 px-2.5 py-0.5 rounded-full bg-emerald-500 text-slate-950 text-[9px] font-black uppercase tracking-wider shadow-md">
-              MAIS VENDIDO ⭐
-            </span>
-            <div>
-              <h3 className="text-lg font-bold text-white mb-1">Profissional Pro</h3>
-              <p className="text-xs text-slate-400 mb-5 min-h-[32px]">Para quem quer fechar contratos semanais sem limites.</p>
-              <div className="mb-5 pb-5 border-b border-slate-800">
-                <span className="text-3xl sm:text-4xl font-black text-white">R$ 49</span>
-                <span className="text-xs text-slate-400 font-medium"> / mês</span>
-              </div>
-              <div className="space-y-2.5 mb-6 text-xs text-slate-300">
-                <div className="flex items-start gap-2"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" /><span><strong>Propostas e Contratos ILIMITADOS</strong></span></div>
-                <div className="flex items-start gap-2"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" /><span><strong>Rastreamento em tempo real</strong></span></div>
-                <div className="flex items-start gap-2"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" /><span>Chave Pix para entrada na proposta</span></div>
-                <div className="flex items-start gap-2"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" /><span>Simulador de parcelamento no cartão</span></div>
-                <div className="flex items-start gap-2"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" /><span>Calculadora de ROI automática</span></div>
-                <div className="flex items-start gap-2"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" /><span>Suporte prioritário via WhatsApp VIP</span></div>
-              </div>
-            </div>
-            <a
-              href={CHECKOUT_LINKS.pro}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full py-3 px-4 rounded-xl font-black text-xs bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-400 hover:from-emerald-400 hover:to-teal-300 text-slate-950 shadow-lg shadow-emerald-500/25 hover:scale-[1.02] transition-all flex items-center justify-center gap-2"
-            >
-              <CreditCard className="w-3.5 h-3.5" />
-              <span>Assinar Plano Pro (R$ 49)</span>
-              <ExternalLink className="w-3 h-3 ml-0.5" />
-            </a>
-          </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left items-stretch mb-16">
+          {AGENCY_PACKAGES.map((pkg) => {
+            const isPopular = pkg.popular;
 
-          {/* Card 4: Agência (R$ 119) */}
-          <div className="rounded-3xl p-6 sm:p-7 flex flex-col justify-between glass-panel border border-slate-800 hover:border-purple-500/40 transition-all">
-            <div>
-              <span className="inline-block px-2.5 py-0.5 rounded-full bg-purple-500/20 text-purple-300 text-[9px] font-black uppercase tracking-wider mb-2 border border-purple-500/30">
-                ESCALA RÁPIDA 🚀
-              </span>
-              <h3 className="text-lg font-bold text-white mb-1">Agência & Equipe</h3>
-              <p className="text-xs text-slate-400 mb-5 min-h-[32px]">Para agências e empresas com múltiplos vendedores.</p>
-              <div className="mb-5 pb-5 border-b border-slate-800">
-                <span className="text-3xl sm:text-4xl font-black text-white">R$ 119</span>
-                <span className="text-xs text-slate-400 font-medium"> / mês</span>
+            return (
+              <div
+                key={pkg.id}
+                className={`rounded-3xl p-7 flex flex-col justify-between transition-all ${
+                  isPopular
+                    ? 'glass-panel-glow border-2 border-emerald-500 shadow-2xl shadow-emerald-500/15 scale-105 z-10 relative'
+                    : 'glass-panel border border-slate-800 hover:border-slate-700'
+                }`}
+              >
+                <div>
+                  {pkg.badge && (
+                    <span className="inline-block px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[9px] font-black uppercase tracking-wider mb-3 border border-emerald-500/30">
+                      {pkg.badge}
+                    </span>
+                  )}
+
+                  <h3 className="text-xl font-black text-white mb-1">{pkg.title}</h3>
+                  <p className="text-xs text-slate-400 mb-5 min-h-[32px]">{pkg.description}</p>
+
+                  <div className="mb-5 pb-5 border-b border-slate-800">
+                    <span className="text-3xl sm:text-4xl font-black text-emerald-400">
+                      R$ {pkg.price}
+                    </span>
+                    <span className="text-xs text-slate-400 font-medium"> (pagamento único no Pix)</span>
+                    {pkg.installments && (
+                      <span className="block text-[11px] text-slate-400 mt-1">{pkg.installments}</span>
+                    )}
+                  </div>
+
+                  <div className="flex items-center gap-1.5 text-xs text-emerald-400 font-bold mb-4">
+                    <Clock className="w-4 h-4 shrink-0" />
+                    <span>{pkg.deliveryTime}</span>
+                  </div>
+
+                  <div className="space-y-2.5 mb-8 text-xs text-slate-300">
+                    {pkg.features.map((f, idx) => (
+                      <div key={idx} className="flex items-start gap-2">
+                        <Check className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                        <span>{f}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <a
+                  href={`https://wa.me/${AGENCY_CONFIG.phone}?text=${encodeURIComponent(
+                    `Olá! Gostaria de contratar o pacote "${pkg.title}" por R$ ${pkg.price} para o meu negócio.`
+                  )}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`w-full py-3.5 px-4 rounded-xl font-black text-xs transition-all flex items-center justify-center gap-2 ${
+                    isPopular
+                      ? 'bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-slate-950 shadow-lg shadow-emerald-500/25 hover:scale-[1.02]'
+                      : 'bg-slate-850 hover:bg-slate-800 text-white border border-slate-700'
+                  }`}
+                >
+                  <Phone className="w-3.5 h-3.5" />
+                  <span>Fechar Este Pacote no WhatsApp</span>
+                </a>
               </div>
-              <div className="space-y-2.5 mb-6 text-xs text-slate-300">
-                <div className="flex items-start gap-2"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" /><span><strong>Tudo do Plano Pro 100% ILIMITADO</strong></span></div>
-                <div className="flex items-start gap-2"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" /><span>Até 5 Usuários / Vendedores</span></div>
-                <div className="flex items-start gap-2"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" /><span><strong>White-label total (Sua marca)</strong></span></div>
-                <div className="flex items-start gap-2"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" /><span>Domínio próprio personalizado</span></div>
-                <div className="flex items-start gap-2"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" /><span>Exportação financeira em Excel/CSV</span></div>
-                <div className="flex items-start gap-2"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" /><span>Gerente de suporte dedicado VIP</span></div>
-              </div>
-            </div>
-            <a
-              href={CHECKOUT_LINKS.agency}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full py-3 px-4 rounded-xl font-bold text-xs bg-purple-600 hover:bg-purple-500 text-white transition-all flex items-center justify-center gap-2 shadow-lg shadow-purple-600/20"
-            >
-              <CreditCard className="w-3.5 h-3.5" />
-              <span>Assinar Agência (R$ 119)</span>
-              <ExternalLink className="w-3 h-3 ml-0.5" />
-            </a>
-          </div>
+            );
+          })}
         </div>
 
         <div className="flex items-center justify-center gap-2 text-xs text-slate-400">
           <ShieldCheck className="w-4 h-4 text-emerald-400" />
-          <span>Garantia de 7 dias com reembolso Pix ou Cartão • Liberação instantânea na Cakto</span>
+          <span>Garantia de Satisfação: Ajustamos o design até ficar 100% do seu agrado!</span>
         </div>
       </section>
 
-      {/* 📊 CALCULADORA DE ROI 📊 */}
-      <section id="calculadora" className="py-20 px-4 sm:px-6 max-w-5xl mx-auto relative z-10">
-        <div className="glass-panel rounded-3xl p-8 sm:p-12 border border-slate-800 shadow-2xl relative overflow-hidden">
-          <div className="text-center max-w-2xl mx-auto mb-10">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 text-xs font-semibold mb-3 border border-emerald-500/20">
-              <TrendingUp className="w-3.5 h-3.5" />
-              <span>Simulador de Retorno sobre Investimento (ROI)</span>
-            </div>
-            <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-white">
-              Quanto você está deixando na mesa com PDFs comuns?
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-            <div className="space-y-6 bg-slate-900/80 p-6 rounded-2xl border border-slate-800">
-              <div>
-                <div className="flex justify-between items-center mb-2 text-xs font-bold text-slate-300">
-                  <span>Propostas enviadas por mês:</span>
-                  <span className="text-emerald-400 text-base font-extrabold">{proposalsPerMonth} propostas</span>
-                </div>
-                <input
-                  type="range"
-                  min="2"
-                  max="50"
-                  value={proposalsPerMonth}
-                  onChange={(e) => setProposalsPerMonth(Number(e.target.value))}
-                  className="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-emerald-400"
-                />
-              </div>
-
-              <div>
-                <div className="flex justify-between items-center mb-2 text-xs font-bold text-slate-300">
-                  <span>Ticket Médio por Projeto:</span>
-                  <span className="text-emerald-400 text-base font-extrabold">
-                    {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(averageTicket)}
-                  </span>
-                </div>
-                <input
-                  type="range"
-                  min="500"
-                  max="20000"
-                  step="500"
-                  value={averageTicket}
-                  onChange={(e) => setAverageTicket(Number(e.target.value))}
-                  className="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-emerald-400"
-                />
-              </div>
-            </div>
-
-            <div className="p-8 rounded-2xl bg-gradient-to-br from-indigo-950/80 to-slate-900 border border-indigo-500/30 text-center space-y-6">
-              <div>
-                <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">
-                  Potencial de Faturamento Extra / Mês
-                </span>
-                <span className="text-3xl sm:text-5xl font-black text-emerald-400 tracking-tight">
-                  +{formattedRevenue}
-                </span>
-              </div>
-
-              <Link
-                href="/cadastro"
-                className="w-full flex items-center justify-center gap-2 py-3 px-6 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs shadow-lg transition-all"
-              >
-                <span>Criar Minha Conta Grátis</span>
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 🚀 FINAL CALL TO ACTION 🚀 */}
+      {/* 🚀 CALL TO ACTION FINAL 🚀 */}
       <section className="py-20 px-4 sm:px-6 max-w-5xl mx-auto relative z-10 text-center">
         <div className="glass-panel-glow p-10 sm:p-16 rounded-3xl border border-emerald-500/30 relative overflow-hidden shadow-2xl">
           <h2 className="text-3xl sm:text-5xl font-black text-white max-w-3xl mx-auto tracking-tight leading-tight mb-6">
-            Pronto para fechar contratos com a imagem que sua empresa merece?
+            Pronto para ter o site oficial da sua empresa no ar até amanhã?
           </h2>
 
           <p className="text-slate-300 text-xs sm:text-base max-w-xl mx-auto mb-10 leading-relaxed">
-            Crie sua conta gratuita agora, escolha um modelo e envie sua primeira proposta comercial em menos de 3 minutos.
+            Chame nossa equipe no WhatsApp agora mesmo, tire suas dúvidas e receba sua prévia em menos de 24 horas.
           </p>
 
-          <Link
-            href="/cadastro"
+          <a
+            href={whatsappUrl}
+            target="_blank"
+            rel="noopener noreferrer"
             className="inline-flex items-center gap-3 px-8 py-4 rounded-2xl bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-400 hover:from-emerald-400 hover:to-teal-300 text-slate-950 font-black text-sm shadow-xl shadow-emerald-500/30 transition-all hover:scale-105"
           >
-            <Sparkles className="w-5 h-5 text-slate-950" />
-            <span>Criar Conta Gratuita Agora</span>
+            <Phone className="w-5 h-5 text-slate-950" />
+            <span>Falar com o Desenvolvedor no WhatsApp</span>
             <ArrowRight className="w-4 h-4" />
-          </Link>
+          </a>
         </div>
       </section>
 
@@ -829,18 +377,12 @@ export default function HomePage() {
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <Sparkles className="w-4 h-4 text-emerald-400" />
-            <span className="font-bold text-slate-300">SignFlow SaaS</span>
-            <span>• Propostas & Contratos Digitais</span>
+            <span className="font-bold text-slate-300">{AGENCY_CONFIG.name}</span>
+            <span>• Criação de Sites & Landing Pages</span>
           </div>
-          <p>&copy; 2026 SignFlow. Todos os direitos reservados.</p>
+          <p>&copy; 2026 {AGENCY_CONFIG.name}. Todos os direitos reservados.</p>
         </div>
       </footer>
-
-      <UpgradeModal
-        isOpen={isUpgradeModalOpen}
-        onClose={() => setIsUpgradeModalOpen(false)}
-        initialPlan={selectedPlanForModal}
-      />
     </div>
   );
 }

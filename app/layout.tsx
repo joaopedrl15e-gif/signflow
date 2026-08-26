@@ -2,21 +2,21 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "SignFlow - Propostas Comerciais & Assinatura Digital no WhatsApp",
-  description: "Crie propostas comerciais interativas de alto luxo, envie direto no WhatsApp e colete assinaturas na tela com validade jurídica MP 2.200-2 em minutos.",
-  keywords: ["gerador de propostas", "assinatura digital", "contratos online", "proposta comercial", "whatsapp", "saas brasil"],
+  title: "Apex Web Studio - Sites & Landing Pages de Alta Conversão em 24h",
+  description: "Desenvolvemos sites profissionais, cardápios digitais e landing pages de alta conversão para empresas e negócios locais. Entregue em 24 a 48 horas.",
+  keywords: ["criacao de sites", "landing page", "web design", "cardapio digital", "desenvolvimento de sites", "negocios locais"],
   openGraph: {
-    title: "SignFlow • Propostas Comerciais & Assinatura Digital",
-    description: "Transforme orçamentos em contratos assinados no WhatsApp em minutos.",
+    title: "Apex Web Studio • Criação de Sites Profissionais em 24h",
+    description: "Transforme visitantes em clientes no WhatsApp com um site moderno e ultra-rápido para sua empresa.",
     url: "https://signflow-mu-silk.vercel.app",
-    siteName: "SignFlow SaaS",
+    siteName: "Apex Web Studio",
     locale: "pt_BR",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "SignFlow - Propostas Comerciais & Assinatura Digital",
-    description: "Transforme orçamentos em contratos assinados no WhatsApp em minutos.",
+    title: "Apex Web Studio - Sites Profissionais em 24h",
+    description: "Transforme visitantes em clientes no WhatsApp com um site moderno.",
   },
 };
 
