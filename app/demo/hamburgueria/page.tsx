@@ -488,7 +488,20 @@ export default function HamburgueriaUltraDemoPage() {
   };
 
   return (
-    <div className="min-h-screen bg-neutral-950 text-white font-sans selection:bg-amber-500 selection:text-black pb-32">
+    <div className="min-h-screen bg-neutral-950 text-white font-sans selection:bg-amber-500 selection:text-black pb-32 relative overflow-x-hidden">
+      {/* 🔥 THEMED FIRE & BURGER BACKGROUND EMBERS & GLOW 🔥 */}
+      <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[1100px] h-[550px] bg-radial-gradient pointer-events-none z-0 opacity-60" />
+      <div className="fixed top-[-5%] left-[5%] w-[500px] h-[500px] bg-orange-600/20 rounded-full blur-[140px] pointer-events-none animate-aurora-1 z-0" />
+      <div className="fixed top-[30%] right-[5%] w-[550px] h-[550px] bg-amber-500/20 rounded-full blur-[150px] pointer-events-none animate-aurora-2 z-0" />
+      <div className="fixed bottom-[10%] left-[10%] w-[600px] h-[600px] bg-red-600/15 rounded-full blur-[160px] pointer-events-none animate-float-slow z-0" />
+
+      {/* Floating Fire Particles */}
+      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+        <div className="absolute top-[35%] left-[12%] w-2 h-2 rounded-full bg-amber-400/50 blur-xs animate-ember-1" />
+        <div className="absolute top-[60%] right-[18%] w-3 h-3 rounded-full bg-orange-500/40 blur-xs animate-ember-2" />
+        <div className="absolute top-[80%] left-[22%] w-2 h-2 rounded-full bg-red-500/40 blur-xs animate-ember-3" />
+        <div className="absolute top-[20%] right-[15%] w-2.5 h-2.5 rounded-full bg-yellow-400/50 blur-xs animate-ember-4" />
+      </div>
       {/* 🚀 1. STICKY TOP SELLER CONVERSION BAR (Para quem quer comprar o site) 🚀 */}
       <div className="bg-gradient-to-r from-amber-600 via-orange-600 to-amber-600 text-white px-4 py-2.5 text-xs font-bold flex items-center justify-between shadow-xl sticky top-0 z-50">
         <div className="flex items-center gap-2">

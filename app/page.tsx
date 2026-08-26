@@ -24,7 +24,9 @@ import {
   X,
   Layers,
   Award,
-  Eye
+  Eye,
+  Code2,
+  Compass
 } from 'lucide-react';
 import { AGENCY_CONFIG, AGENCY_PACKAGES, DEMO_SHOWCASES } from '@/lib/agency';
 
@@ -40,6 +42,7 @@ export default function AgencyHomePage() {
   const [mousePos, setMousePos] = useState({ x: -100, y: -100 });
   const [trailingPos, setTrailingPos] = useState({ x: -100, y: -100 });
   const [activeDemoTab, setActiveDemoTab] = useState(0);
+  const [scrollY, setScrollY] = useState(0);
 
   // Social Proof Toast State
   const [tickerIndex, setTickerIndex] = useState(0);
@@ -48,6 +51,15 @@ export default function AgencyHomePage() {
   // ROI Calculator
   const [averageTicket, setAverageTicket] = useState(150);
   const [newClientsPerMonth, setNewClientsPerMonth] = useState(15);
+
+  // Scroll Listener for Kinetic Typography
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollY(window.scrollY);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   // Mouse Move Listener for Trail & Spotlight
   useEffect(() => {
@@ -93,6 +105,12 @@ export default function AgencyHomePage() {
   const activeDemo = DEMO_SHOWCASES[activeDemoTab];
   const calculatedMonthlyRevenue = averageTicket * newClientsPerMonth;
 
+  // Kinetic scroll progress calculations
+  const heroProgress = Math.min(1, Math.max(0, scrollY / 400));
+  const modelsProgress = Math.min(1, Math.max(0, (scrollY - 300) / 500));
+  const compareProgress = Math.min(1, Math.max(0, (scrollY - 800) / 500));
+  const pricingProgress = Math.min(1, Math.max(0, (scrollY - 1400) / 500));
+
   return (
     <div className="min-h-screen bg-slate-950 text-white selection:bg-emerald-500 selection:text-black overflow-x-hidden bg-grid-pattern relative">
       {/* 🟢 CUSTOM CURSOR HALO 🟢 */}
@@ -122,12 +140,20 @@ export default function AgencyHomePage() {
         }}
       />
 
-      {/* 🌌 MULTI-LAYERED AURORA GLOW BACKGROUND LIGHTS 🌌 */}
+      {/* 🌌 MULTI-LAYERED THEMED BACKGROUND AURORAS 🌌 */}
       <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[1300px] h-[650px] bg-radial-gradient pointer-events-none z-0" />
       <div className="fixed top-[-5%] left-[8%] w-[600px] h-[600px] bg-emerald-500/20 rounded-full blur-[140px] pointer-events-none animate-aurora-1 z-0" />
-      <div className="fixed top-[18%] right-[5%] w-[650px] h-[650px] bg-indigo-600/25 rounded-full blur-[160px] pointer-events-none animate-aurora-2 z-0" />
-      <div className="fixed top-[52%] left-[12%] w-[550px] h-[550px] bg-cyan-500/18 rounded-full blur-[130px] pointer-events-none animate-aurora-3 z-0" />
-      <div className="fixed bottom-[8%] right-[12%] w-[600px] h-[600px] bg-emerald-600/18 rounded-full blur-[150px] pointer-events-none animate-pulse-glow z-0" />
+      <div className="fixed top-[22%] right-[5%] w-[650px] h-[650px] bg-indigo-600/25 rounded-full blur-[160px] pointer-events-none animate-aurora-2 z-0" />
+      <div className="fixed top-[55%] left-[10%] w-[550px] h-[550px] bg-cyan-500/18 rounded-full blur-[130px] pointer-events-none animate-aurora-1 z-0" />
+      <div className="fixed bottom-[8%] right-[10%] w-[600px] h-[600px] bg-emerald-600/18 rounded-full blur-[150px] pointer-events-none animate-float-slow z-0" />
+
+      {/* Floating Animated Themed Particles */}
+      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+        <div className="absolute top-[20%] left-[15%] w-2 h-2 rounded-full bg-emerald-400/40 blur-xs animate-ember-1" />
+        <div className="absolute top-[45%] right-[20%] w-3 h-3 rounded-full bg-indigo-400/40 blur-xs animate-ember-2" />
+        <div className="absolute top-[70%] left-[25%] w-2 h-2 rounded-full bg-cyan-400/40 blur-xs animate-ember-3" />
+        <div className="absolute top-[85%] right-[15%] w-2.5 h-2.5 rounded-full bg-amber-400/40 blur-xs animate-ember-4" />
+      </div>
 
       {/* Neon Top Laser Accent Line */}
       <div className="fixed top-0 left-0 right-0 h-[2px] neon-line z-50 pointer-events-none opacity-90 shadow-sm shadow-emerald-500/50" />
@@ -209,26 +235,27 @@ export default function AgencyHomePage() {
         </div>
       </header>
 
-      {/* Hero Section */}
+      {/* 🌟 1. HERO SECTION COM TEXTO CINÉTICO REVEAL 🌟 */}
       <section className="relative z-10 pt-16 pb-20 px-4 sm:px-6 max-w-6xl mx-auto text-center flex flex-col items-center">
-        {/* Floating Badges */}
-        <div className="hidden xl:flex items-center gap-2 px-3.5 py-2 rounded-2xl glass-panel text-[11px] font-bold text-emerald-300 absolute top-28 left-2 shadow-2xl animate-float border border-emerald-500/30">
-          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-          <span>⚡ Site entregue em 24h no Pix</span>
+        {/* Floating Code Badges */}
+        <div className="hidden xl:flex items-center gap-2 px-3.5 py-2 rounded-2xl glass-panel text-[11px] font-bold text-emerald-300 absolute top-28 left-2 shadow-2xl animate-float-slow border border-emerald-500/30">
+          <Code2 className="w-4 h-4 text-emerald-400" />
+          <span>+2.400 Linhas de Código Puro</span>
         </div>
 
-        <div className="hidden xl:flex items-center gap-2 px-3.5 py-2 rounded-2xl glass-panel text-[11px] font-bold text-indigo-300 absolute top-40 right-2 shadow-2xl animate-float border border-indigo-500/30">
+        <div className="hidden xl:flex items-center gap-2 px-3.5 py-2 rounded-2xl glass-panel text-[11px] font-bold text-indigo-300 absolute top-40 right-2 shadow-2xl animate-float-slow border border-indigo-500/30">
           <ShieldCheck className="w-4 h-4 text-indigo-400" />
-          <span>Sem Mensalidades Obrigatórias</span>
+          <span>Sites no Ar em 24h no Pix</span>
         </div>
 
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-panel border border-indigo-500/40 text-xs font-semibold text-indigo-300 mb-8 shadow-inner">
           <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
           <Flame className="w-3.5 h-3.5 text-amber-400" />
-          <span>Sites Profissionais Entregues em 24h a 48h</span>
+          <span>Desenvolvimento Expresso em 24h a 48h</span>
         </div>
 
-        <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight max-w-5xl leading-[1.08] mb-6">
+        {/* Kinetic Animated H1 */}
+        <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight max-w-5xl leading-[1.08] mb-6 transition-all duration-700">
           Coloque sua empresa no Google com um{' '}
           <span className="shimmer-text">
             site de alta conversão
@@ -281,7 +308,7 @@ export default function AgencyHomePage() {
         </div>
       </section>
 
-      {/* 🌟 HERO INTERACTIVE LIVE SHOWCASE WIDGET (Tabs + Live Screen Preview) 🌟 */}
+      {/* 🌟 2. SEÇÃO DE MODELOS COM EFEITOS CINÉTICOS DE SCROLL 🌟 */}
       <section id="modelos" className="py-20 px-4 sm:px-6 max-w-6xl mx-auto relative z-10 text-center">
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-panel border border-emerald-500/30 text-emerald-300 text-xs font-bold mb-6">
           <Sparkles className="w-3.5 h-3.5" />
@@ -383,7 +410,7 @@ export default function AgencyHomePage() {
         </div>
       </section>
 
-      {/* ⚖️ ANTES VS DEPOIS (POR QUE TER UM SITE PROFISSIONAL) ⚖️ */}
+      {/* 🌟 3. COMPARATIVO ANTES VS DEPOIS 🌟 */}
       <section id="comparativo" className="py-20 px-4 sm:px-6 max-w-5xl mx-auto relative z-10">
         <div className="text-center max-w-xl mx-auto mb-12">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 text-amber-400 text-xs font-semibold mb-2 border border-amber-500/20">
@@ -426,7 +453,7 @@ export default function AgencyHomePage() {
         </div>
       </section>
 
-      {/* 💰 PACOTES E PREÇOS DOS SITES 💰 */}
+      {/* 🌟 4. PACOTES E PREÇOS DOS SITES 🌟 */}
       <section id="servicos" className="py-24 px-4 sm:px-6 max-w-6xl mx-auto relative z-10 text-center">
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-panel border border-emerald-500/30 text-emerald-300 text-xs font-bold mb-6">
           <Sparkles className="w-3.5 h-3.5" />
@@ -515,7 +542,7 @@ export default function AgencyHomePage() {
         </div>
       </section>
 
-      {/* 📊 CALCULADORA DE RETORNO DO CLIENTE (ROI) 📊 */}
+      {/* 🌟 5. CALCULADORA DE RETORNO DO CLIENTE (ROI) 🌟 */}
       <section id="calculadora" className="py-20 px-4 sm:px-6 max-w-5xl mx-auto relative z-10">
         <div className="glass-panel rounded-3xl p-8 sm:p-12 border border-slate-800 shadow-2xl relative overflow-hidden">
           <div className="text-center max-w-2xl mx-auto mb-10">
@@ -589,7 +616,7 @@ export default function AgencyHomePage() {
         </div>
       </section>
 
-      {/* 🚀 CALL TO ACTION FINAL 🚀 */}
+      {/* 🚀 6. CALL TO ACTION FINAL 🚀 */}
       <section className="py-20 px-4 sm:px-6 max-w-5xl mx-auto relative z-10 text-center">
         <div className="glass-panel-glow p-10 sm:p-16 rounded-3xl border border-emerald-500/30 relative overflow-hidden shadow-2xl">
           <h2 className="text-3xl sm:text-5xl font-black text-white max-w-3xl mx-auto tracking-tight leading-tight mb-6">

@@ -130,7 +130,20 @@ export default function AdvocaciaUltraDemoPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 font-sans selection:bg-emerald-600 selection:text-white pb-32">
+    <div className="min-h-screen bg-slate-950 text-slate-100 font-sans selection:bg-emerald-600 selection:text-white pb-32 relative overflow-x-hidden">
+      {/* ⚖️ THEMED PRESTIGE EMERALD & GOLD JUDICIAL AURA ⚖️ */}
+      <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[1100px] h-[550px] bg-radial-gradient pointer-events-none z-0 opacity-60" />
+      <div className="fixed top-[-5%] left-[5%] w-[500px] h-[500px] bg-emerald-600/20 rounded-full blur-[140px] pointer-events-none animate-aurora-1 z-0" />
+      <div className="fixed top-[30%] right-[5%] w-[550px] h-[550px] bg-teal-600/20 rounded-full blur-[150px] pointer-events-none animate-aurora-2 z-0" />
+      <div className="fixed bottom-[10%] left-[10%] w-[600px] h-[600px] bg-emerald-700/15 rounded-full blur-[160px] pointer-events-none animate-float-slow z-0" />
+
+      {/* Floating Emerald Sparks */}
+      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+        <div className="absolute top-[30%] left-[15%] w-2.5 h-2.5 rounded-full bg-emerald-400/50 blur-xs animate-ember-1" />
+        <div className="absolute top-[55%] right-[20%] w-3 h-3 rounded-full bg-teal-400/40 blur-xs animate-ember-2" />
+        <div className="absolute top-[75%] left-[18%] w-2 h-2 rounded-full bg-emerald-500/40 blur-xs animate-ember-3" />
+        <div className="absolute top-[18%] right-[12%] w-2.5 h-2.5 rounded-full bg-emerald-300/50 blur-xs animate-ember-4" />
+      </div>
       {/* 🚀 TOP SELLER BAR 🚀 */}
       <div className="bg-gradient-to-r from-emerald-700 via-teal-700 to-emerald-700 text-white px-4 py-2.5 text-xs font-bold flex items-center justify-between shadow-xl sticky top-0 z-50">
         <div className="flex items-center gap-2">
