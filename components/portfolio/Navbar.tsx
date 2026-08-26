@@ -1,8 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
-import { Menu, X, Sparkles, ArrowRight, Code2 } from 'lucide-react';
+import { Menu, X, ArrowUpRight } from 'lucide-react';
 
 const NAV_LINKS = [
   { id: 'inicio', label: 'Início' },
@@ -21,21 +20,14 @@ export const Navbar: React.FC = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      // Background blur toggle
-      if (window.scrollY > 25) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
+      setIsScrolled(window.scrollY > 20);
 
-      // Scroll Progress Bar calculation
       const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
       if (totalHeight > 0) {
         setScrollProgress((window.scrollY / totalHeight) * 100);
       }
 
-      // Active Section Spy
-      const sections = NAV_LINKS.map(link => document.getElementById(link.id));
+      const sections = NAV_LINKS.map((link) => document.getElementById(link.id));
       const scrollPosition = window.scrollY + 200;
 
       for (let i = sections.length - 1; i >= 0; i--) {
@@ -66,103 +58,95 @@ export const Navbar: React.FC = () => {
 
   return (
     <>
-      {/* 🚀 SCROLL PROGRESS BAR AT VERY TOP 🚀 */}
-      <div className="fixed top-0 left-0 right-0 h-[2.5px] z-50 pointer-events-none bg-transparent">
+      {/* Hairline Scroll Progress */}
+      <div className="fixed top-0 left-0 right-0 h-[2px] z-50 pointer-events-none bg-transparent">
         <div
-          className="h-full bg-gradient-to-r from-cyan-400 via-indigo-500 to-purple-500 shadow-[0_0_10px_rgba(6,182,212,0.8)] transition-all duration-75 ease-out"
+          className="h-full bg-zinc-300 transition-all duration-75 ease-out"
           style={{ width: `${scrollProgress}%` }}
         />
       </div>
 
       {/* Main Navbar */}
-      <header className="fixed top-3 left-0 right-0 z-40 max-w-6xl mx-auto px-4 sm:px-6 transition-all duration-300">
+      <header className="fixed top-4 left-0 right-0 z-40 max-w-5xl mx-auto px-4 sm:px-6">
         <div
-          className={`rounded-2xl px-5 py-3.5 flex items-center justify-between transition-all duration-300 ${
+          className={`rounded-2xl px-4 sm:px-5 py-3 flex items-center justify-between transition-all duration-300 ${
             isScrolled
-              ? 'glass-card-glow shadow-2xl bg-[#030712]/85 backdrop-blur-xl border border-cyan-500/25'
+              ? 'bg-[#09090b]/80 backdrop-blur-xl border border-white/[0.08] shadow-2xl shadow-black/50'
               : 'bg-transparent border border-transparent'
           }`}
         >
-          {/* Logo Minimalista JP */}
+          {/* Logo */}
           <button
             onClick={() => handleNavClick('inicio')}
             className="flex items-center gap-3 group text-left"
           >
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 via-indigo-500 to-purple-500 p-0.5 shadow-lg shadow-cyan-500/20 group-hover:scale-105 transition-transform duration-300">
-              <div className="w-full h-full bg-[#030712] rounded-[10px] flex items-center justify-center font-mono font-black text-sm tracking-tighter text-cyan-400 group-hover:text-white transition-colors">
-                JP
-              </div>
+            <div className="w-8 h-8 rounded-lg bg-zinc-900 border border-zinc-800 flex items-center justify-center font-mono font-bold text-xs text-zinc-100 group-hover:border-zinc-700 transition-colors">
+              JP
             </div>
             <div>
-              <div className="flex items-center gap-1.5">
-                <span className="font-extrabold text-sm tracking-tight text-white group-hover:text-cyan-400 transition-colors">
-                  João Pedro
-                </span>
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
-              </div>
-              <p className="text-[10px] font-mono text-slate-400">Criador de Sites</p>
+              <span className="font-bold text-xs tracking-tight text-zinc-200 group-hover:text-white transition-colors">
+                João Pedro
+              </span>
+              <span className="block text-[10px] font-mono text-zinc-500">Desenvolvedor</span>
             </div>
           </button>
 
-          {/* Desktop Navigation Links */}
-          <nav className="hidden md:flex items-center gap-1 glass-card px-3 py-1.5 rounded-full border border-slate-800/80 bg-slate-950/60">
+          {/* Navigation Links */}
+          <nav className="hidden md:flex items-center gap-1 bg-zinc-900/60 p-1 rounded-full border border-white/[0.06]">
             {NAV_LINKS.map((link) => {
               const isActive = activeSection === link.id;
               return (
                 <button
                   key={link.id}
                   onClick={() => handleNavClick(link.id)}
-                  className={`relative px-3.5 py-1.5 text-xs font-semibold rounded-full transition-all duration-200 ${
+                  className={`px-3.5 py-1.5 text-xs font-medium rounded-full transition-all duration-150 ${
                     isActive
-                      ? 'text-white'
-                      : 'text-slate-400 hover:text-slate-200'
+                      ? 'bg-zinc-800 text-white shadow-xs'
+                      : 'text-zinc-400 hover:text-zinc-200'
                   }`}
                 >
-                  <span className="relative z-10">{link.label}</span>
-                  {isActive && (
-                    <span className="absolute inset-0 rounded-full bg-gradient-to-r from-cyan-500/20 via-indigo-500/25 to-purple-500/20 border border-cyan-400/40 shadow-xs z-0 animate-in fade-in zoom-in-95 duration-200" />
-                  )}
+                  {link.label}
                 </button>
               );
             })}
           </nav>
 
-          {/* Action CTA Button */}
+          {/* Action CTA */}
           <div className="hidden sm:flex items-center gap-3">
             <button
               onClick={() => handleNavClick('contato')}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-500 via-blue-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-slate-950 font-bold text-xs shadow-lg shadow-cyan-500/25 transition-all hover:scale-105 active:scale-95"
+              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-zinc-100 hover:bg-white text-zinc-950 font-bold text-xs transition-all hover:scale-[1.02] active:scale-[0.98]"
             >
               <span>Falar comigo</span>
-              <ArrowRight className="w-3.5 h-3.5" />
+              <ArrowUpRight className="w-3.5 h-3.5" />
             </button>
           </div>
 
-          {/* Mobile Menu Toggle Button */}
+          {/* Mobile Toggle */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden p-2 rounded-xl glass-card text-slate-300 hover:text-white border border-slate-800"
-            aria-label="Abrir menu"
+            className="md:hidden p-2 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-300 hover:text-white"
+            aria-label="Menu"
           >
-            {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            {isMobileMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
           </button>
         </div>
       </header>
 
-      {/* Mobile Drawer Menu */}
+      {/* Mobile Drawer */}
       {isMobileMenuOpen && (
-        <div className="fixed inset-0 z-30 md:hidden bg-[#030712]/95 backdrop-blur-2xl p-6 pt-24 animate-in fade-in slide-in-from-top-6 duration-200">
-          <div className="flex flex-col space-y-4 text-center">
+        <div className="fixed inset-0 z-30 md:hidden bg-[#09090b]/95 backdrop-blur-2xl p-6 pt-24 animate-in fade-in duration-150">
+          <div className="flex flex-col space-y-3 text-center">
             {NAV_LINKS.map((link) => {
               const isActive = activeSection === link.id;
               return (
                 <button
                   key={link.id}
                   onClick={() => handleNavClick(link.id)}
-                  className={`p-3 rounded-2xl text-base font-bold transition-all ${
+                  className={`p-3 rounded-xl text-sm font-semibold transition-all ${
                     isActive
-                      ? 'bg-gradient-to-r from-cyan-500/20 to-indigo-500/20 text-cyan-400 border border-cyan-500/30'
-                      : 'text-slate-300 hover:text-white hover:bg-slate-900'
+                      ? 'bg-zinc-800 text-white'
+                      : 'text-zinc-400 hover:text-white hover:bg-zinc-900'
                   }`}
                 >
                   {link.label}
@@ -170,13 +154,13 @@ export const Navbar: React.FC = () => {
               );
             })}
 
-            <div className="pt-6 border-t border-slate-800">
+            <div className="pt-4 border-t border-zinc-800">
               <button
                 onClick={() => handleNavClick('contato')}
-                className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-cyan-500 to-indigo-600 text-slate-950 font-black text-sm shadow-xl shadow-cyan-500/30 flex items-center justify-center gap-2"
+                className="w-full py-3 rounded-xl bg-zinc-100 text-zinc-950 font-bold text-xs flex items-center justify-center gap-2"
               >
                 <span>Falar comigo</span>
-                <ArrowRight className="w-4 h-4" />
+                <ArrowUpRight className="w-3.5 h-3.5" />
               </button>
             </div>
           </div>
