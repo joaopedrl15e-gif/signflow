@@ -1,6 +1,7 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
+import { WelcomeScreen } from '@/components/ekizr/WelcomeScreen';
 import { SpaceBackground } from '@/components/ekizr/SpaceBackground';
 import { AudioPlayer } from '@/components/ekizr/AudioPlayer';
 import { Navbar } from '@/components/ekizr/Navbar';
@@ -14,44 +15,44 @@ import { Contact } from '@/components/ekizr/Contact';
 import { Footer } from '@/components/ekizr/Footer';
 
 export default function EkizrPortfolioPage() {
+  const [hasEntered, setHasEntered] = useState(false);
+
   return (
     <div className="min-h-screen bg-[#030014] text-zinc-100 selection:bg-purple-600 selection:text-white overflow-x-hidden relative">
-      {/* 🌌 DEEP SPACE CANVAS WITH FLOATING CONSTELLATIONS & PARTICLES (EKIZR STYLE) 🌌 */}
+      {/* 🚀 1. EXACT EKIZR ENTRY WELCOME ANIMATION (3.2s DURATION) 🚀 */}
+      <WelcomeScreen onLoadingComplete={() => setHasEntered(true)} />
+
+      {/* 🌌 2. EXACT EKIZR BACKGROUND: 28px GRID + GLOWING NEBULAS + STARFIELD 🌌 */}
       <SpaceBackground />
 
-      {/* Ambient Cosmos Glow Nebulas */}
-      <div className="fixed top-[-10%] left-[10%] w-[550px] h-[550px] bg-purple-600/15 rounded-full blur-[160px] pointer-events-none z-0" />
-      <div className="fixed top-[35%] right-[5%] w-[600px] h-[600px] bg-indigo-600/15 rounded-full blur-[180px] pointer-events-none z-0" />
-      <div className="fixed bottom-[15%] left-[5%] w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[160px] pointer-events-none z-0" />
-
-      {/* 🎵 FLOATING AUDIO / AMBIENCE TOGGLE (EKIZR STYLE) 🎵 */}
+      {/* 🎵 3. FLOATING MUSIC / SOUND TOGGLE (EKIZR STYLE) 🎵 */}
       <AudioPlayer />
 
-      {/* 🌟 1. FLOATING GLASS CAPSULE NAVBAR 🌟 */}
+      {/* 🛸 4. FLOATING GLASS CAPSULE NAVBAR 🛸 */}
       <Navbar />
 
-      {/* 🌟 2. HERO SECTION WITH TYPEWRITER, 3D CYBER CARD & MARQUEE 🌟 */}
+      {/* 🌟 5. HERO SECTION WITH TYPEWRITER, 3D CYBER CARD & MARQUEE 🌟 */}
       <Hero />
 
-      {/* 🌟 3. ABOUT ME WITH SPINNING RGB BORDER & STATS 🌟 */}
+      {/* 🌟 6. ABOUT ME WITH SPINNING RGB GLOW BORDER & STATS 🌟 */}
       <About />
 
-      {/* 🌟 4. SKILLS & TECH STACK (FILTERABLE CATEGORIES) 🌟 */}
+      {/* 🌟 7. SKILLS & TECH STACK (CATEGORIZED TABS) 🌟 */}
       <Skills />
 
-      {/* 🌟 5. PROJECTS & CASE STUDIES GALLERY WITH MODAL 🌟 */}
+      {/* 🌟 8. PROJECTS & CASE STUDIES GALLERY WITH DETAILS MODAL 🌟 */}
       <Projects />
 
-      {/* 🌟 6. CERTIFICATES & ACHIEVEMENTS WITH ZOOM 🌟 */}
+      {/* 🌟 9. CERTIFICATES & ACHIEVEMENTS WITH ZOOM 🌟 */}
       <Certificates />
 
-      {/* 🌟 7. COMMUNITY GUESTBOOK (INTERACTIVE MESSAGE BOARD) 🌟 */}
+      {/* 🌟 10. COMMUNITY GUESTBOOK (REAL-TIME COMMENTS) 🌟 */}
       <Guestbook />
 
-      {/* 🌟 8. CONTACT & SOCIAL CHANNELS 🌟 */}
+      {/* 🌟 11. CONTACT & SOCIAL CHANNELS 🌟 */}
       <Contact />
 
-      {/* 🌟 9. FOOTER & BACK TO TOP 🌟 */}
+      {/* 🌟 12. FOOTER & BACK TO TOP 🌟 */}
       <Footer />
     </div>
   );
