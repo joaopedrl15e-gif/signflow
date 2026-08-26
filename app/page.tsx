@@ -19,15 +19,37 @@ import {
   Check,
   HelpCircle,
   Scissors,
-  Briefcase
+  Briefcase,
+  TrendingUp,
+  X,
+  Layers,
+  Award,
+  Eye
 } from 'lucide-react';
 import { AGENCY_CONFIG, AGENCY_PACKAGES, DEMO_SHOWCASES } from '@/lib/agency';
+
+// Live Ticker items for social proof
+const LIVE_NOTIFICATIONS = [
+  { text: 'Novo site de Hamburgueria entregue em 24h', city: 'São Paulo • SP', time: 'há 6m', icon: '🍔' },
+  { text: 'Clínica Odonto fechou Landing Page por R$ 350', city: 'Belo Horizonte • MG', time: 'há 18m', icon: '🦷' },
+  { text: 'Barbearia Vintage Club no ar com agendamento', city: 'Curitiba • PR', time: 'há 34m', icon: '💈' },
+  { text: 'Escritório de Advocacia com +15 contatos no WhatsApp', city: 'Rio de Janeiro • RJ', time: 'há 52m', icon: '⚖️' },
+];
 
 export default function AgencyHomePage() {
   const [mousePos, setMousePos] = useState({ x: -100, y: -100 });
   const [trailingPos, setTrailingPos] = useState({ x: -100, y: -100 });
+  const [activeDemoTab, setActiveDemoTab] = useState(0);
 
-  // Mouse Spotlight
+  // Social Proof Toast State
+  const [tickerIndex, setTickerIndex] = useState(0);
+  const [toastVisible, setToastVisible] = useState(true);
+
+  // ROI Calculator
+  const [averageTicket, setAverageTicket] = useState(150);
+  const [newClientsPerMonth, setNewClientsPerMonth] = useState(15);
+
+  // Mouse Move Listener for Trail & Spotlight
   useEffect(() => {
     const onMove = (e: MouseEvent) => {
       setMousePos({ x: e.clientX, y: e.clientY });
@@ -50,10 +72,26 @@ export default function AgencyHomePage() {
     return () => cancelAnimationFrame(animationFrameId);
   }, [mousePos]);
 
+  // Rotate Live Ticker Toast
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setToastVisible(false);
+      setTimeout(() => {
+        setTickerIndex((prev) => (prev + 1) % LIVE_NOTIFICATIONS.length);
+        setToastVisible(true);
+      }, 400);
+    }, 6000);
+    return () => clearInterval(interval);
+  }, []);
+
   const defaultWhatsappMsg = encodeURIComponent(
     'Olá! Vi o portfólio no site e gostaria de um orçamento para criar um site profissional para o meu negócio.'
   );
   const whatsappUrl = `https://wa.me/${AGENCY_CONFIG.phone}?text=${defaultWhatsappMsg}`;
+
+  const currentNotification = LIVE_NOTIFICATIONS[tickerIndex];
+  const activeDemo = DEMO_SHOWCASES[activeDemoTab];
+  const calculatedMonthlyRevenue = averageTicket * newClientsPerMonth;
 
   return (
     <div className="min-h-screen bg-slate-950 text-white selection:bg-emerald-500 selection:text-black overflow-x-hidden bg-grid-pattern relative">
@@ -84,14 +122,51 @@ export default function AgencyHomePage() {
         }}
       />
 
-      {/* 🌌 AURORA GLOW LIGHTS 🌌 */}
+      {/* 🌌 MULTI-LAYERED AURORA GLOW BACKGROUND LIGHTS 🌌 */}
       <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[1300px] h-[650px] bg-radial-gradient pointer-events-none z-0" />
       <div className="fixed top-[-5%] left-[8%] w-[600px] h-[600px] bg-emerald-500/20 rounded-full blur-[140px] pointer-events-none animate-aurora-1 z-0" />
       <div className="fixed top-[18%] right-[5%] w-[650px] h-[650px] bg-indigo-600/25 rounded-full blur-[160px] pointer-events-none animate-aurora-2 z-0" />
+      <div className="fixed top-[52%] left-[12%] w-[550px] h-[550px] bg-cyan-500/18 rounded-full blur-[130px] pointer-events-none animate-aurora-3 z-0" />
       <div className="fixed bottom-[8%] right-[12%] w-[600px] h-[600px] bg-emerald-600/18 rounded-full blur-[150px] pointer-events-none animate-pulse-glow z-0" />
 
       {/* Neon Top Laser Accent Line */}
       <div className="fixed top-0 left-0 right-0 h-[2px] neon-line z-50 pointer-events-none opacity-90 shadow-sm shadow-emerald-500/50" />
+
+      {/* 💬 LIVE SOCIAL PROOF POPUP TICKER (Bottom Left) 💬 */}
+      <div className="fixed bottom-6 left-6 z-40 hidden sm:block pointer-events-none">
+        <div
+          className={`glass-panel-glow px-4 py-3 rounded-2xl flex items-center gap-3 border border-emerald-500/40 shadow-2xl transition-all duration-300 transform ${
+            toastVisible ? 'translate-y-0 opacity-100 scale-100' : 'translate-y-4 opacity-0 scale-95'
+          }`}
+        >
+          <div className="w-9 h-9 rounded-xl bg-emerald-500/20 text-emerald-300 flex items-center justify-center text-base shrink-0 border border-emerald-500/30">
+            {currentNotification.icon}
+          </div>
+          <div>
+            <p className="text-xs font-bold text-slate-100 leading-tight line-clamp-1">{currentNotification.text}</p>
+            <div className="flex items-center gap-2 text-[10px] text-slate-400 mt-0.5">
+              <span className="text-emerald-400 font-semibold">{currentNotification.city}</span>
+              <span>•</span>
+              <span>{currentNotification.time}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* 🟢 FLOATING WHATSAPP RADAR BUTTON (Bottom Right) 🟢 */}
+      <a
+        href={whatsappUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="fixed bottom-6 right-6 z-40 flex items-center gap-2.5 px-4 py-3 rounded-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs shadow-2xl shadow-emerald-500/40 transition-all hover:scale-110 active:scale-95 group"
+      >
+        <span className="relative flex h-3 w-3">
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-slate-950 opacity-75" />
+          <span className="relative inline-flex rounded-full h-3 w-3 bg-slate-950" />
+        </span>
+        <Phone className="w-4 h-4 text-slate-950" />
+        <span className="hidden sm:inline">Falar com Desenvolvedor</span>
+      </a>
 
       {/* Floating Navbar */}
       <header className="sticky top-4 z-50 max-w-6xl mx-auto px-4 sm:px-6">
@@ -115,8 +190,9 @@ export default function AgencyHomePage() {
 
           <nav className="hidden md:flex items-center gap-6 text-xs font-medium text-slate-300 relative z-10">
             <a href="#modelos" className="hover:text-emerald-400 transition-colors">Modelos Prontos</a>
+            <a href="#comparativo" className="hover:text-emerald-400 transition-colors">Por Que Ter um Site?</a>
             <a href="#servicos" className="hover:text-emerald-400 transition-colors">Preços & Pacotes</a>
-            <a href="#vantagens" className="hover:text-emerald-400 transition-colors">Por Que Ter um Site?</a>
+            <a href="#calculadora" className="hover:text-emerald-400 transition-colors">Simulador de Lucro</a>
           </nav>
 
           <div className="flex items-center gap-3 relative z-10">
@@ -127,7 +203,7 @@ export default function AgencyHomePage() {
               className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-400 hover:from-emerald-400 hover:to-teal-300 text-slate-950 font-black text-xs shadow-lg shadow-emerald-500/25 transition-all hover:scale-105"
             >
               <Phone className="w-3.5 h-3.5" />
-              <span>Pedir Meu Site no WhatsApp</span>
+              <span>Pedir Meu Site</span>
             </a>
           </div>
         </div>
@@ -135,6 +211,17 @@ export default function AgencyHomePage() {
 
       {/* Hero Section */}
       <section className="relative z-10 pt-16 pb-20 px-4 sm:px-6 max-w-6xl mx-auto text-center flex flex-col items-center">
+        {/* Floating Badges */}
+        <div className="hidden xl:flex items-center gap-2 px-3.5 py-2 rounded-2xl glass-panel text-[11px] font-bold text-emerald-300 absolute top-28 left-2 shadow-2xl animate-float border border-emerald-500/30">
+          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+          <span>⚡ Site entregue em 24h no Pix</span>
+        </div>
+
+        <div className="hidden xl:flex items-center gap-2 px-3.5 py-2 rounded-2xl glass-panel text-[11px] font-bold text-indigo-300 absolute top-40 right-2 shadow-2xl animate-float border border-indigo-500/30">
+          <ShieldCheck className="w-4 h-4 text-indigo-400" />
+          <span>Sem Mensalidades Obrigatórias</span>
+        </div>
+
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-panel border border-indigo-500/40 text-xs font-semibold text-indigo-300 mb-8 shadow-inner">
           <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
           <Flame className="w-3.5 h-3.5 text-amber-400" />
@@ -194,8 +281,8 @@ export default function AgencyHomePage() {
         </div>
       </section>
 
-      {/* 🌟 SEÇÃO DE MODELOS DE DEMONSTRAÇÃO AO VIVO (SHOWCASE) 🌟 */}
-      <section id="modelos" className="py-24 px-4 sm:px-6 max-w-6xl mx-auto relative z-10 text-center">
+      {/* 🌟 HERO INTERACTIVE LIVE SHOWCASE WIDGET (Tabs + Live Screen Preview) 🌟 */}
+      <section id="modelos" className="py-20 px-4 sm:px-6 max-w-6xl mx-auto relative z-10 text-center">
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-panel border border-emerald-500/30 text-emerald-300 text-xs font-bold mb-6">
           <Sparkles className="w-3.5 h-3.5" />
           <span>Veja Nossos Modelos de Demonstração Funcionando</span>
@@ -205,57 +292,137 @@ export default function AgencyHomePage() {
           Escolha o modelo perfeito para o seu segmento
         </h2>
 
-        <p className="text-slate-400 text-sm sm:text-base max-w-xl mx-auto mb-16">
-          Clique nos modelos abaixo para navegar e testar a experiência exata que seus clientes terão no celular e computador.
+        <p className="text-slate-400 text-sm sm:text-base max-w-xl mx-auto mb-12">
+          Navegue pelas abas abaixo e clique em "Testar Demonstração" para ver a experiência completa como se fosse o seu cliente.
         </p>
 
-        {/* 4 Demo Showcase Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
-          {DEMO_SHOWCASES.map((demo) => (
-            <div
-              key={demo.id}
-              className="glass-panel rounded-3xl p-6 sm:p-8 border border-slate-800 hover:border-emerald-500/40 transition-all flex flex-col justify-between group shadow-xl"
-            >
-              <div>
-                <div className="flex items-center justify-between mb-4">
-                  <span className="text-[10px] font-black uppercase tracking-wider text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20">
-                    {demo.category}
-                  </span>
-                  <span className="text-xs font-bold text-slate-400">{demo.niche}</span>
-                </div>
+        {/* Interactive Tabs */}
+        <div className="flex items-center justify-center gap-2 sm:gap-3 flex-wrap mb-10">
+          {DEMO_SHOWCASES.map((demo, idx) => {
+            const isSelected = activeDemoTab === idx;
+            return (
+              <button
+                key={demo.id}
+                onClick={() => setActiveDemoTab(idx)}
+                className={`px-5 py-3 rounded-2xl text-xs font-black transition-all flex items-center gap-2 ${
+                  isSelected
+                    ? 'bg-emerald-500 text-slate-950 shadow-lg shadow-emerald-500/25 scale-105 border border-emerald-400'
+                    : 'glass-panel text-slate-300 hover:text-white hover:bg-slate-850 border border-slate-800'
+                }`}
+              >
+                <span>{demo.badge}</span>
+              </button>
+            );
+          })}
+        </div>
 
-                <h3 className="text-xl sm:text-2xl font-black text-white group-hover:text-emerald-400 transition-colors">
-                  {demo.title}
-                </h3>
-                <p className="text-xs sm:text-sm text-slate-300 mt-2 leading-relaxed">
-                  {demo.description}
-                </p>
+        {/* Active Demo Showcase Box */}
+        <div className="glass-panel-glow rounded-3xl p-6 sm:p-10 text-left border border-emerald-500/30 shadow-2xl relative overflow-hidden max-w-4xl mx-auto">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6 pb-6 border-b border-slate-800">
+            <div>
+              <div className="flex items-center gap-2 mb-2">
+                <span className="text-[10px] font-black uppercase tracking-wider text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20">
+                  {activeDemo.category}
+                </span>
+                <span className="text-xs font-bold text-slate-400">• {activeDemo.niche}</span>
               </div>
+              <h3 className="text-2xl sm:text-3xl font-black text-white">{activeDemo.title}</h3>
+              <p className="text-xs sm:text-sm text-slate-300 mt-1 max-w-xl leading-relaxed">{activeDemo.description}</p>
+            </div>
 
-              <div className="mt-8 pt-6 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
-                <Link
-                  href={demo.href}
-                  className="w-full sm:w-auto flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-black transition-colors"
-                >
-                  <Laptop className="w-3.5 h-3.5 text-emerald-400" />
-                  <span>Ver Demonstração ao Vivo</span>
-                  <ExternalLink className="w-3.5 h-3.5 ml-0.5" />
-                </Link>
+            <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto shrink-0">
+              <Link
+                href={activeDemo.href}
+                className="flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-black text-xs transition-all border border-slate-700"
+              >
+                <Eye className="w-4 h-4 text-emerald-400" />
+                <span>Testar Demonstração ao Vivo</span>
+                <ExternalLink className="w-3.5 h-3.5 ml-0.5" />
+              </Link>
 
-                <a
-                  href={`https://wa.me/${AGENCY_CONFIG.phone}?text=${encodeURIComponent(
-                    `Olá! Vi o modelo de demonstração "${demo.title}" e gostaria de criar um site nesse estilo para minha empresa!`
-                  )}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full sm:w-auto flex items-center justify-center gap-1.5 px-5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-black shadow-md transition-all hover:scale-105"
-                >
-                  <Phone className="w-3.5 h-3.5" />
-                  <span>Pedir Este Modelo (R$ 350)</span>
-                </a>
+              <a
+                href={`https://wa.me/${AGENCY_CONFIG.phone}?text=${encodeURIComponent(
+                  `Olá! Gostei muito do modelo "${activeDemo.title}" e gostaria de criar um site oficial para o meu negócio!`
+                )}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-1.5 px-6 py-3.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-slate-950 font-black text-xs shadow-lg shadow-emerald-500/20 transition-all hover:scale-105"
+              >
+                <Phone className="w-4 h-4" />
+                <span>Pedir Este Modelo (R$ 350)</span>
+              </a>
+            </div>
+          </div>
+
+          {/* Device Mockup Highlights */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-6 text-xs">
+            <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 flex items-center gap-3">
+              <Smartphone className="w-6 h-6 text-emerald-400 shrink-0" />
+              <div>
+                <span className="font-bold text-white block">100% Mobile First</span>
+                <span className="text-slate-400 text-[11px]">Perfeito em iPhones e Androids</span>
               </div>
             </div>
-          ))}
+
+            <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 flex items-center gap-3">
+              <MessageSquare className="w-6 h-6 text-emerald-400 shrink-0" />
+              <div>
+                <span className="font-bold text-white block">WhatsApp 1-Clique</span>
+                <span className="text-slate-400 text-[11px]">Pedidos e agendamentos diretos</span>
+              </div>
+            </div>
+
+            <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 flex items-center gap-3">
+              <Zap className="w-6 h-6 text-emerald-400 shrink-0" />
+              <div>
+                <span className="font-bold text-white block">Entrega em 24 Horas</span>
+                <span className="text-slate-400 text-[11px]">No ar com domínio configurado</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ⚖️ ANTES VS DEPOIS (POR QUE TER UM SITE PROFISSIONAL) ⚖️ */}
+      <section id="comparativo" className="py-20 px-4 sm:px-6 max-w-5xl mx-auto relative z-10">
+        <div className="text-center max-w-xl mx-auto mb-12">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 text-amber-400 text-xs font-semibold mb-2 border border-amber-500/20">
+            <Award className="w-3.5 h-3.5" />
+            <span>O Impacto de um Site Profissional</span>
+          </div>
+          <h2 className="text-3xl sm:text-4xl font-black text-white">
+            Por que empresas sem site perdem mais de 70% das vendas?
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {/* Lado Negativo: Empresa Sem Site */}
+          <div className="p-8 rounded-3xl bg-rose-950/20 border border-rose-500/30 space-y-4 text-left relative overflow-hidden">
+            <div className="flex items-center justify-between pb-4 border-b border-rose-500/20">
+              <h3 className="text-lg font-black text-rose-300">Empresa Sem Site Oficial ❌</h3>
+              <span className="text-xs font-bold text-rose-400 bg-rose-500/10 px-2.5 py-1 rounded-full">Perde Vendas</span>
+            </div>
+            <div className="space-y-3 text-xs text-slate-300">
+              <div className="flex items-start gap-2"><X className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" /><span>Não aparece quando o cliente pesquisa no Google</span></div>
+              <div className="flex items-start gap-2"><X className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" /><span>Passa imagem amadora e desconfiança</span></div>
+              <div className="flex items-start gap-2"><X className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" /><span>O cliente desiste porque não encontra cardápio/serviços rápido</span></div>
+              <div className="flex items-start gap-2"><X className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" /><span>Depende apenas do algoritmo instável do Instagram</span></div>
+            </div>
+          </div>
+
+          {/* Lado Positivo: Empresa Com Apex Web Studio */}
+          <div className="p-8 rounded-3xl bg-emerald-950/30 border-2 border-emerald-500/50 space-y-4 text-left relative overflow-hidden shadow-2xl shadow-emerald-500/10">
+            <div className="flex items-center justify-between pb-4 border-b border-emerald-500/30">
+              <h3 className="text-lg font-black text-emerald-300">Empresa Com Site Apex Web ✅</h3>
+              <span className="text-xs font-black text-slate-950 bg-emerald-400 px-2.5 py-1 rounded-full">Autoridade Máxima</span>
+            </div>
+            <div className="space-y-3 text-xs text-slate-200">
+              <div className="flex items-start gap-2"><Check className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" /><span>Aparece no Google quando clientes buscam na cidade</span></div>
+              <div className="flex items-start gap-2"><Check className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" /><span>Passa credibilidade de empresa grande e confiável</span></div>
+              <div className="flex items-start gap-2"><Check className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" /><span>Botão direto de WhatsApp gerando orçamentos 24 horas</span></div>
+              <div className="flex items-start gap-2"><Check className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" /><span>Investimento único que se paga nas primeiras semanas</span></div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -263,7 +430,7 @@ export default function AgencyHomePage() {
       <section id="servicos" className="py-24 px-4 sm:px-6 max-w-6xl mx-auto relative z-10 text-center">
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-panel border border-emerald-500/30 text-emerald-300 text-xs font-bold mb-6">
           <Sparkles className="w-3.5 h-3.5" />
-          <span>Investimento Acessível com Retorno Rápido</span>
+          <span>Investimento Acessível com Retorno Imediato</span>
         </div>
 
         <h2 className="text-3xl sm:text-5xl font-black tracking-tight text-white mb-4">
@@ -348,6 +515,80 @@ export default function AgencyHomePage() {
         </div>
       </section>
 
+      {/* 📊 CALCULADORA DE RETORNO DO CLIENTE (ROI) 📊 */}
+      <section id="calculadora" className="py-20 px-4 sm:px-6 max-w-5xl mx-auto relative z-10">
+        <div className="glass-panel rounded-3xl p-8 sm:p-12 border border-slate-800 shadow-2xl relative overflow-hidden">
+          <div className="text-center max-w-2xl mx-auto mb-10">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 text-xs font-semibold mb-3 border border-emerald-500/20">
+              <TrendingUp className="w-3.5 h-3.5" />
+              <span>Simulador de Retorno do Investimento</span>
+            </div>
+            <h2 className="text-2xl sm:text-4xl font-black text-white">
+              Veja em quantos dias o seu site se paga sozinho
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+            <div className="space-y-6 bg-slate-900/80 p-6 rounded-2xl border border-slate-800">
+              <div>
+                <div className="flex justify-between items-center mb-2 text-xs font-bold text-slate-300">
+                  <span>Valor médio do seu produto/serviço:</span>
+                  <span className="text-emerald-400 text-base font-black">R$ {averageTicket},00</span>
+                </div>
+                <input
+                  type="range"
+                  min="30"
+                  max="1500"
+                  step="10"
+                  value={averageTicket}
+                  onChange={(e) => setAverageTicket(Number(e.target.value))}
+                  className="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-emerald-400"
+                />
+              </div>
+
+              <div>
+                <div className="flex justify-between items-center mb-2 text-xs font-bold text-slate-300">
+                  <span>Novos clientes vindos pelo site por mês:</span>
+                  <span className="text-emerald-400 text-base font-black">{newClientsPerMonth} clientes</span>
+                </div>
+                <input
+                  type="range"
+                  min="3"
+                  max="60"
+                  value={newClientsPerMonth}
+                  onChange={(e) => setNewClientsPerMonth(Number(e.target.value))}
+                  className="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-emerald-400"
+                />
+              </div>
+            </div>
+
+            <div className="p-8 rounded-2xl bg-gradient-to-br from-indigo-950/80 to-slate-900 border border-indigo-500/30 text-center space-y-6">
+              <div>
+                <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">
+                  Faturamento Extra Estimado / Mês
+                </span>
+                <span className="text-3xl sm:text-5xl font-black text-emerald-400 tracking-tight">
+                  +R$ {calculatedMonthlyRevenue.toLocaleString('pt-BR')},00
+                </span>
+                <p className="text-[11px] text-emerald-300/80 mt-2">
+                  Um site de R$ 350 se paga logo no primeiro cliente fechado! 🚀
+                </p>
+              </div>
+
+              <a
+                href={whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full flex items-center justify-center gap-2 py-3.5 px-6 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs shadow-lg transition-all"
+              >
+                <span>Garantir Meu Site com Desconto no WhatsApp</span>
+                <ArrowRight className="w-4 h-4" />
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* 🚀 CALL TO ACTION FINAL 🚀 */}
       <section className="py-20 px-4 sm:px-6 max-w-5xl mx-auto relative z-10 text-center">
         <div className="glass-panel-glow p-10 sm:p-16 rounded-3xl border border-emerald-500/30 relative overflow-hidden shadow-2xl">
@@ -378,7 +619,7 @@ export default function AgencyHomePage() {
           <div className="flex items-center gap-2">
             <Sparkles className="w-4 h-4 text-emerald-400" />
             <span className="font-bold text-slate-300">{AGENCY_CONFIG.name}</span>
-            <span>• Criação de Sites & Landing Pages</span>
+            <span>• Criação de Sites & Landing Pages de Alta Conversão</span>
           </div>
           <p>&copy; 2026 {AGENCY_CONFIG.name}. Todos os direitos reservados.</p>
         </div>
