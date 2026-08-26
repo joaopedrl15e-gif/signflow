@@ -1,83 +1,53 @@
 'use client';
 
-import React, { useState } from 'react';
-import { LoadingScreen } from '@/components/portfolio/LoadingScreen';
-import { CustomCursor } from '@/components/portfolio/CustomCursor';
-import { Navbar } from '@/components/portfolio/Navbar';
-import { HeroSection } from '@/components/portfolio/HeroSection';
-import { WhyWebsiteSection } from '@/components/portfolio/WhyWebsiteSection';
-import { AboutSection } from '@/components/portfolio/AboutSection';
-import { SkillsSection } from '@/components/portfolio/SkillsSection';
-import { ProjectsSection } from '@/components/portfolio/ProjectsSection';
-import { ProcessSection } from '@/components/portfolio/ProcessSection';
-import { MiniSiteBuilder } from '@/components/portfolio/MiniSiteBuilder';
-import { ContactSection } from '@/components/portfolio/ContactSection';
-import { Footer } from '@/components/portfolio/Footer';
+import React from 'react';
+import { SpaceBackground } from '@/components/ekizr/SpaceBackground';
+import { Navbar } from '@/components/ekizr/Navbar';
+import { Hero } from '@/components/ekizr/Hero';
+import { About } from '@/components/ekizr/About';
+import { Skills } from '@/components/ekizr/Skills';
+import { Projects } from '@/components/ekizr/Projects';
+import { Certificates } from '@/components/ekizr/Certificates';
+import { Guestbook } from '@/components/ekizr/Guestbook';
+import { Contact } from '@/components/ekizr/Contact';
+import { Footer } from '@/components/ekizr/Footer';
 
-export default function PortfolioPage() {
-  const [isLoading, setIsLoading] = useState(true);
-  const [prefilledContact, setPrefilledContact] = useState<{ projectType: string; style: string }>({
-    projectType: 'Landing page',
-    style: 'Tecnológico',
-  });
-
-  const handleSelectMiniSiteConfig = (config: { projectType: string; style: string }) => {
-    setPrefilledContact(config);
-  };
-
+export default function EkizrPortfolioPage() {
   return (
-    <div className="min-h-screen bg-[#030712] text-slate-100 selection:bg-cyan-500 selection:text-black overflow-x-hidden relative">
-      {/* 🚀 INITIAL LOADING SCREEN 🚀 */}
-      {isLoading && <LoadingScreen onComplete={() => setIsLoading(false)} />}
+    <div className="min-h-screen bg-[#030014] text-zinc-100 selection:bg-purple-600 selection:text-white overflow-x-hidden relative">
+      {/* 🌌 DEEP SPACE CANVAS WITH FLOATING CONSTELLATIONS (EKIZR STYLE) 🌌 */}
+      <SpaceBackground />
 
-      {/* 🖱️ CUSTOM CURSOR & AMBIENT SPOTLIGHT 🖱️ */}
-      <CustomCursor />
+      {/* Ambient Cosmos Glow Nebulas */}
+      <div className="fixed top-[-10%] left-[10%] w-[550px] h-[550px] bg-purple-600/15 rounded-full blur-[160px] pointer-events-none z-0" />
+      <div className="fixed top-[35%] right-[5%] w-[600px] h-[600px] bg-indigo-600/15 rounded-full blur-[180px] pointer-events-none z-0" />
+      <div className="fixed bottom-[15%] left-[5%] w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[160px] pointer-events-none z-0" />
 
-      {/* 🌌 AMBIENT BACKGROUND GLOW ORBS & TECH GRID 🌌 */}
-      <div className="fixed inset-0 bg-tech-grid opacity-40 pointer-events-none z-0" />
-      <div className="fixed top-[-5%] left-[8%] w-[600px] h-[600px] bg-cyan-500/15 rounded-full blur-[160px] pointer-events-none animate-orb-1 z-0" />
-      <div className="fixed top-[28%] right-[5%] w-[650px] h-[650px] bg-indigo-600/18 rounded-full blur-[180px] pointer-events-none animate-orb-2 z-0" />
-      <div className="fixed top-[60%] left-[5%] w-[550px] h-[550px] bg-purple-600/12 rounded-full blur-[160px] pointer-events-none animate-orb-1 z-0" />
-      <div className="fixed bottom-[5%] right-[10%] w-[600px] h-[600px] bg-blue-600/15 rounded-full blur-[170px] pointer-events-none animate-pulse-slow z-0" />
-
-      {/* Floating Abstract Tech Particles */}
-      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-        <div className="absolute top-[20%] left-[12%] w-1.5 h-1.5 rounded-full bg-cyan-400/50 animate-particle-1" />
-        <div className="absolute top-[50%] right-[15%] w-2 h-2 rounded-full bg-indigo-400/50 animate-particle-2" />
-        <div className="absolute top-[75%] left-[22%] w-1.5 h-1.5 rounded-full bg-purple-400/50 animate-particle-3" />
-      </div>
-
-      {/* 🌟 1. NAVBAR FIXED 🌟 */}
+      {/* 🌟 1. FLOATING GLASS NAVBAR 🌟 */}
       <Navbar />
 
-      {/* 🌟 2. HERO SECTION 🌟 */}
-      <HeroSection />
+      {/* 🌟 2. HERO SECTION WITH TYPEWRITER & 3D CYBER CARD 🌟 */}
+      <Hero />
 
-      {/* 🌟 3. SEÇÃO SOBRE MIM 🌟 */}
-      <AboutSection />
+      {/* 🌟 3. ABOUT ME & STATS 🌟 */}
+      <About />
 
-      {/* 🌟 4. SEÇÃO POR QUE TER UM SITE? + COMPARATIVO 🌟 */}
-      <WhyWebsiteSection />
+      {/* 🌟 4. SKILLS & TECH STACK 🌟 */}
+      <Skills />
 
-      {/* 🌟 5. SEÇÃO MINHAS HABILIDADES 🌟 */}
-      <SkillsSection />
+      {/* 🌟 5. PROJECTS & CASE STUDIES GALLERY 🌟 */}
+      <Projects />
 
-      {/* 🌟 6. SEÇÃO PROJETOS + MODAL DE DETALHES 🌟 */}
-      <ProjectsSection />
+      {/* 🌟 6. CERTIFICATES & ACHIEVEMENTS 🌟 */}
+      <Certificates />
 
-      {/* 🌟 7. PROCESSO DE CRIAÇÃO 🌟 */}
-      <ProcessSection />
+      {/* 🌟 7. COMMUNITY GUESTBOOK (INTERACTIVE MESSAGES) 🌟 */}
+      <Guestbook />
 
-      {/* 🌟 8. MINI CRIADOR DE SITE INTERATIVO 🌟 */}
-      <MiniSiteBuilder onSelectConfig={handleSelectMiniSiteConfig} />
+      {/* 🌟 8. CONTACT & SOCIALS 🌟 */}
+      <Contact />
 
-      {/* 🌟 9. SEÇÃO CONTATO 🌟 */}
-      <ContactSection
-        prefilledType={prefilledContact.projectType}
-        prefilledStyle={prefilledContact.style}
-      />
-
-      {/* 🌟 10. RODAPÉ 🌟 */}
+      {/* 🌟 9. FOOTER 🌟 */}
       <Footer />
     </div>
   );
