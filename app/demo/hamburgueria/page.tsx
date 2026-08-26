@@ -70,7 +70,7 @@ const MENU_DATA: MenuItem[] = [
     ingredients: ['2x Smash Bacon Duplo', '2x Batatas Rústicas', '2x Bebidas Lata'],
     price: 79.90,
     originalPrice: 104.90,
-    image: 'https://images.unsplash.com/photo-1610440042657-612c34d95e9f?auto=format&fit=crop&w=800&q=80',
+    image: 'https://images.unsplash.com/photo-1586816001966-79b736744398?w=700&auto=format&fit=crop&q=80',
     badge: 'SUPER OFERTA (ECONOMIZE R$ 25) ⚡',
     rating: 5.0,
     reviewCount: 612,
@@ -87,7 +87,7 @@ const MENU_DATA: MenuItem[] = [
     ingredients: ['4x Classic Burgers', '1x Mega Batata 800g', '1x Refrigerante 2L'],
     price: 139.90,
     originalPrice: 178.00,
-    image: 'https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=800&q=80',
+    image: 'https://images.unsplash.com/photo-1550547660-d9450f859349?w=700&auto=format&fit=crop&q=80',
     badge: 'SERVE ATÉ 4 PESSOAS 👨‍👩‍👧‍👦',
     rating: 4.9,
     reviewCount: 380,
@@ -103,7 +103,7 @@ const MENU_DATA: MenuItem[] = [
     description: 'Dois burgers smash 100g de angus certificados com crostinha crocante na chapa ultra quente, queijo cheddar fundido, fatias generosas de bacon defumado na lenha e maionese secreta de alho negro no pão brioche dourado na manteiga.',
     ingredients: ['2x Smash Angus 100g', 'Cheddar Inglês', 'Bacon Defumado', 'Maionese Alho Negro', 'Pão Brioche'],
     price: 34.90,
-    image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=800&q=80',
+    image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=700&auto=format&fit=crop&q=80',
     badge: 'O MAIS PEDIDO 🔥',
     rating: 5.0,
     reviewCount: 890,
@@ -119,7 +119,7 @@ const MENU_DATA: MenuItem[] = [
     description: 'Três carnes smash de 90g ultra prensadas, piscina de queijo cheddar artesanal derretido, cebola brunoise e picles artesanal agridoce.',
     ingredients: ['3x Smash 90g', 'Cheddar Cremoso', 'Cebola Roxa', 'Picles Agridoce'],
     price: 38.90,
-    image: 'https://images.unsplash.com/photo-1583032015879-c63e26127b14?auto=format&fit=crop&w=800&q=80',
+    image: 'https://images.unsplash.com/photo-1572802419224-296b0aeee0d9?w=700&auto=format&fit=crop&q=80',
     badge: 'MUITO QUEIJO 🧀',
     rating: 4.9,
     reviewCount: 415,
@@ -135,7 +135,7 @@ const MENU_DATA: MenuItem[] = [
     description: 'Blend nobre de costela e picanha 180g assado no fogo a carvão, queijo gouda maçaricado, cogumelos shimeji salteados na manteiga trufada e cebola caramelizada no pão australiano.',
     ingredients: ['Blend Nobre 180g', 'Queijo Gouda', 'Shimeji na Manteiga', 'Azeite Trufado', 'Pão Australiano'],
     price: 42.90,
-    image: 'https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&w=800&q=80',
+    image: 'https://images.unsplash.com/photo-1586190848861-99aa4a171e90?w=700&auto=format&fit=crop&q=80',
     badge: 'CHEF CHOICE ⭐',
     rating: 5.0,
     reviewCount: 520,
@@ -151,7 +151,7 @@ const MENU_DATA: MenuItem[] = [
     description: 'Hambúrguer de 180g grelhado no ponto perfeito, generoso creme de queijo gorgonzola dolce, montanha de cebola crispy crocante e mel picante no pão com gergelim.',
     ingredients: ['Carne 180g', 'Creme Gorgonzola', 'Cebola Crispy', 'Mel com Pimenta'],
     price: 41.50,
-    image: 'https://images.unsplash.com/photo-1553979459-d2229ba7433b?auto=format&fit=crop&w=800&q=80',
+    image: 'https://images.unsplash.com/photo-1553979459-d2229ba7433b?w=700&auto=format&fit=crop&q=80',
     rating: 4.8,
     reviewCount: 310,
     prepTime: '25-35 min',
@@ -166,7 +166,7 @@ const MENU_DATA: MenuItem[] = [
     description: '500g de batatas rústicas cortadas à mão, temperadas com sal de alecrim e páprica defumada, cobertas com fondue artesanal de queijo cheddar e cubos de bacon crocantes.',
     ingredients: ['500g Batata Rústica', 'Fondue Cheddar', 'Bacon Crispy', 'Alecrim'],
     price: 28.90,
-    image: 'https://images.unsplash.com/photo-1576107232684-1279f3908594?auto=format&fit=crop&w=800&q=80',
+    image: 'https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=700&auto=format&fit=crop&q=80',
     badge: 'MAIS VENDIDA 🍟',
     rating: 4.9,
     reviewCount: 740,
@@ -180,20 +180,20 @@ const MENU_DATA: MenuItem[] = [
     description: '6 unidades feitas 100% com recheio de costela bovina marinada 12h na cerveja preta e desfiada, empanadas na farinha panko japonesa com maionese da casa.',
     ingredients: ['Costela Desfiada', 'Farinha Panko', 'Molho Barbecue'],
     price: 32.90,
-    image: 'https://images.unsplash.com/photo-1541592106381-b31e9677c0e5?auto=format&fit=crop&w=800&q=80',
+    image: 'https://images.unsplash.com/photo-1563245372-f21724e3856d?w=700&auto=format&fit=crop&q=80',
     rating: 5.0,
     reviewCount: 410,
     prepTime: '15-20 min',
   },
   {
     id: 'porcao-3',
-    name: 'Onion Rings Crocantes com Geléia de Pimenta',
+    name: 'Anéis de Cebola Crocantes com Geléia de Pimenta',
     category: 'porcoes',
     categoryLabel: 'Porções & Entradas',
     description: 'Anéis de cebola selecionados super crocantes, acompanhados de pote de geléia de pimenta defumada da casa.',
     ingredients: ['Anéis de Cebola 350g', 'Geléia de Pimenta'],
     price: 26.00,
-    image: 'https://images.unsplash.com/photo-1639024471287-032f66e054ec?auto=format&fit=crop&w=800&q=80',
+    image: 'https://images.unsplash.com/photo-1639024471287-032f66e054ec?w=700&auto=format&fit=crop&q=80',
     rating: 4.8,
     reviewCount: 220,
     prepTime: '15-20 min',
@@ -206,7 +206,7 @@ const MENU_DATA: MenuItem[] = [
     description: '500ml de sorvete cremoso de baunilha batido com bastante Nutella original, pedaços generosos de brownie caseiro recheado e borda farta de Ninho.',
     ingredients: ['Sorvete Baunilha', 'Nutella Original', 'Brownie', 'Leite Ninho'],
     price: 24.90,
-    image: 'https://images.unsplash.com/photo-1572490122747-3968b75cc699?auto=format&fit=crop&w=800&q=80',
+    image: 'https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=700&auto=format&fit=crop&q=80',
     badge: 'SOBREMESA TOP 🍦',
     rating: 5.0,
     reviewCount: 680,
@@ -220,7 +220,7 @@ const MENU_DATA: MenuItem[] = [
     description: 'Fatia alta de brownie de chocolate belga 70% servido aquecido com bola de sorvete de creme e calda quente de chocolate meio amargo.',
     ingredients: ['Brownie Belga 70%', 'Sorvete Creme', 'Calda de Chocolate'],
     price: 22.90,
-    image: 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=800&q=80',
+    image: 'https://images.unsplash.com/photo-1587314168485-3236d6710814?w=700&auto=format&fit=crop&q=80',
     rating: 4.9,
     reviewCount: 290,
     prepTime: '10 min',
@@ -233,7 +233,7 @@ const MENU_DATA: MenuItem[] = [
     description: 'Lata 350ml trincando de gelada.',
     ingredients: ['Lata 350ml'],
     price: 6.90,
-    image: 'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=800&q=80',
+    image: 'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=700&auto=format&fit=crop&q=80',
     rating: 5.0,
     reviewCount: 950,
     prepTime: '5 min',
@@ -246,7 +246,7 @@ const MENU_DATA: MenuItem[] = [
     description: 'Cerveja artesanal estilo American IPA com notas cítricas e amargor equilibrado. Servida em garrafa de 500ml.',
     ingredients: ['Garrafa 500ml IPA'],
     price: 18.90,
-    image: 'https://images.unsplash.com/photo-1608270199120-f4728d116fa0?auto=format&fit=crop&w=800&q=80',
+    image: 'https://images.unsplash.com/photo-1535958636474-b021ee887b13?w=700&auto=format&fit=crop&q=80',
     rating: 4.9,
     reviewCount: 320,
     prepTime: '5 min',
@@ -677,6 +677,9 @@ export default function HamburgueriaUltraDemoPage() {
                       <img
                         src={item.image}
                         alt={item.name}
+                        onError={(e) => {
+                          e.currentTarget.src = 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=700&auto=format&fit=crop&q=80';
+                        }}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                       />
                       {item.badge && (
@@ -761,7 +764,14 @@ export default function HamburgueriaUltraDemoPage() {
             {REVIEWS.map((rev, idx) => (
               <div key={idx} className="bg-neutral-900 rounded-3xl p-6 border border-neutral-800 space-y-3 shadow-xl">
                 <div className="flex items-center gap-3">
-                  <img src={rev.avatar} alt={rev.name} className="w-10 h-10 rounded-full object-cover border border-amber-500/40" />
+                  <img
+                    src={rev.avatar}
+                    alt={rev.name}
+                    onError={(e) => {
+                      e.currentTarget.src = 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80';
+                    }}
+                    className="w-10 h-10 rounded-full object-cover border border-amber-500/40"
+                  />
                   <div>
                     <h4 className="font-bold text-white text-xs">{rev.name}</h4>
                     <span className="text-[10px] text-neutral-500">{rev.date}</span>

@@ -386,7 +386,14 @@ export default function BarbeariaUltraDemoPage() {
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
           {BARBER_TEAM.map((b, idx) => (
             <div key={idx} className="bg-stone-900 rounded-3xl p-5 border border-stone-800 space-y-3 text-center">
-              <img src={b.image} alt={b.name} className="w-full h-48 rounded-2xl object-cover border border-amber-500/20" />
+              <img
+                src={b.image}
+                alt={b.name}
+                onError={(e) => {
+                  e.currentTarget.src = 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&auto=format&fit=crop&q=80';
+                }}
+                className="w-full h-48 rounded-2xl object-cover border border-amber-500/20"
+              />
               <div>
                 <h4 className="font-black text-white text-base">{b.name}</h4>
                 <p className="text-xs text-amber-400 font-bold">{b.role}</p>

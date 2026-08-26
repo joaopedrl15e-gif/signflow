@@ -424,7 +424,14 @@ export default function ClinicaUltraDemoPage() {
           {CLINIC_DOCTORS.map((doc, idx) => (
             <div key={idx} className="bg-slate-900 rounded-3xl p-6 border border-slate-800 space-y-4 flex flex-col justify-between">
               <div className="space-y-3">
-                <img src={doc.image} alt={doc.name} className="w-full h-52 rounded-2xl object-cover border border-cyan-500/20" />
+                <img
+                  src={doc.image}
+                  alt={doc.name}
+                  onError={(e) => {
+                    e.currentTarget.src = 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=500&auto=format&fit=crop&q=80';
+                  }}
+                  className="w-full h-52 rounded-2xl object-cover border border-cyan-500/20"
+                />
                 <div>
                   <h4 className="text-lg font-black text-white">{doc.name}</h4>
                   <p className="text-xs text-cyan-400 font-bold">{doc.role}</p>
