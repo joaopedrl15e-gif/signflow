@@ -10,8 +10,8 @@ export interface AgencyConfig {
 export const AGENCY_CONFIG: AgencyConfig = {
   name: 'Apex Web Studio',
   tagline: 'Sites & Landing Pages de Alta Conversão em 24h',
-  phone: '5511999999999', // User can easily edit in one place
-  formattedPhone: '(11) 99999-9999',
+  phone: '5517992537024', // WhatsApp Oficial do Usuário
+  formattedPhone: '(17) 99253-7024',
   pixKey: 'contato@apexweb.com.br',
   deliveryTime: '24 a 48 horas',
 };
