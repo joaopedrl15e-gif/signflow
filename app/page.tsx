@@ -1,50 +1,48 @@
 'use client';
 
-import React, { useState } from 'react';
-import { WelcomeScreen } from '@/components/jp/WelcomeScreen';
-import { BackgroundGrid } from '@/components/jp/BackgroundGrid';
-import { Navbar } from '@/components/jp/Navbar';
-import { HeroSection } from '@/components/jp/HeroSection';
-import { AboutSection } from '@/components/jp/AboutSection';
-import { WhyWebsiteSection } from '@/components/jp/WhyWebsiteSection';
-import { PortfolioSection } from '@/components/jp/PortfolioSection';
-import { ProcessSection } from '@/components/jp/ProcessSection';
-import { ContactSection } from '@/components/jp/ContactSection';
-import { Footer } from '@/components/jp/Footer';
+import React from 'react';
+import { Background } from '@/components/studio/Background';
+import { Navbar } from '@/components/studio/Navbar';
+import { Hero } from '@/components/studio/Hero';
+import { About } from '@/components/studio/About';
+import { WhyWebsite } from '@/components/studio/WhyWebsite';
+import { Projects } from '@/components/studio/Projects';
+import { Skills } from '@/components/studio/Skills';
+import { Process } from '@/components/studio/Process';
+import { Contact } from '@/components/studio/Contact';
+import { Footer } from '@/components/studio/Footer';
 
 export default function HomePage() {
-  const [hasEntered, setHasEntered] = useState(false);
-
   return (
-    <div className="min-h-screen bg-[#030014] text-slate-100 selection:bg-[#6366f1] selection:text-white overflow-x-hidden relative font-sans">
-      {/* 🚀 1. WELCOME SCREEN ANIMATION (IDÊNTICA À DA REFERÊNCIA) */}
-      <WelcomeScreen onLoadingComplete={() => setHasEntered(true)} />
+    <div className="min-h-screen bg-[#06040e] text-zinc-100 selection:bg-purple-600 selection:text-white overflow-x-hidden relative font-sans">
+      {/* 🌌 1. FUNDO ATMOSFÉRICO DE ALTO LUXO (OBSIDIAN VOID + NEBULA + STARDUST) */}
+      <Background />
 
-      {/* 🌌 2. BACKGROUND COM BLOBS EM MOVIMENTO NO SCROLL E GRADE 28px */}
-      <BackgroundGrid />
-
-      {/* 🛸 3. MENU SUPERIOR FIXO COM GLASSMORPHISM */}
+      {/* 🛸 2. NAVBAR FLUTUANTE EM CÁPSULA COM VIDRO ESCURO */}
       <Navbar />
 
-      {/* 🌟 4. SEÇÃO INICIAL — HERO COM DIGITAÇÃO E COMPOSIÇÃO 3D */}
-      <HeroSection />
+      {/* 🌟 3. HERO COM DIGITAÇÃO E STUDIO IDE 3D INTERATIVO */}
+      <Hero />
 
-      {/* 🌟 5. SOBRE MIM COM BORDAS GIRATÓRIAS E CARDS REAIS */}
-      <AboutSection />
+      {/* 🌟 4. SOBRE MIM & CAPACIDADES TÉCNICAS REAIS */}
+      <About />
 
-      {/* 🌟 6. POR QUE SEU NEGÓCIO PRECISA DE UM SITE? (BENEFÍCIOS) */}
-      <WhyWebsiteSection />
+      {/* 🌟 5. POR QUE SEU NEGÓCIO PRECISA DE UM SITE? (BENEFÍCIOS) */}
+      <WhyWebsite />
 
-      {/* 🌟 7. PORTFÓLIO COM 3 ABAS (PROJETOS, TECNOLOGIAS, EM DESENVOLVIMENTO) */}
-      <PortfolioSection />
+      {/* 🌟 6. SHOWCASE DE PROJETOS & DEMONSTRAÇÕES (SIGNFLOW + 4 DEMOS) */}
+      <Projects />
 
-      {/* 🌟 8. PROCESSO DE CRIAÇÃO — COMO TRANSFORMO UMA IDEIA EM SITE */}
-      <ProcessSection />
+      {/* 🌟 7. STACK TECNOLÓGICA & HABILIDADES */}
+      <Skills />
 
-      {/* 🌟 9. CONTATO COM FORMULÁRIO VALIDADO E CARDS SOCIAIS */}
-      <ContactSection />
+      {/* 🌟 8. PROCESSO DE CRIAÇÃO DO CONCEITO AO AR */}
+      <Process />
 
-      {/* 🌟 10. RODAPÉ */}
+      {/* 🌟 9. CONTATO & FORMULÁRIO VALIDADO */}
+      <Contact />
+
+      {/* 🌟 10. RODAPÉ MINIMALISTA */}
       <Footer />
     </div>
   );
