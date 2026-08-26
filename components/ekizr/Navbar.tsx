@@ -6,8 +6,7 @@ import { Menu, X, Instagram, Mail, Github, Sparkles, ArrowUpRight } from 'lucide
 const NAV_ITEMS = [
   { id: 'home', label: 'Home' },
   { id: 'about', label: 'About' },
-  { id: 'skills', label: 'Skills' },
-  { id: 'projects', label: 'Projects' },
+  { id: 'projects', label: 'Portfolio' },
   { id: 'certificates', label: 'Certificates' },
   { id: 'guestbook', label: 'Guestbook' },
   { id: 'contact', label: 'Contact' },
@@ -20,10 +19,10 @@ export const Navbar: React.FC = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 30);
+      setIsScrolled(window.scrollY > 25);
 
       const sections = NAV_ITEMS.map((item) => document.getElementById(item.id));
-      const scrollPos = window.scrollY + 200;
+      const scrollPos = window.scrollY + 220;
 
       for (let i = sections.length - 1; i >= 0; i--) {
         const sec = sections[i];
@@ -53,8 +52,8 @@ export const Navbar: React.FC = () => {
       <div
         className={`rounded-2xl px-5 py-3 flex items-center justify-between transition-all duration-300 ${
           isScrolled
-            ? 'bg-[#030014]/80 backdrop-blur-xl border border-purple-500/20 shadow-2xl shadow-purple-950/40'
-            : 'bg-[#030014]/40 backdrop-blur-md border border-white/[0.05]'
+            ? 'bg-[#030014]/85 backdrop-blur-xl border border-purple-500/25 shadow-2xl shadow-purple-950/60'
+            : 'bg-[#030014]/40 backdrop-blur-md border border-white/[0.08]'
         }`}
       >
         {/* Brand Logo */}
@@ -62,25 +61,28 @@ export const Navbar: React.FC = () => {
           onClick={() => scrollTo('home')}
           className="flex items-center gap-2.5 group text-left"
         >
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-purple-600 via-indigo-500 to-cyan-400 p-0.5 shadow-lg shadow-purple-500/30 group-hover:scale-105 transition-transform">
-            <div className="w-full h-full bg-[#030014] rounded-[6px] flex items-center justify-center font-mono font-black text-xs text-white">
+          <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 p-0.5 shadow-lg shadow-purple-500/40 group-hover:scale-105 transition-transform">
+            <div className="w-full h-full bg-[#030014] rounded-[10px] flex items-center justify-center font-mono font-black text-xs text-white">
               JP
             </div>
           </div>
-          <span className="font-bold text-sm tracking-tight text-white group-hover:text-purple-300 transition-colors">
-            João Pedro
-          </span>
+          <div className="flex flex-col">
+            <span className="font-bold text-sm tracking-tight text-white group-hover:text-purple-300 transition-colors">
+              João Pedro
+            </span>
+            <span className="text-[10px] text-zinc-400 font-mono -mt-0.5">Portfólio</span>
+          </div>
         </button>
 
         {/* Desktop Navigation Links */}
-        <nav className="hidden lg:flex items-center gap-1 bg-[#07031e]/60 px-3 py-1.5 rounded-full border border-purple-500/20">
+        <nav className="hidden lg:flex items-center gap-1 bg-[#0b0424]/70 px-3 py-1.5 rounded-full border border-purple-500/25 shadow-inner">
           {NAV_ITEMS.map((item) => {
             const isActive = activeSection === item.id;
             return (
               <button
                 key={item.id}
                 onClick={() => scrollTo(item.id)}
-                className={`relative px-3.5 py-1 text-xs font-semibold rounded-full transition-all duration-200 ${
+                className={`relative px-4 py-1 text-xs font-semibold rounded-full transition-all duration-200 ${
                   isActive
                     ? 'text-white'
                     : 'text-zinc-400 hover:text-zinc-200'
@@ -88,20 +90,20 @@ export const Navbar: React.FC = () => {
               >
                 <span className="relative z-10">{item.label}</span>
                 {isActive && (
-                  <span className="absolute inset-0 rounded-full bg-gradient-to-r from-purple-600/40 to-cyan-500/40 border border-purple-400/50 shadow-xs z-0 animate-in fade-in zoom-in-95 duration-200" />
+                  <span className="absolute inset-0 rounded-full bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 shadow-md shadow-purple-500/30 z-0 animate-in fade-in zoom-in-95 duration-200" />
                 )}
               </button>
             );
           })}
         </nav>
 
-        {/* Social Quick Links */}
+        {/* Right Socials & Contact CTA */}
         <div className="hidden sm:flex items-center gap-2.5">
           <a
             href="https://instagram.com/_jaopimentel"
             target="_blank"
             rel="noopener noreferrer"
-            className="w-8 h-8 rounded-lg bg-purple-950/40 hover:bg-purple-900/60 border border-purple-500/30 flex items-center justify-center text-purple-300 hover:text-white transition-all hover:scale-105"
+            className="w-8 h-8 rounded-xl bg-purple-950/40 hover:bg-purple-900/60 border border-purple-500/30 flex items-center justify-center text-purple-300 hover:text-white transition-all hover:scale-105"
             aria-label="Instagram"
           >
             <Instagram className="w-4 h-4" />
@@ -109,7 +111,7 @@ export const Navbar: React.FC = () => {
 
           <a
             href="mailto:pimentarp153@icloud.com"
-            className="w-8 h-8 rounded-lg bg-purple-950/40 hover:bg-purple-900/60 border border-purple-500/30 flex items-center justify-center text-cyan-300 hover:text-white transition-all hover:scale-105"
+            className="w-8 h-8 rounded-xl bg-purple-950/40 hover:bg-purple-900/60 border border-purple-500/30 flex items-center justify-center text-cyan-300 hover:text-white transition-all hover:scale-105"
             aria-label="Email"
           >
             <Mail className="w-4 h-4" />
@@ -117,14 +119,14 @@ export const Navbar: React.FC = () => {
 
           <button
             onClick={() => scrollTo('contact')}
-            className="ml-1 flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold text-xs shadow-lg shadow-purple-600/30 transition-all hover:scale-105"
+            className="ml-1 flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:from-indigo-500 hover:to-pink-500 text-white font-bold text-xs shadow-lg shadow-purple-600/30 transition-all hover:scale-105"
           >
-            <span>Let's Talk</span>
+            <span>Let&apos;s Talk</span>
             <ArrowUpRight className="w-3.5 h-3.5" />
           </button>
         </div>
 
-        {/* Mobile Toggle */}
+        {/* Mobile Menu Toggle */}
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           className="lg:hidden p-2 rounded-xl bg-purple-950/40 border border-purple-500/30 text-zinc-300 hover:text-white"
@@ -143,7 +145,7 @@ export const Navbar: React.FC = () => {
                 onClick={() => scrollTo(item.id)}
                 className={`p-3 rounded-xl text-sm font-bold transition-all ${
                   activeSection === item.id
-                    ? 'bg-purple-600/30 text-purple-300 border border-purple-500/40'
+                    ? 'bg-purple-600/40 text-purple-200 border border-purple-500/50'
                     : 'text-zinc-400 hover:text-white hover:bg-zinc-900'
                 }`}
               >
